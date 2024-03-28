@@ -1,5 +1,8 @@
 <?php
 
+use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Auth\LoginGoogleController;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -13,10 +16,13 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/admin', function () {
-    return view('admin.dashboard.index');
-});
+Route::get('/admin', [DashboardController::class, 'index'])->name('admin');
 
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+Route::controller(LoginGoogleController::class)->group(function () {
+    Route::get('auth/google', 'redirectToGoogle')->name('auth.google');
+    Route::get('auth/google/callback', 'handleGoogleCallback');
+});
