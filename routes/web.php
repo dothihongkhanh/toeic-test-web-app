@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Auth\LoginGoogleController;
+use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -16,11 +17,13 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/admin', [DashboardController::class, 'index'])->name('admin');
+Auth::routes(['verify' => true]);
 
-Auth::routes();
+Route::middleware(['verified'])->group(function () {
+    Route::get('/home', [HomeController::class, 'index'])->name('home');
+    Route::get('/admin', [DashboardController::class, 'index'])->name('admin');
+});
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 Route::controller(LoginGoogleController::class)->group(function () {
     Route::get('auth/google', 'redirectToGoogle')->name('auth.google');
