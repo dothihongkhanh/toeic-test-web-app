@@ -9,7 +9,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>{{ config('app.name') }} - Trang quản trị</title>
+    <title>@yield('title', config('app.name') . ' - Trang quản trị')</title>
 
     <!-- Custom fonts for this template-->
     <link href="/template/admin/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">

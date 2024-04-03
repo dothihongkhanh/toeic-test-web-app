@@ -14,9 +14,8 @@ return new class extends Migration
         Schema::create('parts', function (Blueprint $table) {
             $table->id();
             $table->string('name_part');
-            $table->string('direction');
+            $table->longText('direction');
             $table->string('desc');
-            $table->string('time');
             $table->string('number_question');
             $table->timestamps();
         });

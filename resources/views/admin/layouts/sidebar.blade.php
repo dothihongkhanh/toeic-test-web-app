@@ -19,7 +19,7 @@
     <hr class="sidebar-divider">
 
     <li class="nav-item">
-        <a class="nav-link" href="">
+        <a class="nav-link" href="{{ route('admin.parts.list') }}">
             <i class="fas fa-fw fa-bookmark"></i>
             <span>Part</span></a>
     </li>
