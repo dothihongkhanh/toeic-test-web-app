@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\ListeningController;
 use App\Http\Controllers\Admin\PartController;
 use App\Http\Controllers\Auth\LoginGoogleController;
 use App\Http\Controllers\HomeController;
@@ -43,6 +44,14 @@ Route::middleware(['verified'])->group(function () {
                 Route::get('update/{id}','edit');
                 Route::post('update/{id}', 'update');
                 Route::delete('delete/{id}', 'destroy');
+            });
+        });
+
+        Route::prefix('listening')->group(function () {
+            Route::controller(ListeningController::class)->group(function () {
+                Route::get('list', 'index')-> name('admin.listening.list');
+                Route::get('create', 'create');
+                Route::post('create', 'store');
             });
         });
     });

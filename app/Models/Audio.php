@@ -5,7 +5,13 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Questions extends Model
+class Audio extends Model
 {
     use HasFactory;
+    protected $table = 'audios';
+
+
+    protected $fillable = [
+        'url_audio'
+    ];
 }
