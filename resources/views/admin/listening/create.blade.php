@@ -36,14 +36,15 @@
             </div>
             <div class="form-group">
                 <label>Audios<span class="text-danger">*</span></label>
-                <input type="file" accept="audio/*" name="audio_upload" class="form-control" multiple>
+                <input type="file" id="audioUpload" accept="audio/*" name="audio_upload[]" class="form-control" multiple>
                 @error('audio_upload')
                 <span class="text-danger"> {{ $message }}</span>
                 @enderror
             </div>
             <div class="form-group">
                 <label>Images</label>
-                <input type="file" accept="image/*" name="image_upload[]" class="form-control" multiple>
+                <input type="file" id="imageUpload" accept="image/*" name="image_upload[]" class="form-control" multiple>
+
                 @error('image_upload')
                 <span class="text-danger"> {{ $message }}</span>
                 @enderror
@@ -55,4 +56,5 @@
     </div>
 
 </div>
+<script src="/js/upload-listening.js"></script>
 @endsection

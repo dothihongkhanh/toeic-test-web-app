@@ -7,6 +7,7 @@ use App\Imports\ListeningQuestionsImport;
 use App\Models\Part;
 use Illuminate\Http\Request;
 use App\Models\Level;
+use App\Models\Question;
 use Maatwebsite\Excel\Facades\Excel;
 
 class ListeningController extends Controller
@@ -23,7 +24,8 @@ class ListeningController extends Controller
      */
     public function index()
     {
-        return view('admin.listening.index');
+        $questions = Question::with('part')->oldest('id')->get();
+        return view('admin.listening.index', compact('questions'));
     }
 
     /**
@@ -66,7 +68,9 @@ class ListeningController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $question = Question::findOrFail($id);
+        $answers = $question->answers;
+        return view('admin.listening.detail', compact('question', 'answers'));
     }
 
     /**

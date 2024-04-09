@@ -52,6 +52,7 @@ Route::middleware(['verified'])->group(function () {
                 Route::get('list', 'index')-> name('admin.listening.list');
                 Route::get('create', 'create');
                 Route::post('create', 'store');
+                Route::get('detail/{id}', 'show');
             });
         });
     });
