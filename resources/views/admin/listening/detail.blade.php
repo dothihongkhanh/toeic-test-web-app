@@ -14,7 +14,6 @@
                 <p>Title</p>
             </div>
             <div class="col-md-8">
-                <p>{{ $question->id }}</p>
                 <p>{{ $question->question_title }}</p>
             </div>
         </div>
@@ -45,7 +44,7 @@
                 <p>Audio URL</p>
             </div>
             <div class="col-md-8">
-                @if($question->images)
+                @if($question->audios)
                 <audio controls>
                     <source src="{{ $question->audios->url_audio }}" type="audio/mpeg">
                     Your browser does not support the audio element.

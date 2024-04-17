@@ -24,7 +24,7 @@ class ListeningController extends Controller
      */
     public function index()
     {
-        $questions = Question::with('part')->oldest('id')->get();
+        $questions = Question::with('part')->oldest('id')->paginate(5);
         return view('admin.listening.index', compact('questions'));
     }
 

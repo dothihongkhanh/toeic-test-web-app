@@ -38,4 +38,5 @@
         </div>
     </div>
 </div>
+{{ $questions->links() }}
 @endsection

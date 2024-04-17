@@ -24,33 +24,66 @@ class ListeningQuestionsImport implements ToModel, WithHeadingRow
         $imageFiles = request()->file('image_upload');
         $audioFiles = request()->file('audio_upload');
 
-        if ($imageFiles !== null && $audioFiles !== null && count($imageFiles) > 0 && count($audioFiles) > 0) {
-            foreach ($imageFiles as $key => $imageFile) {
-                $imageName = $imageFile->getClientOriginalName();
+        if ($this->partId == 1) {
+            if ($imageFiles !== null && $audioFiles !== null && count($imageFiles) > 0 && count($audioFiles) > 0) {
+                foreach ($imageFiles as $key => $imageFile) {
+                    $imageName = $imageFile->getClientOriginalName();
 
-                if ($imageName === $row['image']) {
-                    $audioFile = $audioFiles[$key];
+                    if ($imageName === $row['image']) {
+                        $audioFile = $audioFiles[$key];
 
-                    $imagePath = $imageFile->store('listening/images', 'public');
-                    $audioPath = $audioFile->store('listening/audios', 'public');
+                        $imagePath = $imageFile->store('listening/images', 'public');
+                        $audioPath = $audioFile->store('listening/audios', 'public');
 
-                    $image = Image::create(['url_image' => Storage::url($imagePath)]);
-                    $audio = Audio::create(['url_audio' => Storage::url($audioPath)]);
+                        $image = Image::create(['url_image' => Storage::url($imagePath)]);
+                        $audio = Audio::create(['url_audio' => Storage::url($audioPath)]);
 
-                    $question = Question::create([
-                        'question_title' => $row['question_title'],
-                        'id_image' => $image->id,
-                        'id_audio' => $audio->id,
-                        'id_level' => $this->levelId,
-                        'id_part' => $this->partId,
-                    ]);
-
-                    for ($j = 1; $j <= 4; $j++) {
-                        Answer::create([
-                            'id_question' => $question->id,
-                            'answer_text' => $row['answer_' . $j],
-                            'is_correct' => ($row['correct_answer'] === "Chọn đáp án " . chr(64 + $j)), // Sử dụng mã ASCII để chuyển đổi A, B, C, D thành 1, 2, 3, 4
+                        $question = Question::create([
+                            'question_title' => $row['question_title'],
+                            'id_image' => $image->id,
+                            'id_audio' => $audio->id,
+                            'id_level' => $this->levelId,
+                            'id_part' => $this->partId,
                         ]);
+
+                        for ($j = 1; $j <= 4; $j++) {
+                            Answer::create([
+                                'id_question' => $question->id,
+                                'answer_text' => $row['answer_' . $j],
+                                'is_correct' => ($row['correct_answer'] === "Chọn đáp án " . chr(64 + $j)), // Sử dụng mã ASCII để chuyển đổi A, B, C, D thành 1, 2, 3, 4
+                            ]);
+                        }
+                    }
+                }
+            }
+        }
+
+        if ($this->partId == 2) {
+            if ($audioFiles !== null && count($audioFiles) > 0) {
+                foreach ($audioFiles as $key => $audioFile) {
+                    $audioName = $audioFile->getClientOriginalName();
+
+                    if ($audioName === $row['audio']) {
+                        $audioFile = $audioFiles[$key];
+                        $audioPath = $audioFile->store('listening/audios/part2', 'public');
+                        $audio = Audio::create(['url_audio' => Storage::url($audioPath)]);
+
+                        $question = Question::create([
+                            'question_title' => $row['title_question'],
+                            'id_audio' => $audio->id,
+                            'id_level' => $this->levelId,
+                            'id_part' => $this->partId,
+                        ]);
+
+                        for ($j = 1; $j <= 3; $j++) {
+                            $isCorrect = ($row['status_answer_' . $j] === 'Đáp án đúng') ? 1 : 0;
+
+                            Answer::create([
+                                'id_question' => $question->id,
+                                'answer_text' => $row['answer_' . $j],
+                                'is_correct' => $isCorrect,
+                            ]);
+                        }
                     }
                 }
             }
