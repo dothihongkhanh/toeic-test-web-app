@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin\Listening;
 
 use App\Http\Controllers\Controller;
 use App\Imports\ListeningQuestionsImport;
+use App\Models\Exam;
 use App\Models\Level;
 use App\Models\Part;
 use App\Models\Question;
@@ -33,8 +34,9 @@ class ListeningController extends Controller
      */
     public function index()
     {
-        $questions = Question::with('part')->oldest('id')->paginate(5);
-        return view('admin.listening.index', compact('questions'));
+        $exams = Exam::paginate(5);
+        // $questions = Question::with('part')->oldest('id')->paginate(5);
+        return view('admin.listening.index', compact('exams'));
     }
 
     /**
@@ -77,9 +79,9 @@ class ListeningController extends Controller
      */
     public function show(string $id)
     {
-        $question = Question::findOrFail($id);
-        $answers = $question->answers;
-        return view('admin.listening.detail', compact('question', 'answers'));
+        $exam = Exam::findOrFail($id);
+        $questions = $exam->questions()->with('answers')->get();
+        return view('admin.listening.detail', compact('exam', 'questions'));
     }
 
     /**

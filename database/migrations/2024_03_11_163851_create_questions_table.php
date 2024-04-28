@@ -17,7 +17,6 @@ return new class extends Migration
             $table->unsignedBigInteger('id_level');
             $table->string('question_number')->nullable();
             $table->string('question_title')->nullable();
-            $table->text('transcript')->nullable();
             $table->text('explanation');
             $table->unsignedBigInteger('id_audio')->nullable();
             $table->timestamps();

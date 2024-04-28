@@ -14,9 +14,9 @@ class Question extends Model
         'id_level',
         'question_number',
         'question_title',
-        'transcript',
         'explanation',
-        'id_audio'
+        'id_audio',
+        'id_trans',
     ];
 
     public function part()
@@ -36,11 +36,21 @@ class Question extends Model
 
     public function images()
     {
-        return $this->hasMany(Image::class, 'id_image');
+        return $this->belongsToMany(Image::class, 'image_questions', 'id_image', 'id_question');
     }
 
     public function answers()
     {
         return $this->hasMany(Answer::class, 'id_question');
+    }
+
+    public function exams()
+    {
+        return $this->belongsToMany(Exam::class, 'exam_questions', 'id_exam', 'id_question');
+    }
+
+    public function transcript()
+    {
+        return $this->belongsTo(Transcript::class, 'id_trans');
     }
 }

@@ -16,20 +16,18 @@
                     <tr>
                         <th>ID</th>
                         <th>Name</th>
-                        <th>Part</th>
-                        <th>Level</th>
+                        <th>Price</th>
                         <th>Action</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($questions as $question)
+                    @foreach ($exams as $exam)
                     <tr>
-                        <td>{{ $question->id }}</td>
-                        <td>{{ $question->question_title }}</td>
-                        <td>{{ $question->part->name_part }}</td>
-                        <td>{{ $question->level->name_level }}</td>
+                        <td>{{ $exam->id }}</td>
+                        <td>{{ $exam->name_exam }}</td>
+                        <td>{{ $exam->price }}</td>
                         <td>
-                            <a href="/admin/listening/detail/{{ $question->id }}" class="btn btn-warning">Detail</a>
+                            <a href="/admin/listening/detail/{{ $exam->id }}" class="btn btn-warning">Detail</a>
                         </td>
                     </tr>
                     @endforeach
@@ -38,5 +36,5 @@
         </div>
     </div>
 </div>
-{{ $questions->links() }}
+{{ $exams->links() }}
 @endsection

@@ -5,16 +5,19 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Image extends Model
+class Exam extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'url_image'
+        'name_exam',
+        'price',
+        'time',
+        'id_type',
     ];
 
     public function questions()
     {
-        return $this->belongsToMany(Question::class, 'image_questions', 'id_image', 'id_question');
+        return $this->belongsToMany(Question::class, 'exam_questions', 'id_exam', 'id_question');
     }
 }

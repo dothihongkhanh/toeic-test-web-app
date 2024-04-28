@@ -2,7 +2,9 @@
 
 namespace App\Http\Requests;
 
+use App\Rules\MultipleFiles;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Contracts\Validation\Rule;
 
 class PartOneRequest extends FormRequest
 {
@@ -36,10 +38,26 @@ class PartOneRequest extends FormRequest
             ],
             'audio_upload' => [
                 'required',
+                new MultipleFiles(6),
             ],
             'image_upload' => [
-                'required',                
+                'required',
+                new MultipleFiles(6),           
             ],
         ];
+    }
+}
+
+class SixAudioFiles implements Rule
+{
+    public function passes($attribute, $value)
+    {
+        // Kiểm tra xem có đúng 6 tệp âm thanh không
+        return count($value) == 6;
+    }
+
+    public function message()
+    {
+        return 'The ' . $attribute . ' must contain exactly 6 audio files.';
     }
 }

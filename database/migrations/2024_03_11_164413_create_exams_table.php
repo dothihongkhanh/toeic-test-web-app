@@ -14,8 +14,8 @@ return new class extends Migration
         Schema::create('exams', function (Blueprint $table) {
             $table->id();
             $table->string('name_exam');
-            $table->string('ava');
             $table->string('price');
+            $table->time('time')->nullable();
             $table->unsignedBigInteger('id_type');
             $table->timestamps();
 

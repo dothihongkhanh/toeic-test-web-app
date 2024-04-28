@@ -2,11 +2,16 @@
 
 namespace App\Imports;
 
+use App\Enums\ExamType;
+use App\Enums\PartType;
 use App\Models\Answer;
 use App\Models\Audio;
+use App\Models\Exam;
+use App\Models\ExamQuestion;
 use App\Models\Image;
 use App\Models\ImageQuestion;
 use App\Models\Question;
+use App\Models\Transcript;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Storage;
 use Maatwebsite\Excel\Concerns\ToCollection;
@@ -28,10 +33,20 @@ class PartOneImport implements ToModel, WithHeadingRow
 
     public function model(array $row)
     {
+        /* Bỏ qua dòng tiêu đề  **/
+        if ($row['question_id'] == 'question_id' || empty($row['question_id'])) {
+            return null;
+        }
+
+        $exam = Exam::firstOrCreate([
+            'name_exam' => request()->input('name_practice'),
+            'price' => request()->input('price'),
+            'time' => null,
+            'id_type' => ExamType::ListeningPractice,
+        ]);
+
         $level = $this->levelId;
         $question = null;
-
-        // Tạo mới câu hỏi và lưu ID vào biến $question
         foreach ($this->audioFiles as $audioFile) {
             $audioName = $audioFile->getClientOriginalName();
             preg_match('/(\d+)_audio_/', $audioName, $matches);
@@ -39,19 +54,24 @@ class PartOneImport implements ToModel, WithHeadingRow
             if ($row['question_id'] == $idQuestionFromAudioName) {
                 $audioPath = $audioFile->store('listening/part1/audios', 'public');
                 $audio = Audio::create(['url_audio' => Storage::url($audioPath)]);
+                $transcript = Transcript::create(['content_trans' => $row['transcript']]);
                 $question = Question::create([
-                    'id_part' => 1,
+                    'id_part' => PartType::PartOne,
                     'id_level' => $level,
                     'question_number' => $row['question_number'],
                     'question_title' => null,
-                    'transcript' => $row['transcript'],
                     'explanation' => $row['explanation'],
                     'id_audio' => $audio->id,
+                    'id_trans' => $transcript->id,
+                ]);
+
+                ExamQuestion::create([
+                    'id_exam' => $exam->id,
+                    'id_question' => $question->id,
                 ]);
             }
         }
 
-        // Lưu ID của hình ảnh vào bảng trung gian question_image
         if ($question) {
             foreach ($this->imageFiles as $imageFile) {
                 $imageName = $imageFile->getClientOriginalName();
@@ -68,7 +88,6 @@ class PartOneImport implements ToModel, WithHeadingRow
             }
         }
 
-        // Tạo mới các đáp án và lưu vào cơ sở dữ liệu
         if ($question) {
             for ($i = 1; $i <= 4; $i++) {
                 Answer::create([
