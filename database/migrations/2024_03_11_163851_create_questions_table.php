@@ -15,8 +15,10 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('id_part');
             $table->unsignedBigInteger('id_level');
+            $table->string('question_number')->nullable();
             $table->string('question_title')->nullable();
-            $table->unsignedBigInteger('id_image')->nullable();
+            $table->text('transcript')->nullable();
+            $table->text('explanation');
             $table->unsignedBigInteger('id_audio')->nullable();
             $table->timestamps();
 
@@ -24,8 +26,6 @@ return new class extends Migration
                 ->references('id')->on('parts')->onUpdate('cascade')->onDelete('cascade');
             $table->foreign('id_level')
                 ->references('id')->on('levels')->onUpdate('cascade')->onDelete('cascade');
-            $table->foreign('id_image')
-                ->references('id')->on('images')->onUpdate('cascade')->onDelete('cascade');
             $table->foreign('id_audio')
                 ->references('id')->on('audios')->onUpdate('cascade')->onDelete('cascade');
         });

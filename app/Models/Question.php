@@ -12,8 +12,10 @@ class Question extends Model
     protected $fillable = [
         'id_part',
         'id_level',
+        'question_number',
         'question_title',
-        'id_image',
+        'transcript',
+        'explanation',
         'id_audio'
     ];
 
@@ -27,14 +29,14 @@ class Question extends Model
         return $this->belongsTo(Level::class, 'id_level');
     }
 
-    public function audios()
+    public function audio()
     {
         return $this->belongsTo(Audio::class, 'id_audio');
     }
 
     public function images()
     {
-        return $this->belongsTo(Image::class, 'id_image');
+        return $this->hasMany(Image::class, 'id_image');
     }
 
     public function answers()

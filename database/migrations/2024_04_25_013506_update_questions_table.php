@@ -11,10 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('types', function (Blueprint $table) {
-            $table->id();
-            $table->string('name_type');
-            $table->timestamps();
+        Schema::table('questions', function (Blueprint $table) {
+            $table->unsignedBigInteger('id_trans')->nullable();
+
+            $table->foreign('id_trans')
+                ->references('id')->on('transcripts')->onUpdate('cascade')->onDelete('cascade');
         });
     }
 
@@ -23,6 +24,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('types');
+        Schema::table('questions', function (Blueprint $table) {
+            //
+        });
     }
 };

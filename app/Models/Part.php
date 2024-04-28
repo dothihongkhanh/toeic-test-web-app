@@ -16,4 +16,9 @@ class Part extends Model
         'number_question'
     ];
 
+    public function questions()
+    {
+        return $this->hasMany(Question::class, 'id_part');
+    }
+
 }

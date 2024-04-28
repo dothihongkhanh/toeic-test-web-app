@@ -5,16 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Level extends Model
+class Type extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'name_level'
+        'name_type'
     ];
-
-    public function questions()
-    {
-        return $this->hasMany(Question::class, 'id_level');
-    }
 }

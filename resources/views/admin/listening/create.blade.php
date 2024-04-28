@@ -1,6 +1,9 @@
 @extends('admin.layouts.app')
 @section('title', 'Upload Listening')
 @section('content')
+@extends('admin.layouts.app')
+@section('title', 'Upload Listening')
+@section('content')
 <div class="card shadow mb-4">
     <div class="card-header py-3 d-flex justify-content-between">
         <a href="/admin/listening/list">
@@ -9,52 +12,29 @@
         </a>
     </div>
     <div class="card-body">
-        <form action="" method="POST" enctype="multipart/form-data">
-            @csrf
-            <div class="form-group">
-                <label>Part<span class="text-danger">*</span></label>
-                <select class="form-control" name="id_part">
-                    @foreach($listeningParts as $listeningPart)
-                    <option value="{{ $listeningPart->id }}">{{ $listeningPart->name_part }}</option>
-                    @endforeach
-                </select>
-            </div>
-            <div class="form-group">
-                <label>Level<span class="text-danger">*</span></label>
-                <select class="form-control" name="id_level">
-                    @foreach($levels as $level)
-                    <option value="{{ $level->id }}">{{ $level->name_level }}</option>
-                    @endforeach
-                </select>
-            </div>
-            <div class="form-group">
-                <label>Content questions<span class="text-danger">*</span></label>
-                <input type="file" accept=".xls,.xlsx" name="file_upload" class="form-control">
-                @error('file_upload')
-                <span class="text-danger"> {{ $message }}</span>
-                @enderror
-            </div>
-            <div class="form-group">
-                <label>Audios<span class="text-danger">*</span></label>
-                <input type="file" id="audioUpload" accept="audio/*" name="audio_upload[]" class="form-control" multiple>
-                @error('audio_upload')
-                <span class="text-danger"> {{ $message }}</span>
-                @enderror
-            </div>
-            <div class="form-group">
-                <label>Images</label>
-                <input type="file" id="imageUpload" accept="image/*" name="image_upload[]" class="form-control" multiple>
+        <h6 class="mb-4">Choose Part to add Question</h6>
+        <div class="row">
+            @foreach($listeningParts as $listeningPart)
+                <div class="col-md-6 mb-4">
+                    <div class="card border-left-primary shadow h-100 py-2">
+                        <div class="card-body">
+                            <div class="row no-gutters align-items-center">
+                                <div class="col mr-2">
+                                    <a href="/admin/listening/create/part{{ $listeningPart->id }}" class="h5 font-weight-bold text-primary text-uppercase mb-1">
+                                        {{ $listeningPart->name_part }}
+                                    </a>
+                                    <div class="text-xs mb-0 font-weight-bold text-gray-800">{{ $listeningPart->desc }}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            @endforeach
+        </div>
 
-                @error('image_upload')
-                <span class="text-danger"> {{ $message }}</span>
-                @enderror
-            </div>
-            <div style="border-top: 1px solid rgba(0, 0, 0);">
-                <button type="submit" class="btn btn-primary mt-3">Save new</button>
-            </div>
-        </form>
     </div>
 
 </div>
 <script src="/js/upload-listening.js"></script>
+@endsection
 @endsection

@@ -1,12 +1,14 @@
 <?php
 
 use App\Http\Controllers\Admin\DashboardController;
-use App\Http\Controllers\Admin\ListeningController;
+use App\Http\Controllers\Admin\Listening\ListeningController;
+use App\Http\Controllers\Admin\Listening\PartOneController;
 use App\Http\Controllers\Admin\PartController;
 use App\Http\Controllers\Auth\LoginGoogleController;
 use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use Maatwebsite\Excel\Row;
 
 /*
 |--------------------------------------------------------------------------
@@ -53,6 +55,10 @@ Route::middleware(['verified'])->group(function () {
                 Route::get('create', 'create');
                 Route::post('create', 'store');
                 Route::get('detail/{id}', 'show');
+            });
+            Route::controller(PartOneController::class)->group(function () {
+                Route::get('create/part{id}', 'create');
+                Route::post('create/part{id}', 'store');
             });
         });
     });

@@ -1,13 +1,14 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers\Admin\Listening;
 
 use App\Http\Controllers\Controller;
 use App\Imports\ListeningQuestionsImport;
-use App\Models\Part;
-use Illuminate\Http\Request;
 use App\Models\Level;
+use App\Models\Part;
 use App\Models\Question;
+use App\Models\Type;
+use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
 
 class ListeningController extends Controller
@@ -17,6 +18,14 @@ class ListeningController extends Controller
     public function __construct(Part $part)
     {
         $this->part = $part;
+    }
+
+    protected function getLevels() {
+        return Level::get(['id', 'name_level']);
+    }
+
+    protected function getTypes() {
+        return Type::get(['id', 'name_type']);
     }
 
     /**
