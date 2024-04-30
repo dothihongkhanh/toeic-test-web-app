@@ -34,9 +34,16 @@ class ListeningController extends Controller
      */
     public function index()
     {
-        $exams = Exam::paginate(5);
-        // $questions = Question::with('part')->oldest('id')->paginate(5);
-        return view('admin.listening.index', compact('exams'));
+        // $exams = Exam::paginate(5);
+        // // $questions = Question::with('part')->oldest('id')->paginate(5);
+        // return view('admin.listening.index', compact('exams'));
+
+        $listeningParts = $this->part::where('name_part', 'like', 'Part %')
+            ->whereRaw('CAST(SUBSTRING(name_part, 6) AS UNSIGNED) BETWEEN 1 AND 4')
+            ->get();
+
+        $levels = Level::get(['id', 'name_level']);
+        return view('admin.listening.index', compact('listeningParts', 'levels'));
     }
 
     /**
@@ -74,6 +81,7 @@ class ListeningController extends Controller
         }
     }
 
+    
     /**
      * Display the specified resource.
      */

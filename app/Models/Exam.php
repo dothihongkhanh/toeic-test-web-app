@@ -14,10 +14,16 @@ class Exam extends Model
         'price',
         'time',
         'id_type',
+        'id_level',
     ];
 
     public function questions()
     {
         return $this->belongsToMany(Question::class, 'exam_questions', 'id_exam', 'id_question');
+    }
+
+    public function level()
+    {
+        return $this->belongsTo(Level::class, 'id_level');
     }
 }

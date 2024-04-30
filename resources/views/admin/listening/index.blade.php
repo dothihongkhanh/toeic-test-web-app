@@ -3,38 +3,28 @@
 @section('content')
 <div class="card shadow mb-4">
     <div class="card-header py-3 d-flex justify-content-between">
-        <h6 class="m-0 font-weight-bold text-primary">List Listening Question</h6>
-        <a href="/admin/listening/create" class="btn btn-primary">
-            <i class="fas fa-upload fa-sm text-white-50"></i>
-            <span>Upload file Listening</span>
-        </a>
+    <h6 class="m-0 font-weight-bold text-primary">List Part of Listening Question</h6>
     </div>
     <div class="card-body">
-        <div class="table-responsive">
-            <table class="table table-bordered table-hover" id="dataTable" width="100%" cellspacing="0">
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Name</th>
-                        <th>Price</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach ($exams as $exam)
-                    <tr>
-                        <td>{{ $exam->id }}</td>
-                        <td>{{ $exam->name_exam }}</td>
-                        <td>{{ $exam->price }}</td>
-                        <td>
-                            <a href="/admin/listening/detail/{{ $exam->id }}" class="btn btn-warning">Detail</a>
-                        </td>
-                    </tr>
-                    @endforeach
-                </tbody>
-            </table>
+        <div class="row">
+            @foreach($listeningParts as $listeningPart)
+                <div class="col-md-6 mb-4">
+                    <div class="card border-left-primary shadow h-100 py-2">
+                        <div class="card-body">
+                            <div class="row no-gutters align-items-center">
+                                <div class="col mr-2">
+                                    <a href="/admin/listening/list-part{{ $listeningPart->id }}" class="h5 font-weight-bold text-primary text-uppercase mb-1">
+                                        {{ $listeningPart->name_part }}
+                                    </a>
+                                    <div class="text-xs mb-0 font-weight-bold text-gray-800">{{ $listeningPart->desc }}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            @endforeach
         </div>
+
     </div>
 </div>
-{{ $exams->links() }}
 @endsection

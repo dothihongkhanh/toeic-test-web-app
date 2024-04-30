@@ -3,13 +3,13 @@
 @section('content')
 <div class="card shadow mb-4">
     <div class="card-header py-3 d-flex justify-content-between">
-        <a href="/admin/listening/list">
+        <a href="/admin/listening/list-part2">
             <i class="fas fa-fw fa-arrow-left"></i>
-            List Listening
+            List Question Part2
         </a>
     </div>
     <div class="card-body">
-        <h5 class="mb-4 font-weight-bold">Upload Part1 Practice</h5>
+        <h4 class="mb-4 font-weight-bold text-primary">Upload Part2 Practice</h4>
         <form action="" method="POST" enctype="multipart/form-data">
             @csrf
             <div class="form-group">
@@ -49,14 +49,6 @@
                 <label>Audios<span class="text-danger">*</span></label>
                 <input type="file" id="audioUpload" accept="audio/*" name="audio_upload[]" class="form-control" multiple>
                 @error('audio_upload')
-                <span class="text-danger"> {{ $message }}</span>
-                @enderror
-            </div>
-            <div class="form-group">
-                <label>Images<span class="text-danger">*</span></label></label>
-                <input type="file" id="imageUpload" accept="image/*" name="image_upload[]" class="form-control" multiple>
-
-                @error('image_upload')
                 <span class="text-danger"> {{ $message }}</span>
                 @enderror
             </div>
