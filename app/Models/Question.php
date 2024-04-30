@@ -11,7 +11,6 @@ class Question extends Model
 
     protected $fillable = [
         'id_part',
-        'id_level',
         'question_number',
         'question_title',
         'explanation',
@@ -22,11 +21,6 @@ class Question extends Model
     public function part()
     {
         return $this->belongsTo(Part::class, 'id_part');
-    }
-
-    public function level()
-    {
-        return $this->belongsTo(Level::class, 'id_level');
     }
 
     public function audio()

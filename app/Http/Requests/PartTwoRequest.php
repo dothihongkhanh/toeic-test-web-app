@@ -4,9 +4,8 @@ namespace App\Http\Requests;
 
 use App\Rules\MultipleFiles;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Contracts\Validation\Rule;
 
-class PartOneRequest extends FormRequest
+class PartTwoRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -39,11 +38,7 @@ class PartOneRequest extends FormRequest
             ],
             'audio_upload' => [
                 'required',
-                new MultipleFiles(6),
-            ],
-            'image_upload' => [
-                'required',
-                new MultipleFiles(6),
+                new MultipleFiles(25),
             ],
         ];
     }

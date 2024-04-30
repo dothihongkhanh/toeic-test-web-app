@@ -14,7 +14,6 @@ return new class extends Migration
         Schema::create('questions', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('id_part');
-            $table->unsignedBigInteger('id_level');
             $table->string('question_number')->nullable();
             $table->string('question_title')->nullable();
             $table->text('explanation');
@@ -23,8 +22,6 @@ return new class extends Migration
 
             $table->foreign('id_part')
                 ->references('id')->on('parts')->onUpdate('cascade')->onDelete('cascade');
-            $table->foreign('id_level')
-                ->references('id')->on('levels')->onUpdate('cascade')->onDelete('cascade');
             $table->foreign('id_audio')
                 ->references('id')->on('audios')->onUpdate('cascade')->onDelete('cascade');
         });

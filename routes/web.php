@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\Listening\ListeningController;
 use App\Http\Controllers\Admin\Listening\PartOneController;
 use App\Http\Controllers\Admin\PartController;
+use App\Http\Controllers\Admin\PartTwoController;
 use App\Http\Controllers\Auth\LoginGoogleController;
 use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Auth;
@@ -52,13 +53,19 @@ Route::middleware(['verified'])->group(function () {
         Route::prefix('listening')->group(function () {
             Route::controller(ListeningController::class)->group(function () {
                 Route::get('list', 'index')-> name('admin.listening.list');
-                Route::get('create', 'create');
-                Route::post('create', 'store');
+                // Route::get('create', 'create');
+                // Route::post('create', 'store');
                 Route::get('detail/{id}', 'show');
             });
             Route::controller(PartOneController::class)->group(function () {
-                Route::get('create/part{id}', 'create');
-                Route::post('create/part{id}', 'store');
+                Route::get('create-part1', 'create');
+                Route::post('create-part1', 'store');
+                Route::get('list-part1', 'index')-> name('list-part1');
+            });
+            Route::controller(PartTwoController::class)->group(function () {
+                Route::get('create-part2', 'create');
+                Route::post('create-part2', 'store');
+                Route::get('list-part2', 'index')-> name('list-part2');
             });
         });
     });

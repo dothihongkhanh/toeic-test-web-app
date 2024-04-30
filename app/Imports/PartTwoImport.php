@@ -8,28 +8,22 @@ use App\Models\Answer;
 use App\Models\Audio;
 use App\Models\Exam;
 use App\Models\ExamQuestion;
-use App\Models\Image;
-use App\Models\ImageQuestion;
 use App\Models\Question;
 use App\Models\Transcript;
-use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Storage;
-use Maatwebsite\Excel\Concerns\ToCollection;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 
-class PartOneImport implements ToModel, WithHeadingRow
+class PartTwoImport implements ToModel, WithHeadingRow
 {
     protected $levelId;
     protected $audioFiles;
-    protected $imageFiles;
     protected $importSuccess;
 
-    public function __construct($levelId, $audioFiles, $imageFiles)
+    public function __construct($levelId, $audioFiles)
     {
         $this->levelId = $levelId;
         $this->audioFiles = $audioFiles;
-        $this->imageFiles = $imageFiles;
         $this->importSuccess = false;
     }
 
@@ -56,12 +50,11 @@ class PartOneImport implements ToModel, WithHeadingRow
                 preg_match('/(\d+)_audio_/', $audioName, $matches);
                 $idQuestionFromAudioName = $matches[1];
                 if ($row['question_id'] == $idQuestionFromAudioName) {
-                    // Logic xử lý khi 'question_id' trùng khớp
                     $audioPath = $audioFile->store('listening/part1/audios', 'public');
                     $audio = Audio::create(['url_audio' => Storage::url($audioPath)]);
                     $transcript = Transcript::create(['content_trans' => $row['transcript']]);
                     $question = Question::create([
-                        'id_part' => PartType::PartOne,
+                        'id_part' => PartType::PartTwo,
                         'question_number' => $row['question_number'],
                         'question_title' => null,
                         'explanation' => $row['explanation'],
@@ -74,33 +67,15 @@ class PartOneImport implements ToModel, WithHeadingRow
                         'id_question' => $question->id,
                     ]);
                 } else {
-                    return null; // Trả về null nếu 'question_id' không trùng khớp
+                    return null;
                 }
             } else {
-                return null; // Trả về null nếu tên tệp không chứa 'question_id'
+                return null;
             }
         }
 
         if ($question) {
-            foreach ($this->imageFiles as $imageFile) {
-                $imageName = $imageFile->getClientOriginalName();
-                preg_match('/(\d+)_image_/', $imageName, $matches);
-                $idQuestionFromImageName = $matches[1];
-                if ($row['question_id'] == $idQuestionFromImageName) {
-                    $imagePath = $imageFile->store('listening/part1/images', 'public');
-                    $image = Image::create(['url_image' => Storage::url($imagePath)]);
-                    ImageQuestion::create([
-                        'id_image' => $image->id,
-                        'id_question' => $question->id,
-                    ]);
-                }
-            }
-        } else {
-            return null; // Trả về null nếu tên tệp không chứa 'question_id'
-        }
-
-        if ($question) {
-            for ($i = 1; $i <= 4; $i++) {
+            for ($i = 1; $i <= 3; $i++) {
                 Answer::create([
                     'id_question' => $question->id,
                     'answer_text' => $row['answer' . $i],
@@ -108,7 +83,7 @@ class PartOneImport implements ToModel, WithHeadingRow
                 ]);
             }
         } else {
-            return null; // Trả về null nếu tên tệp không chứa 'question_id'
+            return null;
         }
 
         $this->importSuccess = true;
