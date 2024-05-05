@@ -13,17 +13,14 @@ return new class extends Migration
     {
         Schema::create('questions', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('code');
             $table->unsignedBigInteger('id_part');
-            $table->string('question_number')->nullable();
-            $table->string('question_title')->nullable();
-            $table->text('explanation');
-            $table->unsignedBigInteger('id_audio')->nullable();
+            $table->string('url_audio')->nullable();
+            $table->longText('transcript');
             $table->timestamps();
 
             $table->foreign('id_part')
                 ->references('id')->on('parts')->onUpdate('cascade')->onDelete('cascade');
-            $table->foreign('id_audio')
-                ->references('id')->on('audios')->onUpdate('cascade')->onDelete('cascade');
         });
     }
 

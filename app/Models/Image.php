@@ -10,11 +10,12 @@ class Image extends Model
     use HasFactory;
 
     protected $fillable = [
-        'url_image'
+        'id_question',
+        'url_image',
     ];
 
-    public function questions()
+    public function question()
     {
-        return $this->belongsToMany(Question::class, 'image_questions', 'id_image', 'id_question');
+        return $this->belongsTo(Question::class, 'id_question');
     }
 }

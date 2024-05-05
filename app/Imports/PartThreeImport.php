@@ -5,21 +5,16 @@ namespace App\Imports;
 use App\Enums\ExamType;
 use App\Enums\PartType;
 use App\Models\Answer;
-use App\Models\Audio;
 use App\Models\Exam;
 use App\Models\ExamQuestion;
 use App\Models\Image;
-use App\Models\ImageQuestion;
 use App\Models\Question;
 use App\Models\QuestionChild;
-use App\Models\Transcript;
-use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Storage;
-use Maatwebsite\Excel\Concerns\ToCollection;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 
-class PartOneImport implements ToModel, WithHeadingRow
+class PartThreeImport implements ToModel, WithHeadingRow
 {
     protected $levelId;
     protected $audioFiles;
@@ -40,7 +35,7 @@ class PartOneImport implements ToModel, WithHeadingRow
             return null;
         }
 
-        $parentQuestion = Question::where('id_part', PartType::PartOne)
+        $parentQuestion = Question::where('id_part', PartType::PartThree)
             ->where('code', $row['question_id'])
             ->first();
 
@@ -50,10 +45,10 @@ class PartOneImport implements ToModel, WithHeadingRow
                 if (preg_match('/(\d+)_audio_/', $audioName, $matches)) {
                     $idQuestionFromAudioName = $matches[1];
                     if ($row['question_id'] == $idQuestionFromAudioName) {
-                        $audioPath = $audioFile->store('listening/part1/audios', 'public');
+                        $audioPath = $audioFile->store('listening/part3/audios', 'public');
                         $parentQuestion = Question::create([
                             'code' => $row['question_id'],
-                            'id_part' => PartType::PartOne,
+                            'id_part' => PartType::PartThree,
                             'url_audio' => Storage::url($audioPath),
                             'transcript' => $row['transcript'],
                         ]);
@@ -69,7 +64,7 @@ class PartOneImport implements ToModel, WithHeadingRow
                 if (preg_match('/(\d+)_image_/', $imageName, $matches)) {
                     $idQuestionFromImageName = $matches[1];
                     if ($row['question_id'] == $idQuestionFromImageName) {
-                        $imagePath = $imageFile->store('listening/part1/images', 'public');
+                        $imagePath = $imageFile->store('listening/part3/images', 'public');
                         Image::firstOrCreate([
                             'url_image' => Storage::url($imagePath),
                             'id_question' => $parentQuestion->id,
@@ -82,7 +77,7 @@ class PartOneImport implements ToModel, WithHeadingRow
             $questionChild = QuestionChild::create([
                 'id_question' => $parentQuestion->id,
                 'question_number' => $row['question_number'],
-                'question_title' => null,
+                'question_title' => $row['title_question'],
                 'explanation' => $row['explanation'],
             ]);
 
