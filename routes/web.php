@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\Listening\ListeningController;
 use App\Http\Controllers\Admin\Listening\PartOneController;
 use App\Http\Controllers\Admin\PartController;
+use App\Http\Controllers\Admin\PartThreeController;
 use App\Http\Controllers\Admin\PartTwoController;
 use App\Http\Controllers\Auth\LoginGoogleController;
 use App\Http\Controllers\HomeController;
@@ -66,6 +67,11 @@ Route::middleware(['verified'])->group(function () {
                 Route::get('create-part2', 'create');
                 Route::post('create-part2', 'store');
                 Route::get('list-part2', 'index')-> name('list-part2');
+            });
+            Route::controller(PartThreeController::class)->group(function () {
+                Route::get('create-part3', 'create');
+                Route::post('create-part3', 'store');
+                Route::get('list-part3', 'index')->name('list-part3');
             });
         });
     });

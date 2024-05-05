@@ -88,7 +88,8 @@ class ListeningController extends Controller
     public function show(string $id)
     {
         $exam = Exam::findOrFail($id);
-        $questions = $exam->questions()->with('answers')->get();
+        $questions = $exam->questions()->get();
+
         return view('admin.listening.detail', compact('exam', 'questions'));
     }
 

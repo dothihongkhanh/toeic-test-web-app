@@ -10,12 +10,10 @@ class Question extends Model
     use HasFactory;
 
     protected $fillable = [
+        'code',
         'id_part',
-        'question_number',
-        'question_title',
-        'explanation',
-        'id_audio',
-        'id_trans',
+        'url_audio',
+        'transcript',
     ];
 
     public function part()
@@ -23,28 +21,18 @@ class Question extends Model
         return $this->belongsTo(Part::class, 'id_part');
     }
 
-    public function audio()
-    {
-        return $this->belongsTo(Audio::class, 'id_audio');
-    }
-
-    public function images()
-    {
-        return $this->belongsToMany(Image::class, 'image_questions', 'id_image', 'id_question');
-    }
-
-    public function answers()
-    {
-        return $this->hasMany(Answer::class, 'id_question');
-    }
-
     public function exams()
     {
         return $this->belongsToMany(Exam::class, 'exam_questions', 'id_exam', 'id_question');
     }
 
-    public function transcript()
+    public function questionChilds()
     {
-        return $this->belongsTo(Transcript::class, 'id_trans');
+        return $this->hasMany(QuestionChild::class, 'id_question');
+    }
+
+    public function images()
+    {
+        return $this->hasMany(Image::class, 'id_question');
     }
 }

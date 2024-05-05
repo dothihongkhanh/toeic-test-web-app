@@ -13,7 +13,6 @@ return new class extends Migration
     {
         Schema::create('answers', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('id_question');
             $table->string('answer_text');
             $table->boolean('is_correct');
             $table->timestamps();
