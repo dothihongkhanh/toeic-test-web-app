@@ -7,6 +7,8 @@ use App\Http\Controllers\Admin\PartController;
 use App\Http\Controllers\Admin\PartFourController;
 use App\Http\Controllers\Admin\PartThreeController;
 use App\Http\Controllers\Admin\PartTwoController;
+use App\Http\Controllers\Admin\Reading\PartFiveController;
+use App\Http\Controllers\Admin\Reading\ReadingController;
 use App\Http\Controllers\Auth\LoginGoogleController;
 use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Auth;
@@ -43,10 +45,10 @@ Route::middleware(['verified'])->group(function () {
 
         Route::prefix('parts')->group(function () {
             Route::controller(PartController::class)->group(function () {
-                Route::get('list', 'index')-> name('admin.parts.list');
+                Route::get('list', 'index')->name('admin.parts.list');
                 Route::get('create', 'create');
                 Route::post('create', 'store');
-                Route::get('update/{id}','edit');
+                Route::get('update/{id}', 'edit');
                 Route::post('update/{id}', 'update');
                 Route::delete('delete/{id}', 'destroy');
             });
@@ -54,20 +56,18 @@ Route::middleware(['verified'])->group(function () {
 
         Route::prefix('listening')->group(function () {
             Route::controller(ListeningController::class)->group(function () {
-                Route::get('list', 'index')-> name('admin.listening.list');
-                // Route::get('create', 'create');
-                // Route::post('create', 'store');
+                Route::get('list', 'index')->name('admin.listening.list');
                 Route::get('detail/{id}', 'show');
             });
             Route::controller(PartOneController::class)->group(function () {
                 Route::get('create-part1', 'create');
                 Route::post('create-part1', 'store');
-                Route::get('list-part1', 'index')-> name('list-part1');
+                Route::get('list-part1', 'index')->name('list-part1');
             });
             Route::controller(PartTwoController::class)->group(function () {
                 Route::get('create-part2', 'create');
                 Route::post('create-part2', 'store');
-                Route::get('list-part2', 'index')-> name('list-part2');
+                Route::get('list-part2', 'index')->name('list-part2');
             });
             Route::controller(PartThreeController::class)->group(function () {
                 Route::get('create-part3', 'create');
@@ -78,6 +78,17 @@ Route::middleware(['verified'])->group(function () {
                 Route::get('create-part4', 'create');
                 Route::post('create-part4', 'store');
                 Route::get('list-part4', 'index')->name('list-part4');
+            });
+        });
+        Route::prefix('reading')->group(function () {
+            Route::controller(ReadingController::class)->group(function () {
+                Route::get('list', 'index')->name('admin.reading.list');
+                Route::get('detail/{id}', 'show');
+            });
+            Route::controller(PartFiveController::class)->group(function () {
+                Route::get('create-part5', 'create');
+                Route::post('create-part5', 'store');
+                Route::get('list-part5', 'index')->name('list-part5');
             });
         });
     });

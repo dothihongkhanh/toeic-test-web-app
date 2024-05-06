@@ -31,7 +31,7 @@
     </li>
 
     <li class="nav-item">
-        <a class="nav-link" href="">
+        <a class="nav-link" href="{{ route('admin.reading.list') }}">
             <i class="fas fa-fw fa-book-open"></i>
             <span>Reading</span></a>
     </li>
