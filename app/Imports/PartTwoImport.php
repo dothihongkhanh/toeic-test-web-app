@@ -28,7 +28,7 @@ class PartTwoImport implements ToModel, WithHeadingRow
 
     public function model(array $row)
     {
-        if ($row['question_id'] == 'question_id' || empty($row['question_id'])) {
+        if (empty($row['question_id']) || $row['question_id'] == 'question_id') {
             return null;
         }
 

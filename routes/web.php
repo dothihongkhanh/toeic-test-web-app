@@ -8,6 +8,7 @@ use App\Http\Controllers\Admin\PartFourController;
 use App\Http\Controllers\Admin\PartThreeController;
 use App\Http\Controllers\Admin\PartTwoController;
 use App\Http\Controllers\Admin\Reading\PartFiveController;
+use App\Http\Controllers\Admin\Reading\PartSixController;
 use App\Http\Controllers\Admin\Reading\ReadingController;
 use App\Http\Controllers\Auth\LoginGoogleController;
 use App\Http\Controllers\HomeController;
@@ -89,6 +90,11 @@ Route::middleware(['verified'])->group(function () {
                 Route::get('create-part5', 'create');
                 Route::post('create-part5', 'store');
                 Route::get('list-part5', 'index')->name('list-part5');
+            });
+            Route::controller(PartSixController::class)->group(function () {
+                Route::get('create-part6', 'create');
+                Route::post('create-part6', 'store');
+                Route::get('list-part6', 'index')->name('list-part6');
             });
         });
     });
