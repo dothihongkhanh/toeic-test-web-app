@@ -76,6 +76,8 @@ class PartOneImport implements ToModel, WithHeadingRow
                         ]);
                         break;
                     }
+                } else {
+                    return null;
                 }
             }
 
