@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Storage;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 
-class PartThreeImport implements ToModel, WithHeadingRow
+class PartFourImport implements ToModel, WithHeadingRow
 {
     protected $levelId;
     protected $audioFiles;
@@ -35,7 +35,7 @@ class PartThreeImport implements ToModel, WithHeadingRow
             return null;
         }
 
-        $parentQuestion = Question::where('id_part', PartType::PartThree)
+        $parentQuestion = Question::where('id_part', PartType::PartFour)
             ->where('code', $row['question_id'])
             ->first();
 
@@ -45,10 +45,10 @@ class PartThreeImport implements ToModel, WithHeadingRow
                 if (preg_match('/(\d+)_audio_/', $audioName, $matches)) {
                     $idQuestionFromAudioName = $matches[1];
                     if ($row['question_id'] == $idQuestionFromAudioName) {
-                        $audioPath = $audioFile->store('listening/part3/audios', 'public');
+                        $audioPath = $audioFile->store('listening/part4/audios', 'public');
                         $parentQuestion = Question::create([
                             'code' => $row['question_id'],
-                            'id_part' => PartType::PartThree,
+                            'id_part' => PartType::PartFour,
                             'url_audio' => Storage::url($audioPath),
                             'transcript' => $row['transcript'],
                         ]);
@@ -64,7 +64,7 @@ class PartThreeImport implements ToModel, WithHeadingRow
                 if (preg_match('/(\d+)_image_/', $imageName, $matches)) {
                     $idQuestionFromImageName = $matches[1];
                     if ($row['question_id'] == $idQuestionFromImageName) {
-                        $imagePath = $imageFile->store('listening/part3/images', 'public');
+                        $imagePath = $imageFile->store('listening/part4/images', 'public');
                         Image::firstOrCreate([
                             'url_image' => Storage::url($imagePath),
                             'id_question' => $parentQuestion->id,

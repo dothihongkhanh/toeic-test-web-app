@@ -28,7 +28,7 @@
             <div class="col-md-8">
                 @if($question->images->isNotEmpty())
                 @foreach($question->images as $image)
-                <img src="{{ $image->url_image }}" alt="Question Image">
+                <img src="{{ $image->url_image }}" alt="Question Image" style="width: 80%;">
                 @endforeach
                 @endif
             </div>
