@@ -16,7 +16,7 @@ return new class extends Migration
             $table->unsignedBigInteger('code');
             $table->unsignedBigInteger('id_part');
             $table->string('url_audio')->nullable();
-            $table->longText('transcript');
+            $table->longText('transcript')->nullable();
             $table->timestamps();
 
             $table->foreign('id_part')

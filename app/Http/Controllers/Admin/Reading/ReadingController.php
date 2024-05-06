@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Admin\Listening;
+namespace App\Http\Controllers\Admin\Reading;
 
 use App\Http\Controllers\Controller;
 use App\Models\Exam;
@@ -9,7 +9,7 @@ use App\Models\Part;
 use App\Models\Type;
 use Illuminate\Http\Request;
 
-class ListeningController extends Controller
+class ReadingController extends Controller
 {
     protected $part;
 
@@ -33,12 +33,11 @@ class ListeningController extends Controller
      */
     public function index()
     {
-        $listeningParts = $this->part::where('name_part', 'like', 'Part %')
-            ->whereRaw('CAST(SUBSTRING(name_part, 6) AS UNSIGNED) BETWEEN 1 AND 4')
+        $readingParts = $this->part::where('name_part', 'like', 'Part %')
+            ->whereRaw('CAST(SUBSTRING(name_part, 6) AS UNSIGNED) BETWEEN 5 AND 7')
             ->get();
 
-        $levels = Level::get(['id', 'name_level']);
-        return view('admin.listening.index', compact('listeningParts', 'levels'));
+        return view('admin.reading.index', compact('readingParts'));
     }
 
     /**
@@ -57,7 +56,6 @@ class ListeningController extends Controller
         //
     }
 
-
     /**
      * Display the specified resource.
      */
@@ -66,7 +64,7 @@ class ListeningController extends Controller
         $exam = Exam::findOrFail($id);
         $questions = $exam->questions()->get();
 
-        return view('admin.listening.detail', compact('exam', 'questions'));
+        return view('admin.reading.detail', compact('exam', 'questions'));
     }
 
     /**
