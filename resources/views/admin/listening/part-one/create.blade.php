@@ -1,9 +1,9 @@
 @extends('admin.layouts.app')
-@section('title', 'Upload Listening')
+@section('title', 'Create Part1')
 @section('content')
 <div class="card shadow mb-4">
     <div class="card-header py-3 d-flex justify-content-between">
-        <a href="/admin/listening/list">
+        <a href="{{ route('list-part1') }}">
             <i class="fas fa-fw fa-arrow-left"></i>
             List Question Part1
         </a>

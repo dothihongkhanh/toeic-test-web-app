@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Storage;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 
-class PartSixImport implements ToModel, WithHeadingRow
+class PartSevenImport implements ToModel, WithHeadingRow
 {
     protected $levelId;
     protected $imageFiles;
@@ -33,7 +33,7 @@ class PartSixImport implements ToModel, WithHeadingRow
             return null;
         }
 
-        $parentQuestion = Question::where('id_part', PartType::PartSix)
+        $parentQuestion = Question::where('id_part', PartType::PartSeven)
             ->where('code', $row['question_id'])
             ->first();
 
@@ -43,18 +43,17 @@ class PartSixImport implements ToModel, WithHeadingRow
                 if (preg_match('/(\d+)_image_/', $imageName, $matches)) {
                     $idQuestionFromImageName = $matches[1];
                     if ($row['question_id'] == $idQuestionFromImageName) {
-                        $imagePath = $imageFile->store('listening/part6/images', 'public');
-                        $parentQuestion = Question::create([
+                        $imagePath = $imageFile->store('listening/part7/images', 'public');
+                        $parentQuestion = Question::firstOrCreate([
                             'code' => $row['question_id'],
-                            'id_part' => PartType::PartSix,
+                            'id_part' => PartType::PartSeven,
                             'url_audio' => null,
                             'transcript' => $row['transcript'],
                         ]);
                         Image::firstOrCreate([
-                            'url_image' => Storage::url($imagePath),
                             'id_question' => $parentQuestion->id,
+                            'url_image' => Storage::url($imagePath),                            
                         ]);
-                        break;
                     }
                 } else {
                     return  null;

@@ -2,19 +2,19 @@
 
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\Listening\ListeningController;
+use App\Http\Controllers\Admin\Listening\PartFourController;
 use App\Http\Controllers\Admin\Listening\PartOneController;
+use App\Http\Controllers\Admin\Listening\PartThreeController;
+use App\Http\Controllers\Admin\Listening\PartTwoController;
 use App\Http\Controllers\Admin\PartController;
-use App\Http\Controllers\Admin\PartFourController;
-use App\Http\Controllers\Admin\PartThreeController;
-use App\Http\Controllers\Admin\PartTwoController;
 use App\Http\Controllers\Admin\Reading\PartFiveController;
+use App\Http\Controllers\Admin\Reading\PartSevenController;
 use App\Http\Controllers\Admin\Reading\PartSixController;
 use App\Http\Controllers\Admin\Reading\ReadingController;
 use App\Http\Controllers\Auth\LoginGoogleController;
 use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
-use Maatwebsite\Excel\Row;
 
 /*
 |--------------------------------------------------------------------------
@@ -95,6 +95,11 @@ Route::middleware(['verified'])->group(function () {
                 Route::get('create-part6', 'create');
                 Route::post('create-part6', 'store');
                 Route::get('list-part6', 'index')->name('list-part6');
+            });
+            Route::controller(PartSevenController::class)->group(function () {
+                Route::get('create-part7', 'create');
+                Route::post('create-part7', 'store');
+                Route::get('list-part7', 'index')->name('list-part7');
             });
         });
     });

@@ -6,7 +6,6 @@ use App\Enums\ExamType;
 use App\Enums\PartType;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\PartSix\CreatePartSixRequest;
-use App\Imports\PartFiveImport;
 use App\Imports\PartSixImport;
 use App\Models\Level;
 use App\Models\Type;

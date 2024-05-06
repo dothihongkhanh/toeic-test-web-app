@@ -3,7 +3,7 @@
 @section('content')
 <div class="card shadow mb-4">
     <div class="card-header py-3 d-flex justify-content-between">
-        <a href="/admin/listening/list-part3">
+        <a href="{{ route('list-part3') }}">
             <i class="fas fa-fw fa-arrow-left"></i>
             List Question Part3
         </a>
