@@ -7,19 +7,23 @@ use App\Enums\PartType;
 use App\Models\Answer;
 use App\Models\Exam;
 use App\Models\ExamQuestion;
+use App\Models\Image;
 use App\Models\Question;
 use App\Models\QuestionChild;
+use Illuminate\Support\Facades\Storage;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 
-class PartFiveImport implements ToModel, WithHeadingRow
+class PartSixImport implements ToModel, WithHeadingRow
 {
     protected $levelId;
+    protected $imageFiles;
     protected $importSuccess;
 
-    public function __construct($levelId)
+    public function __construct($levelId, $imageFiles)
     {
         $this->levelId = $levelId;
+        $this->imageFiles = $imageFiles;
         $this->importSuccess = false;
     }
 
@@ -29,24 +33,40 @@ class PartFiveImport implements ToModel, WithHeadingRow
             return null;
         }
 
-        $parentQuestion = Question::where('id_part', PartType::PartFive)
+        $parentQuestion = Question::where('id_part', PartType::PartSix)
             ->where('code', $row['question_id'])
             ->first();
 
         if (!$parentQuestion) {
-            $parentQuestion = Question::create([
-                'code' => $row['question_id'],
-                'id_part' => PartType::PartFive,
-                'url_audio' => null,
-                'transcript' => null,
-            ]);
+            foreach ($this->imageFiles as $imageFile) {
+                $imageName = $imageFile->getClientOriginalName();
+                if (preg_match('/(\d+)_image_/', $imageName, $matches)) {
+                    $idQuestionFromImageName = $matches[1];
+                    if ($row['question_id'] == $idQuestionFromImageName) {
+                        $imagePath = $imageFile->store('listening/part6/images', 'public');
+                        $parentQuestion = Question::create([
+                            'code' => $row['question_id'],
+                            'id_part' => PartType::PartSix,
+                            'url_audio' => null,
+                            'transcript' => $row['transcript'],
+                        ]);
+                        Image::firstOrCreate([
+                            'url_image' => Storage::url($imagePath),
+                            'id_question' => $parentQuestion->id,
+                        ]);
+                        break;
+                    }
+                } else {
+                    return  null;
+                }
+            }
         }
 
         if ($parentQuestion) {
             $questionChild = QuestionChild::create([
                 'id_question' => $parentQuestion->id,
                 'question_number' => $row['question_number'],
-                'question_title' => $row['title_question'],
+                'question_title' => null,
                 'explanation' => $row['explanation'],
             ]);
 
@@ -55,7 +75,7 @@ class PartFiveImport implements ToModel, WithHeadingRow
                 'name_exam' => request()->input('name_practice'),
                 'price' => request()->input('price'),
                 'time' => null,
-                'id_type' => ExamType::ReadingPractice,
+                'id_type' => ExamType::ListeningPractice,
                 'id_level' => $level,
             ]);
 
