@@ -1,12 +1,12 @@
 @extends('admin.layouts.app')
-@section('title', 'Listening - Part1')
+@section('title', 'Reading - Part7')
 @section('content')
 <div class="card shadow mb-4">
     <div class="card-header py-3 d-flex justify-content-between">
-        <h6 class="m-0 font-weight-bold text-primary">List Listening Question Part1</h6>
-        <a href="/admin/listening/create-part1" class="btn btn-primary">
+        <h6 class="m-0 font-weight-bold text-primary">List Reading Question Part7</h6>
+        <a href="/admin/reading/create-part7" class="btn btn-primary">
             <i class="fas fa-upload fa-sm text-white-50"></i>
-            <span>Upload file Part 1</span>
+            <span>Upload file Part 7</span>
         </a>
     </div>
     <div class="card-body">
@@ -22,14 +22,14 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($exams_in_part1 as $exam)
+                    @foreach ($exams_in_part7 as $exam)
                     <tr>
                         <td>{{ $exam->id }}</td>
                         <td>{{ $exam->name_exam }}</td>
                         <td>{{ $exam->price }}</td>
                         <td>{{ $exam->name_level}}</td>
                         <td>
-                            <a href="/admin/listening/detail/{{ $exam->id }}" class="btn btn-warning">Detail</a>
+                            <a href="/admin/reading/detail/{{ $exam->id }}" class="btn btn-warning">Detail</a>
                         </td>
                     </tr>
                     @endforeach

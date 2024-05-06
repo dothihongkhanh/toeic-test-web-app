@@ -6,7 +6,7 @@
         <h6 class="m-0 font-weight-bold text-primary">List Reading Question Part6</h6>
         <a href="/admin/reading/create-part6" class="btn btn-primary">
             <i class="fas fa-upload fa-sm text-white-50"></i>
-            <span>Upload file reading</span>
+            <span>Upload file Part 6</span>
         </a>
     </div>
     <div class="card-body">

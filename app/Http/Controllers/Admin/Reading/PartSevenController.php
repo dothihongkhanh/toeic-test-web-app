@@ -1,19 +1,19 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers\Admin\Reading;
 
 use App\Enums\ExamType;
 use App\Enums\PartType;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\PartTwoRequest;
-use App\Imports\PartTwoImport;
+use App\Http\Requests\PartSeven\CreatePartSevenRequest;
+use App\Imports\PartSevenImport;
 use App\Models\Level;
 use App\Models\Type;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
 
-class PartTwoController extends Controller
+class PartSevenController extends Controller
 {
     protected function getLevels()
     {
@@ -30,18 +30,18 @@ class PartTwoController extends Controller
      */
     public function index()
     {
-        $exams_in_part2 = DB::table('parts')
+        $exams_in_part7 = DB::table('parts')
             ->select('exams.id', 'exams.name_exam', 'exams.price', 'levels.name_level')
             ->join('questions', 'parts.id', '=', 'questions.id_part')
             ->join('exam_questions', 'questions.id', '=', 'exam_questions.id_question')
             ->join('exams', 'exam_questions.id_exam', '=', 'exams.id')
-            ->join('levels', 'exams.id_level', '=', 'levels.id') // Thêm mối quan hệ với bảng levels
-            ->where('parts.id', PartType::PartTwo)
+            ->join('levels', 'exams.id_level', '=', 'levels.id')
+            ->where('parts.id', PartType::PartSeven)
             ->distinct()
             ->groupBy('exams.id', 'exams.name_exam', 'exams.price', 'levels.name_level')
             ->get();
 
-        return view('admin.listening.part-two.index', compact('exams_in_part2'));
+        return view('admin.reading.part-seven.index', compact('exams_in_part7'));
     }
 
     /**
@@ -52,31 +52,29 @@ class PartTwoController extends Controller
         $levels = $this->getLevels();
         $types = $this->getTypes();
         foreach ($types as $type) {
-            if ($type['id'] == ExamType::ListeningPractice) {
+            if ($type['id'] == ExamType::ReadingPractice) {
                 $nameType = $type['name_type'];
             }
         }
 
-        return view('admin.listening.part-two.create', compact('levels', 'nameType'));
+        return view('admin.reading.part-seven.create', compact('levels', 'nameType'));
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(PartTwoRequest $request)
+    public function store(CreatePartSevenRequest $request)
     {
         $levelId = $request->input('id_level');
         if ($request->validated()) {
             $file = $request->file('file_upload');
-            $audioFiles = $request->file('audio_upload');
-
-            $import = new PartTwoImport($levelId, $audioFiles);
-
+            $imageFiles = $request->file('image_upload');
+            $import = new PartSevenImport($levelId, $imageFiles);
             $result = Excel::import($import, $file);
 
             if ($result && $import->importSuccess()) {
-                toastr()->success('Listening has been saved successfully!');
-                return redirect()->route('list-part2');
+                toastr()->success('Part 7 has been saved successfully!');
+                return redirect()->route('list-part7');
             } else {
                 toastr()->error('An error has occurred during import. Please select the correct file.');
                 return redirect()->back();

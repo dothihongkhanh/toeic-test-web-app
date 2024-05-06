@@ -1,19 +1,19 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers\Admin\Listening;
 
 use App\Enums\ExamType;
 use App\Enums\PartType;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\PartThree\CreatePartThreeRequest;
-use App\Imports\PartThreeImport;
+use App\Http\Requests\PartFour\CreatePartFourRequest;
+use App\Imports\PartFourImport;
 use App\Models\Level;
 use App\Models\Type;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
 
-class PartThreeController extends Controller
+class PartFourController extends Controller
 {
     protected function getLevels()
     {
@@ -24,24 +24,24 @@ class PartThreeController extends Controller
     {
         return Type::get(['id', 'name_type']);
     }
-    
+
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $exams_in_part3 = DB::table('parts')
+        $exams_in_part4 = DB::table('parts')
             ->select('exams.id', 'exams.name_exam', 'exams.price', 'levels.name_level')
             ->join('questions', 'parts.id', '=', 'questions.id_part')
             ->join('exam_questions', 'questions.id', '=', 'exam_questions.id_question')
             ->join('exams', 'exam_questions.id_exam', '=', 'exams.id')
             ->join('levels', 'exams.id_level', '=', 'levels.id')
-            ->where('parts.id', PartType::PartThree)
+            ->where('parts.id', PartType::PartFour)
             ->distinct()
             ->groupBy('exams.id', 'exams.name_exam', 'exams.price', 'levels.name_level')
             ->get();
 
-        return view('admin.listening.part-three.index', compact('exams_in_part3'));
+        return view('admin.listening.part-four.index', compact('exams_in_part4'));
     }
 
     /**
@@ -57,25 +57,26 @@ class PartThreeController extends Controller
             }
         }
 
-        return view('admin.listening.part-three.create', compact('levels', 'nameType'));
+        return view('admin.listening.part-four.create', compact('levels', 'nameType'));
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(CreatePartThreeRequest $request)
+    public function store(CreatePartFourRequest $request)
     {
         $levelId = $request->input('id_level');
         if ($request->validated()) {
             $file = $request->file('file_upload');
             $audioFiles = $request->file('audio_upload');
             $imageFiles = $request->file('image_upload');
-            $import = new PartThreeImport($levelId, $audioFiles, $imageFiles);
+            $import = new PartFourImport($levelId, $audioFiles, $imageFiles);
+
             $result = Excel::import($import, $file);
-            
+
             if ($result && $import->importSuccess()) {
-                toastr()->success('Listening has been saved successfully!');
-                return redirect()->route('list-part3');
+                toastr()->success('Part 4 has been saved successfully!');
+                return redirect()->route('list-part4');
             } else {
                 toastr()->error('An error has occurred during import. Please select the correct file.');
                 return redirect()->back();
