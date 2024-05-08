@@ -12,6 +12,8 @@ use App\Http\Controllers\Admin\Reading\PartSevenController;
 use App\Http\Controllers\Admin\Reading\PartSixController;
 use App\Http\Controllers\Admin\Reading\ReadingController;
 use App\Http\Controllers\Auth\LoginGoogleController;
+use App\Http\Controllers\Client\HomeController as ClientHomeController;
+use App\Http\Controllers\Client\Listening\PartOnePracticeController;
 use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -103,4 +105,10 @@ Route::middleware(['verified'])->group(function () {
             });
         });
     });
+});
+
+Route::get('/', [ClientHomeController::class, 'index']);
+
+Route::get('/listening', function () {
+    return view('client.listening.index');
 });
