@@ -1,0 +1,44 @@
+@extends('client.layouts.app')
+@section('title', config('app.name'). ' - Part 1')
+@section('content')
+<div class="site-section">
+    <div class="container">
+        <div class="card shadow mb-4">
+            <div class="card-header py-3 d-flex bg-primary">
+                <a href="{{ route('client.listening.list') }}">
+                    <i class="fas fa-solid fa-angle-left text-white mr-2"></i>
+                </a>
+                <h6 class="m-0 font-weight-bold text-white">PART 1</h6>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered table-hover" id="dataTable" width="100%" cellspacing="0">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Name</th>
+                                <th>Price</th>
+                                <th>Level</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($exams_in_part1 as $exam)
+                            <tr>
+                                <td>{{ $exam->id }}</td>
+                                <td>{{ $exam->name_exam }}</td>
+                                <td>{{ $exam->price }}</td>
+                                <td>{{ $exam->name_level}}</td>
+                                <td>
+                                    <a href="/practice-listening/detail/{{ $exam->id }}" class="btn btn-primary">Test now</a>
+                                </td>
+                            </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@endsection

@@ -13,6 +13,8 @@ use App\Http\Controllers\Admin\Reading\PartSixController;
 use App\Http\Controllers\Admin\Reading\ReadingController;
 use App\Http\Controllers\Auth\LoginGoogleController;
 use App\Http\Controllers\Client\HomeController as ClientHomeController;
+use App\Http\Controllers\Client\Listening\ListeningController as ListeningListeningController;
+use App\Http\Controllers\Client\Listening\ListeningPracticeController;
 use App\Http\Controllers\Client\Listening\PartOnePracticeController;
 use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Auth;
@@ -109,6 +111,16 @@ Route::middleware(['verified'])->group(function () {
 
 Route::get('/', [ClientHomeController::class, 'index']);
 
-Route::get('/listening', function () {
-    return view('client.listening.index');
+Route::middleware(['verified'])->group(function () {
+    Route::prefix('practice-listening')->group(function () {
+        Route::controller(ListeningPracticeController::class)->group(function () {
+            Route::get('/', 'index')->name('client.listening.list');
+            Route::get('detail/{id}', 'show');
+        });
+        Route::controller(PartOnePracticeController::class)->group(function () {
+            Route::get('list-part1', 'index')->name('practice-list-part1');
+            Route::get('detail/{id}', 'show');
+            Route::post('submit', 'submit')->name('submit');
+        });
+    });
 });

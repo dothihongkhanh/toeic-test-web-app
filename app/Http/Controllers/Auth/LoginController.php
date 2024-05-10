@@ -26,7 +26,7 @@ class LoginController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/home';
+    protected $redirectTo = '/';
 
     /**
      * Create a new controller instance.
@@ -47,7 +47,7 @@ class LoginController extends Controller
                 return redirect('/admin');
                 break;
             case 2:
-                return redirect('/home');
+                return redirect('/');
                 break;
             default:
                 return redirect('/login');

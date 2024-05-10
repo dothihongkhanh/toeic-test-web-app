@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers\Client\Listening;
 
+use App\Enums\PartType;
 use App\Http\Controllers\Controller;
+use App\Models\Exam;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class PartOnePracticeController extends Controller
 {
@@ -12,54 +15,31 @@ class PartOnePracticeController extends Controller
      */
     public function index()
     {
-        return view('client.home');
+        $exams_in_part1 = DB::table('parts')
+            ->select('exams.id', 'exams.name_exam', 'exams.price', 'levels.name_level')
+            ->join('questions', 'parts.id', '=', 'questions.id_part')
+            ->join('exam_questions', 'questions.id', '=', 'exam_questions.id_question')
+            ->join('exams', 'exam_questions.id_exam', '=', 'exams.id')
+            ->join('levels', 'exams.id_level', '=', 'levels.id')
+            ->where('parts.id', PartType::PartOne)
+            ->distinct()
+            ->groupBy('exams.id', 'exams.name_exam', 'exams.price', 'levels.name_level')
+            ->get();
+
+        return view('client.listening.part-one.index', compact('exams_in_part1'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     */
     public function show(string $id)
     {
-        //
+        $exam = Exam::findOrFail($id);
+        $questions = $exam->questions()->get();
+
+        return view('client.listening.part-one.detail', compact('exam', 'questions'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
+    public function submit(Request $request)
     {
-        //
-    }
+        
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
     }
 }

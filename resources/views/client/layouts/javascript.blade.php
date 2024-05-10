@@ -12,3 +12,5 @@
 <script src="/template/client/js/jquery.fancybox.min.js"></script>
 <script src="/template/client/js/jquery.sticky.js"></script>
 <script src="/template/client/js/main.js"></script>
+
+<script src="/template/client/js/define.js"></script>

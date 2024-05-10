@@ -14,7 +14,7 @@
                             <a href="index.html" class="nav-link text-left">Home</a>
                         </li>
                         <li>
-                            <a href="admissions.html" class="nav-link text-left">Listening</a>
+                            <a href="{{ route('client.listening.list') }}" class="nav-link text-left">Listening</a>
                         </li>
                         <li>
                             <a href="courses.html" class="nav-link text-left">Reading</a>
@@ -32,39 +32,37 @@
                         <li>
                             <a href="contact.html" class="nav-link text-left">Contact</a>
                         </li>
-                    </ul>
+                        @guest
+                        @if (Route::has('login'))
+                        <a class="btn btn-primary mr-3 text-white font-weight-bold" href="{{ route('login') }}">{{ __('Login') }}</a>
+                        @endif
+
+                        @if (Route::has('register'))
+                        <a class="btn btn-outline-primary mr-3 font-weight-bold" href="{{ route('register') }}">{{ __('Register') }}</a>
+                        @endif
+                        @else
+                        <li class="has-children">
+                            <a id="navbarDropdown" class="nav-link text-left text-primary text-uppercase ml-3 font-weight-bold" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                                {{ Auth::user()->name }}
+                            </a>
+
+                            <ul class="dropdown" aria-labelledby="navbarDropdown">
+                                <li><a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault();
+                                                     document.getElementById('logout-form').submit();">
+                                        {{ __('Logout') }}
+                                    </a></li>
+
+                                <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                                    @csrf
+                                </form>
+                            </ul>
+                        </li>
+                        @endguest
                     </ul>
                 </nav>
             </div>
             <div class="ml-auto">
                 <div class="align-items-center">
-                    @guest
-                    @if (Route::has('login'))
-                    <a class="mr-3" href="{{ route('login') }}">{{ __('Login') }}</a>
-                    @endif
-
-                    @if (Route::has('register'))
-                    <a class="mr-3" href="{{ route('register') }}">{{ __('Register') }}</a>
-                    @endif
-                    @else
-                    <li class="nav-item dropdown">
-                        <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                            {{ Auth::user()->name }}
-                        </a>
-
-                        <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                            <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault();
-                                                     document.getElementById('logout-form').submit();">
-                                {{ __('Logout') }}
-                            </a>
-
-                            <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-                                @csrf
-                            </form>
-                        </div>
-                    </li>
-                    @endguest
-
                     <a href="#" class="d-inline-block d-lg-none site-menu-toggle js-menu-toggle text-black"><span class="icon-menu h3"></span></a>
                 </div>
             </div>
