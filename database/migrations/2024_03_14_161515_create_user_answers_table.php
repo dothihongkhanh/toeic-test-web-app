@@ -14,11 +14,13 @@ return new class extends Migration
         Schema::create('user_answers', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('id_user_exam');
-            $table->string('user_answer');
+            $table->unsignedBigInteger('id_user_answer');
             $table->timestamps();
 
             $table->foreign('id_user_exam')
                 ->references('id')->on('user_exams')->onUpdate('cascade')->onDelete('cascade');
+            $table->foreign('id_user_answer')
+                ->references('id')->on('answers')->onUpdate('cascade')->onDelete('cascade');
         });
     }
 

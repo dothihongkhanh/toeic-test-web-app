@@ -15,75 +15,86 @@ questionItems.forEach((item) => {
 document.addEventListener("DOMContentLoaded", function () {
     const answerRadios = document.querySelectorAll('input[name^="answer["]');
 
-    // Lặp qua từng nút radio
+    // Lắng nghe sự kiện click của input radio
     answerRadios.forEach(function (radio) {
-        // Thêm sự kiện click cho mỗi nút radio
         radio.addEventListener("click", function () {
-            // Lấy giá trị của nút radio được chọn
             const selectedAnswerId = this.value;
+            const questionId = getQuestionIdFromRadioName(this.name);
 
-            // Lấy ID của câu hỏi từ tên trường input radio
-            const questionId = this.name.replace('answer[', '').replace(']', '');
-
-            // Lưu trữ giá trị của nút radio được chọn vào localStorage
-            localStorage.setItem("selectedAnswerId_" + questionId, selectedAnswerId);
-
-            // Xác định phần tử test-nav-item tương ứng với câu hỏi được chọn
-            const testNavItem = document.querySelector(
-                '.test-nav-item[data-question-id="' + questionId + '"]'
+            // Lưu trạng thái đã chọn vào localStorage
+            localStorage.setItem(
+                getLocalStorageKey(questionId),
+                selectedAnswerId
             );
 
-            // Thêm hoặc xóa lớp selected-answer tùy thuộc vào việc người dùng đã chọn đáp án hay không
-            if (selectedAnswerId) {
-                testNavItem.classList.add("selected-answer");
-            } else {
-                testNavItem.classList.remove("selected-answer");
-            }
+            markSelectedAnswer(questionId);
         });
+    });
 
-        // Kiểm tra xem có giá trị được lưu trong localStorage hay không khi trang được tải lại
-        const questionId = radio.name.replace('answer[', '').replace(']', '');
-        const selectedAnswerId = localStorage.getItem("selectedAnswerId_" + questionId);
-        if (selectedAnswerId && selectedAnswerId === radio.value) {
-            // Nếu có, đánh dấu nút radio được chọn và thêm lớp selected-answer vào test-nav-item tương ứng
-            radio.checked = true;
-            const testNavItem = document.querySelector('.test-nav-item[data-question-id="' + questionId + '"]');
+    // Đánh dấu câu hỏi đã chọn đáp án
+    function markSelectedAnswer(questionId) {
+        const testNavItem = document.querySelector(
+            '.test-nav-item[data-question-id="' + questionId + '"]'
+        );
+        const selectedAnswerId = localStorage.getItem(
+            getLocalStorageKey(questionId)
+        );
+        if (selectedAnswerId) {
             testNavItem.classList.add("selected-answer");
+        } else {
+            testNavItem.classList.remove("selected-answer");
         }
+    }
+
+    // Lấy id của câu hỏi từ tên của input radio
+    function getQuestionIdFromRadioName(name) {
+        return name.replace("answer[", "").replace("]", "");
+    }
+
+    // Tạo key cho localStorage từ id của câu hỏi
+    function getLocalStorageKey(questionId) {
+        return "selectedAnswerId_" + questionId;
+    }
+
+    // Xóa dữ liệu trong localStorage trước khi trang được tải lại
+    window.addEventListener("beforeunload", function () {
+        localStorage.clear();
     });
 });
+
 //f5 lại trang
-document.addEventListener("DOMContentLoaded", function() {
+document.addEventListener("DOMContentLoaded", function () {
     var radios = document.querySelectorAll('input[type="radio"]');
-    radios.forEach(function(radio) {
+    radios.forEach(function (radio) {
         radio.checked = false;
     });
 });
 //send time
-// var minutes = 0;
-// var seconds = 0;
+var minutes = 0;
+var seconds = 0;
 
-// function updateTimer() {
-//     seconds++;
+function updateTimer() {
+    seconds++;
 
-//     if (seconds >= 60) {
-//         seconds = 0;
-//         minutes++;
-//     }
+    if (seconds >= 60) {
+        seconds = 0;
+        minutes++;
+    }
 
-//     var formattedTime =
-//         ('0' + minutes).slice(-2) + ':' +
-//         ('0' + seconds).slice(-2);
+    var formattedTime =
+        ("0" + minutes).slice(-2) + ":" + ("0" + seconds).slice(-2);
 
-//     document.getElementById('timer').innerText = formattedTime;
+    document.getElementById("timer").innerText = formattedTime;
 
-//     document.getElementById('timeElapsed').value = formattedTime;
-// }
+    document.getElementById("timeElapsed").value = formattedTime;
+}
 
-// setInterval(updateTimer, 1000);
+setInterval(updateTimer, 1000);
 
-// document.getElementById('timeForm').addEventListener('submit', function(event) {
-//     event.preventDefault();
-//     var timeElapsed = document.getElementById('timeElapsed').value;
-//     this.submit();
-// });
+document
+    .getElementById("timeForm")
+    .addEventListener("submit", function (event) {
+        event.preventDefault();
+        var timeElapsed = document.getElementById("timeElapsed").value;
+        this.submit();
+    });

@@ -15,9 +15,8 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('id_user');
             $table->unsignedBigInteger('id_exam');
-            $table->date('date');
-            $table->time('start_time');
-            $table->time('finish_time');
+            $table->dateTime('date');
+            $table->string('total_time');
             $table->timestamps();
 
             $table->foreign('id_exam')

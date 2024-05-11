@@ -5,6 +5,7 @@
     <div class="container mb-4">
         <form id="testForm" action="{{ route('submit') }}" method="POST">
             @csrf
+            <input type="hidden" name="idExam" value="{{ $exam->id }}">
             <div class="row">
                 <div class="col-lg-9">
                     @foreach($questions as $question)

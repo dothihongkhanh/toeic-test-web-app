@@ -121,6 +121,8 @@ Route::middleware(['verified'])->group(function () {
             Route::get('list-part1', 'index')->name('practice-list-part1');
             Route::get('detail/{id}', 'show');
             Route::post('submit', 'submit')->name('submit');
+            Route::get('result/{id}', 'showResult')->name('result');
+            Route::get('result-detail/{id}', 'showResultDetail')->name('result.detail');
         });
     });
 });
