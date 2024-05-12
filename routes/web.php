@@ -12,10 +12,12 @@ use App\Http\Controllers\Admin\Reading\PartSevenController;
 use App\Http\Controllers\Admin\Reading\PartSixController;
 use App\Http\Controllers\Admin\Reading\ReadingController;
 use App\Http\Controllers\Auth\LoginGoogleController;
+use App\Http\Controllers\Client\ClientController;
 use App\Http\Controllers\Client\HomeController as ClientHomeController;
 use App\Http\Controllers\Client\Listening\ListeningController as ListeningListeningController;
 use App\Http\Controllers\Client\Listening\ListeningPracticeController;
 use App\Http\Controllers\Client\Listening\PartOnePracticeController;
+use App\Http\Controllers\Client\Listening\PartTwoPracticeController;
 use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -109,20 +111,28 @@ Route::middleware(['verified'])->group(function () {
     });
 });
 
-Route::get('/', [ClientHomeController::class, 'index']);
+Route::get('/', [ClientController::class, 'index']);
 
 Route::middleware(['verified'])->group(function () {
     Route::prefix('practice-listening')->group(function () {
-        Route::controller(ListeningPracticeController::class)->group(function () {
-            Route::get('/', 'index')->name('client.listening.list');
-            Route::get('detail/{id}', 'show');
-        });
-        Route::controller(PartOnePracticeController::class)->group(function () {
-            Route::get('list-part1', 'index')->name('practice-list-part1');
-            Route::get('detail/{id}', 'show');
+        Route::controller(ClientController::class)->group(function () {
+            Route::get('/', 'showPartListening')->name('client.listening.list');
             Route::post('submit', 'submit')->name('submit');
             Route::get('result/{id}', 'showResult')->name('result');
-            Route::get('result-detail/{id}', 'showResultDetail')->name('result.detail');
+        });
+        Route::controller(PartOnePracticeController::class)->group(function () {
+            Route::prefix('part1')->group(function () {
+                Route::get('/', 'index')->name('practice-list-part1');
+                Route::get('detail/{id}', 'show');
+                Route::get('result-detail/{id}', 'showResultDetail')->name('part1.result.detail');
+            });
+        });
+        Route::controller(PartTwoPracticeController::class)->group(function () {
+            Route::prefix('part2')->group(function () {
+                Route::get('/', 'index')->name('practice-list-part2');
+                Route::get('detail/{id}', 'show');
+                Route::get('result-detail/{id}', 'showResultDetail')->name('part2.result.detail');
+            });
         });
     });
 });

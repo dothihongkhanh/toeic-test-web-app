@@ -29,7 +29,7 @@
                     <div class="card-body">
                         <div class="row no-gutters align-items-center">
                             <div class="col mr-2">
-                                <a href="/practice-listening/list-part{{ $listeningPart->id }}" class="h5 font-weight-bold text-primary text-uppercase mb-1">
+                                <a href="/practice-listening/part{{ $listeningPart->id }}" class="h5 font-weight-bold text-primary text-uppercase mb-1">
                                     {{ $listeningPart->name_part }}
                                 </a>
                                 <div class="text-xs mb-0 font-weight-bold text-gray-800">{{ $listeningPart->desc }}</div>

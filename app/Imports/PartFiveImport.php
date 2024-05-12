@@ -2,11 +2,9 @@
 
 namespace App\Imports;
 
-use App\Enums\ExamType;
 use App\Enums\PartType;
 use App\Models\Answer;
 use App\Models\Exam;
-use App\Models\ExamQuestion;
 use App\Models\Question;
 use App\Models\QuestionChild;
 use Maatwebsite\Excel\Concerns\ToModel;
@@ -14,12 +12,10 @@ use Maatwebsite\Excel\Concerns\WithHeadingRow;
 
 class PartFiveImport implements ToModel, WithHeadingRow
 {
-    protected $levelId;
     protected $importSuccess;
 
-    public function __construct($levelId)
+    public function __construct()
     {
-        $this->levelId = $levelId;
         $this->importSuccess = false;
     }
 
@@ -29,14 +25,19 @@ class PartFiveImport implements ToModel, WithHeadingRow
             return null;
         }
 
-        $parentQuestion = Question::where('id_part', PartType::PartFive)
-            ->where('code', $row['question_id'])
-            ->first();
+        $parentQuestion = Question::where('code', $row['question_id'])->first();
 
         if (!$parentQuestion) {
+            $exam = Exam::firstOrCreate([
+                'name_exam' => request()->input('name_practice'),
+                'price' => request()->input('price'),
+                'time' => null,
+                'id_part' => PartType::PartFive,
+            ]);
+
             $parentQuestion = Question::create([
                 'code' => $row['question_id'],
-                'id_part' => PartType::PartFive,
+                'id_exam' => $exam->id,
                 'url_audio' => null,
                 'transcript' => null,
             ]);
@@ -48,20 +49,6 @@ class PartFiveImport implements ToModel, WithHeadingRow
                 'question_number' => $row['question_number'],
                 'question_title' => $row['title_question'],
                 'explanation' => $row['explanation'],
-            ]);
-
-            $level = $this->levelId;
-            $exam = Exam::firstOrCreate([
-                'name_exam' => request()->input('name_practice'),
-                'price' => request()->input('price'),
-                'time' => null,
-                'id_type' => ExamType::ReadingPractice,
-                'id_level' => $level,
-            ]);
-
-            ExamQuestion::firstOrCreate([
-                'id_exam' => $exam->id,
-                'id_question' => $parentQuestion->id,
             ]);
 
             for ($i = 1; $i <= 4; $i++) {

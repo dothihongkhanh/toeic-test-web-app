@@ -16,7 +16,7 @@ class Part extends Model
         'number_question'
     ];
 
-    public function questions()
+    public function exams()
     {
         return $this->hasMany(Question::class, 'id_part');
     }

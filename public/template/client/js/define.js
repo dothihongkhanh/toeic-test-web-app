@@ -98,3 +98,10 @@ document
         var timeElapsed = document.getElementById("timeElapsed").value;
         this.submit();
     });
+//scroll test-nav
+window.addEventListener('scroll', function() {
+    var element = document.querySelector('.test-nav');
+    var rect = element.getBoundingClientRect();
+    var initialTop = rect.top;
+    element.style.top = initialTop + 'px';
+});

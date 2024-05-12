@@ -5,17 +5,12 @@ namespace App\Imports;
 use App\Enums\ExamType;
 use App\Enums\PartType;
 use App\Models\Answer;
-use App\Models\Audio;
 use App\Models\Exam;
 use App\Models\ExamQuestion;
 use App\Models\Image;
-use App\Models\ImageQuestion;
 use App\Models\Question;
 use App\Models\QuestionChild;
-use App\Models\Transcript;
-use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Storage;
-use Maatwebsite\Excel\Concerns\ToCollection;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 
@@ -26,9 +21,8 @@ class PartOneImport implements ToModel, WithHeadingRow
     protected $imageFiles;
     protected $importSuccess;
 
-    public function __construct($levelId, $audioFiles, $imageFiles)
+    public function __construct($audioFiles, $imageFiles)
     {
-        $this->levelId = $levelId;
         $this->audioFiles = $audioFiles;
         $this->imageFiles = $imageFiles;
         $this->importSuccess = false;
@@ -40,9 +34,7 @@ class PartOneImport implements ToModel, WithHeadingRow
             return null;
         }
 
-        $parentQuestion = Question::where('id_part', PartType::PartOne)
-            ->where('code', $row['question_id'])
-            ->first();
+        $parentQuestion = Question::where('code', $row['question_id'])->first();
 
         if (!$parentQuestion) {
             foreach ($this->audioFiles as $audioFile) {
@@ -51,9 +43,17 @@ class PartOneImport implements ToModel, WithHeadingRow
                     $idQuestionFromAudioName = $matches[1];
                     if ($row['question_id'] == $idQuestionFromAudioName) {
                         $audioPath = $audioFile->store('listening/part1/audios', 'public');
+
+                        $exam = Exam::firstOrCreate([
+                            'name_exam' => request()->input('name_practice'),
+                            'price' => request()->input('price'),
+                            'time' => null,
+                            'id_part' => PartType::PartOne,
+                        ]);
+
                         $parentQuestion = Question::create([
                             'code' => $row['question_id'],
-                            'id_part' => PartType::PartOne,
+                            'id_exam' => $exam->id,
                             'url_audio' => Storage::url($audioPath),
                             'transcript' => $row['transcript'],
                         ]);
@@ -86,20 +86,6 @@ class PartOneImport implements ToModel, WithHeadingRow
                 'question_number' => $row['question_number'],
                 'question_title' => null,
                 'explanation' => $row['explanation'],
-            ]);
-
-            $level = $this->levelId;
-            $exam = Exam::firstOrCreate([
-                'name_exam' => request()->input('name_practice'),
-                'price' => request()->input('price'),
-                'time' => null,
-                'id_type' => ExamType::ListeningPractice,
-                'id_level' => $level,
-            ]);
-
-            ExamQuestion::firstOrCreate([
-                'id_exam' => $exam->id,
-                'id_question' => $parentQuestion->id,
             ]);
 
             for ($i = 1; $i <= 4; $i++) {

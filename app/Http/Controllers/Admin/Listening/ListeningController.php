@@ -18,16 +18,6 @@ class ListeningController extends Controller
         $this->part = $part;
     }
 
-    protected function getLevels()
-    {
-        return Level::get(['id', 'name_level']);
-    }
-
-    protected function getTypes()
-    {
-        return Type::get(['id', 'name_type']);
-    }
-
     /**
      * Display a listing of the resource.
      */
@@ -37,8 +27,7 @@ class ListeningController extends Controller
             ->whereRaw('CAST(SUBSTRING(name_part, 6) AS UNSIGNED) BETWEEN 1 AND 4')
             ->get();
 
-        $levels = Level::get(['id', 'name_level']);
-        return view('admin.listening.index', compact('listeningParts', 'levels'));
+        return view('admin.listening.index', compact('listeningParts'));
     }
 
     /**

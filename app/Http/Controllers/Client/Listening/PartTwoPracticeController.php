@@ -8,16 +8,13 @@ use App\Models\Exam;
 use App\Models\UserAnswer;
 use App\Models\UserExam;
 
-class PartOnePracticeController extends Controller
+class PartTwoPracticeController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        $examsInPart1 = Exam::where('id_part', PartType::PartOne)->get();
+        $examsInPart2 = Exam::where('id_part', PartType::PartTwo)->get();
 
-        return view('client.listening.part-one.index', compact('examsInPart1'));
+        return view('client.listening.part-two.index', compact('examsInPart2'));
     }
 
     public function show(string $id)
@@ -25,7 +22,7 @@ class PartOnePracticeController extends Controller
         $exam = Exam::findOrFail($id);
         $questions = $exam->questions()->get();
 
-        return view('client.listening.part-one.detail', compact('exam', 'questions'));
+        return view('client.listening.part-two.detail', compact('exam', 'questions'));
     }
 
     public function showResultDetail(string $id)
@@ -36,6 +33,6 @@ class PartOnePracticeController extends Controller
         $exam = Exam::findOrFail($idExam);
         $questions = $exam->questions()->get();
 
-        return view('client.listening.part-one.detail_result', compact('userExam', 'exam', 'questions', 'userAnswers'));
+        return view('client.listening.part-two.detail_result', compact('userExam', 'exam', 'questions', 'userAnswers'));
     }
 }

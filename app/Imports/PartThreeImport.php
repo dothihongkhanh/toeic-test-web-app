@@ -16,14 +16,12 @@ use Maatwebsite\Excel\Concerns\WithHeadingRow;
 
 class PartThreeImport implements ToModel, WithHeadingRow
 {
-    protected $levelId;
     protected $audioFiles;
     protected $imageFiles;
     protected $importSuccess;
 
-    public function __construct($levelId, $audioFiles, $imageFiles)
+    public function __construct($audioFiles, $imageFiles)
     {
-        $this->levelId = $levelId;
         $this->audioFiles = $audioFiles;
         $this->imageFiles = $imageFiles;
         $this->importSuccess = false;
@@ -35,9 +33,7 @@ class PartThreeImport implements ToModel, WithHeadingRow
             return null;
         }
 
-        $parentQuestion = Question::where('id_part', PartType::PartThree)
-            ->where('code', $row['question_id'])
-            ->first();
+        $parentQuestion = Question::where('code', $row['question_id'])->first();
 
         if (!$parentQuestion) {
             foreach ($this->audioFiles as $audioFile) {
@@ -46,9 +42,17 @@ class PartThreeImport implements ToModel, WithHeadingRow
                     $idQuestionFromAudioName = $matches[1];
                     if ($row['question_id'] == $idQuestionFromAudioName) {
                         $audioPath = $audioFile->store('listening/part3/audios', 'public');
+
+                        $exam = Exam::firstOrCreate([
+                            'name_exam' => request()->input('name_practice'),
+                            'price' => request()->input('price'),
+                            'time' => null,
+                            'id_part' => PartType::PartThree,
+                        ]);
+
                         $parentQuestion = Question::create([
                             'code' => $row['question_id'],
-                            'id_part' => PartType::PartThree,
+                            'id_exam' => $exam->id,
                             'url_audio' => Storage::url($audioPath),
                             'transcript' => $row['transcript'],
                         ]);
@@ -81,20 +85,6 @@ class PartThreeImport implements ToModel, WithHeadingRow
                 'question_number' => $row['question_number'],
                 'question_title' => $row['title_question'],
                 'explanation' => $row['explanation'],
-            ]);
-
-            $level = $this->levelId;
-            $exam = Exam::firstOrCreate([
-                'name_exam' => request()->input('name_practice'),
-                'price' => request()->input('price'),
-                'time' => null,
-                'id_type' => ExamType::ListeningPractice,
-                'id_level' => $level,
-            ]);
-
-            ExamQuestion::firstOrCreate([
-                'id_exam' => $exam->id,
-                'id_question' => $parentQuestion->id,
             ]);
 
             for ($i = 1; $i <= 4; $i++) {

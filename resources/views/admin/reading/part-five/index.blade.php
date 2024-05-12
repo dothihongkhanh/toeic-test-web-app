@@ -17,17 +17,15 @@
                         <th>ID</th>
                         <th>Name</th>
                         <th>Price</th>
-                        <th>Level</th>
                         <th>Action</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($exams_in_part5 as $exam)
+                    @foreach ($examsInPart5 as $exam)
                     <tr>
                         <td>{{ $exam->id }}</td>
                         <td>{{ $exam->name_exam }}</td>
                         <td>{{ $exam->price }}</td>
-                        <td>{{ $exam->name_level}}</td>
                         <td>
                             <a href="/admin/reading/detail/{{ $exam->id }}" class="btn btn-warning">Detail</a>
                         </td>

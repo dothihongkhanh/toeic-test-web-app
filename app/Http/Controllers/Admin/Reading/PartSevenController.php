@@ -2,46 +2,24 @@
 
 namespace App\Http\Controllers\Admin\Reading;
 
-use App\Enums\ExamType;
 use App\Enums\PartType;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\PartSeven\CreatePartSevenRequest;
 use App\Imports\PartSevenImport;
-use App\Models\Level;
-use App\Models\Type;
+use App\Models\Exam;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
 
 class PartSevenController extends Controller
 {
-    protected function getLevels()
-    {
-        return Level::get(['id', 'name_level']);
-    }
-
-    protected function getTypes()
-    {
-        return Type::get(['id', 'name_type']);
-    }
-
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $exams_in_part7 = DB::table('parts')
-            ->select('exams.id', 'exams.name_exam', 'exams.price', 'levels.name_level')
-            ->join('questions', 'parts.id', '=', 'questions.id_part')
-            ->join('exam_questions', 'questions.id', '=', 'exam_questions.id_question')
-            ->join('exams', 'exam_questions.id_exam', '=', 'exams.id')
-            ->join('levels', 'exams.id_level', '=', 'levels.id')
-            ->where('parts.id', PartType::PartSeven)
-            ->distinct()
-            ->groupBy('exams.id', 'exams.name_exam', 'exams.price', 'levels.name_level')
-            ->get();
+        $examsInPart7 = Exam::where('id_part', PartType::PartSeven)->get();
 
-        return view('admin.reading.part-seven.index', compact('exams_in_part7'));
+        return view('admin.reading.part-seven.index', compact('examsInPart7'));
     }
 
     /**
@@ -49,15 +27,7 @@ class PartSevenController extends Controller
      */
     public function create()
     {
-        $levels = $this->getLevels();
-        $types = $this->getTypes();
-        foreach ($types as $type) {
-            if ($type['id'] == ExamType::ReadingPractice) {
-                $nameType = $type['name_type'];
-            }
-        }
-
-        return view('admin.reading.part-seven.create', compact('levels', 'nameType'));
+        return view('admin.reading.part-seven.create');
     }
 
     /**
@@ -65,11 +35,10 @@ class PartSevenController extends Controller
      */
     public function store(CreatePartSevenRequest $request)
     {
-        $levelId = $request->input('id_level');
         if ($request->validated()) {
             $file = $request->file('file_upload');
             $imageFiles = $request->file('image_upload');
-            $import = new PartSevenImport($levelId, $imageFiles);
+            $import = new PartSevenImport($imageFiles);
             $result = Excel::import($import, $file);
 
             if ($result && $import->importSuccess()) {

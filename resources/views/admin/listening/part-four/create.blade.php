@@ -27,18 +27,6 @@
                 @enderror
             </div>
             <div class="form-group">
-                <label>Type<span class="text-danger">*</span></label>
-                <input type="text" name="type" class="form-control" value="{{ $nameType }}" disabled>
-            </div>
-            <div class="form-group">
-                <label>Level<span class="text-danger">*</span></label>
-                <select class="form-control" name="id_level">
-                    @foreach($levels as $level)
-                    <option value="{{ $level->id }}">{{ $level->name_level }}</option>
-                    @endforeach
-                </select>
-            </div>
-            <div class="form-group">
                 <label>Content questions<span class="text-danger">*</span></label>
                 <input type="file" accept=".xls,.xlsx" name="file_upload" class="form-control">
                 @error('file_upload')

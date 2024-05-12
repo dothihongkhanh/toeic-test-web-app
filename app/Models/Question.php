@@ -11,19 +11,14 @@ class Question extends Model
 
     protected $fillable = [
         'code',
-        'id_part',
+        'id_exam',
         'url_audio',
         'transcript',
     ];
 
-    public function part()
+    public function exam()
     {
-        return $this->belongsTo(Part::class, 'id_part');
-    }
-
-    public function exams()
-    {
-        return $this->belongsToMany(Exam::class, 'exam_questions', 'id_exam', 'id_question');
+        return $this->belongsTo(Exam::class, 'id_exam');
     }
 
     public function questionChilds()

@@ -2,11 +2,9 @@
 
 namespace App\Imports;
 
-use App\Enums\ExamType;
 use App\Enums\PartType;
 use App\Models\Answer;
 use App\Models\Exam;
-use App\Models\ExamQuestion;
 use App\Models\Image;
 use App\Models\Question;
 use App\Models\QuestionChild;
@@ -16,13 +14,11 @@ use Maatwebsite\Excel\Concerns\WithHeadingRow;
 
 class PartSevenImport implements ToModel, WithHeadingRow
 {
-    protected $levelId;
     protected $imageFiles;
     protected $importSuccess;
 
-    public function __construct($levelId, $imageFiles)
+    public function __construct($imageFiles)
     {
-        $this->levelId = $levelId;
         $this->imageFiles = $imageFiles;
         $this->importSuccess = false;
     }
@@ -33,9 +29,7 @@ class PartSevenImport implements ToModel, WithHeadingRow
             return null;
         }
 
-        $parentQuestion = Question::where('id_part', PartType::PartSeven)
-            ->where('code', $row['question_id'])
-            ->first();
+        $parentQuestion = Question::where('code', $row['question_id'])->first();
 
         if (!$parentQuestion) {
             foreach ($this->imageFiles as $imageFile) {
@@ -44,9 +38,16 @@ class PartSevenImport implements ToModel, WithHeadingRow
                     $idQuestionFromImageName = $matches[1];
                     if ($row['question_id'] == $idQuestionFromImageName) {
                         $imagePath = $imageFile->store('listening/part7/images', 'public');
+
+                        $exam = Exam::firstOrCreate([
+                            'name_exam' => request()->input('name_practice'),
+                            'price' => request()->input('price'),
+                            'time' => null,
+                            'id_part' => PartType::PartSeven,
+                        ]);
                         $parentQuestion = Question::firstOrCreate([
                             'code' => $row['question_id'],
-                            'id_part' => PartType::PartSeven,
+                            'id_exam' => $exam->id,
                             'url_audio' => null,
                             'transcript' => $row['transcript'],
                         ]);
@@ -67,20 +68,6 @@ class PartSevenImport implements ToModel, WithHeadingRow
                 'question_number' => $row['question_number'],
                 'question_title' => null,
                 'explanation' => $row['explanation'],
-            ]);
-
-            $level = $this->levelId;
-            $exam = Exam::firstOrCreate([
-                'name_exam' => request()->input('name_practice'),
-                'price' => request()->input('price'),
-                'time' => null,
-                'id_type' => ExamType::ReadingPractice,
-                'id_level' => $level,
-            ]);
-
-            ExamQuestion::firstOrCreate([
-                'id_exam' => $exam->id,
-                'id_question' => $parentQuestion->id,
             ]);
 
             for ($i = 1; $i <= 4; $i++) {

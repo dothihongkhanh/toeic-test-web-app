@@ -36,7 +36,21 @@
                         <p class="text-warning">{{ $totalSkipped }}</p>
                     </div>
                 </div>
-                <a href="{{ route('result.detail', ['id' => $userExam->id]) }}">Xem chi tiết đáp án</a>
+                @if ($exam->part->id === App\Enums\PartType::PartOne)
+                <a href="{{ route('part1.result.detail', ['id' => $userExam->id]) }}">Xem chi tiết đáp án</a>
+                @elseif ($exam->part->id === App\Enums\PartType::PartTwo)
+                <a href="{{ route('part2.result.detail', ['id' => $userExam->id]) }}">Xem chi tiết đáp án</a>
+                @elseif ($exam->part->id === App\Enums\PartType::PartThree)
+                <a href="{{ route('part3.result.detail', ['id' => $userExam->id]) }}">Xem chi tiết đáp án</a>
+                @elseif ($exam->part->id === App\Enums\PartType::PartFour)
+                <a href="{{ route('part4.result.detail', ['id' => $userExam->id]) }}">Xem chi tiết đáp án</a>
+                @elseif ($exam->part->id === App\Enums\PartType::PartFive)
+                <a href="{{ route('part5.result.detail', ['id' => $userExam->id]) }}">Xem chi tiết đáp án</a>
+                @elseif ($exam->part->id === App\Enums\PartType::PartSix)
+                <a href="{{ route('part6.result.detail', ['id' => $userExam->id]) }}">Xem chi tiết đáp án</a>
+                @elseif ($exam->part->id === App\Enums\PartType::PartSeven)
+                <a href="{{ route('part7.result.detail', ['id' => $userExam->id]) }}">Xem chi tiết đáp án</a>
+                @endif
             </div>
         </div>
     </div>

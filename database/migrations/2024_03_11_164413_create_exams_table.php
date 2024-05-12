@@ -16,14 +16,11 @@ return new class extends Migration
             $table->string('name_exam')->unique();
             $table->string('price');
             $table->time('time')->nullable();
-            $table->unsignedBigInteger('id_type');
-            $table->unsignedBigInteger('id_level');
+            $table->unsignedBigInteger('id_part');
             $table->timestamps();
 
-            $table->foreign('id_type')
-                ->references('id')->on('types')->onUpdate('cascade')->onDelete('cascade');
-            $table->foreign('id_level')
-                ->references('id')->on('levels')->onUpdate('cascade')->onDelete('cascade');
+            $table->foreign('id_part')
+                ->references('id')->on('parts')->onUpdate('cascade')->onDelete('cascade');
         });
     }
 

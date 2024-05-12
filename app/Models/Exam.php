@@ -13,17 +13,16 @@ class Exam extends Model
         'name_exam',
         'price',
         'time',
-        'id_type',
-        'id_level',
+        'id_part',
     ];
 
     public function questions()
     {
-        return $this->belongsToMany(Question::class, 'exam_questions', 'id_exam', 'id_question');
+        return $this->hasMany(Question::class, 'id_exam');
     }
 
-    public function level()
+    public function part()
     {
-        return $this->belongsTo(Level::class, 'id_level');
+        return $this->belongsTo(Part::class, 'id_part');
     }
 }

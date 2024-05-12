@@ -14,13 +14,9 @@ return new class extends Migration
         Schema::create('questions', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('code');
-            $table->unsignedBigInteger('id_part');
             $table->string('url_audio')->nullable();
             $table->longText('transcript')->nullable();
             $table->timestamps();
-
-            $table->foreign('id_part')
-                ->references('id')->on('parts')->onUpdate('cascade')->onDelete('cascade');
         });
     }
 

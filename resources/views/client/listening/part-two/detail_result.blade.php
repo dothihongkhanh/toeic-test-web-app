@@ -23,12 +23,7 @@
                                     </div>
                                 </div>
                                 <div class="row">
-                                    <div class="col-md-6">
-                                        @foreach($question->images as $image)
-                                        <img src="{{ $image->url_image }}" alt="Question Image" class="img-fluid">
-                                        @endforeach
-                                    </div>
-                                    <div class="col-md-6">
+                                    <div class="col-md-12">
                                         @foreach($child->answers as $answer)
                                         <p>
                                             @if ($userAnswers->contains('id_user_answer', $answer->id))
@@ -66,7 +61,7 @@
             <div class="col-lg-3">
                 <div class="card shadow mb-4 test-nav" style="position: sticky; top: 90px; max-width: 200px;">
                     <div class="card-body">
-                        <p class="text-primary">Part 1</p>
+                        <p class="text-primary">Part 2</p>
                         <div class="row">
                             @foreach ($questions as $question)
                             @foreach($question->questionChilds as $child)

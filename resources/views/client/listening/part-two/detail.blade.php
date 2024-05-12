@@ -25,12 +25,7 @@
                                         </div>
                                     </div>
                                     <div class="row">
-                                        <div class="col-md-6">
-                                            @foreach($question->images as $image)
-                                            <img src="{{ $image->url_image }}" alt="Question Image" class="img-fluid">
-                                            @endforeach
-                                        </div>
-                                        <div class="col-md-6">
+                                        <div class="col-md-12">
                                             @foreach($child->answers as $answer)
                                             <p>
                                                 <input name="answer[{{ $child->id }}]" type="radio" class="mr-2" value="{{ $answer->id }}" />
@@ -49,7 +44,7 @@
                 <div class="col-lg-3">
                     <div class="card shadow mb-4 test-nav" style="position: sticky; top: 90px; max-width: 200px;">
                         <div class="card-body">
-                            <p class="text-primary">Part 1</p>
+                            <p class="text-primary">Part 2</p>
                             <b>Thời gian làm bài:</b>
                             <input type="hidden" name="timeElapsed" id="timeElapsed" value="">
                             <div id="timer" class="text-black">00:00</div>
