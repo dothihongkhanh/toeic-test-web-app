@@ -37,7 +37,7 @@ class PartSixImport implements ToModel, WithHeadingRow
                 if (preg_match('/(\d+)_image_/', $imageName, $matches)) {
                     $idQuestionFromImageName = $matches[1];
                     if ($row['question_id'] == $idQuestionFromImageName) {
-                        $imagePath = $imageFile->store('listening/part6/images', 'public');
+                        $imagePath = $imageFile->store('reading/part6/images', 'public');
 
                         $exam = Exam::firstOrCreate([
                             'name_exam' => request()->input('name_practice'),

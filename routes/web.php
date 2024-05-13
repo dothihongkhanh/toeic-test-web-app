@@ -16,8 +16,13 @@ use App\Http\Controllers\Client\ClientController;
 use App\Http\Controllers\Client\HomeController as ClientHomeController;
 use App\Http\Controllers\Client\Listening\ListeningController as ListeningListeningController;
 use App\Http\Controllers\Client\Listening\ListeningPracticeController;
+use App\Http\Controllers\Client\Listening\PartFourPracticeController;
 use App\Http\Controllers\Client\Listening\PartOnePracticeController;
+use App\Http\Controllers\Client\Listening\PartThreePracticeController;
 use App\Http\Controllers\Client\Listening\PartTwoPracticeController;
+use App\Http\Controllers\Client\Reading\PartFivePracticeController;
+use App\Http\Controllers\Client\Reading\PartSevenPracticeController;
+use App\Http\Controllers\Client\Reading\PartSixPracticeController;
 use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -132,6 +137,49 @@ Route::middleware(['verified'])->group(function () {
                 Route::get('/', 'index')->name('practice-list-part2');
                 Route::get('detail/{id}', 'show');
                 Route::get('result-detail/{id}', 'showResultDetail')->name('part2.result.detail');
+            });
+        });
+        Route::controller(PartThreePracticeController::class)->group(function () {
+            Route::prefix('part3')->group(function () {
+                Route::get('/', 'index')->name('practice-list-part3');
+                Route::get('detail/{id}', 'show');
+                Route::get('result-detail/{id}', 'showResultDetail')->name('part3.result.detail');
+            });
+        });
+        Route::controller(PartFourPracticeController::class)->group(function () {
+            Route::prefix('part4')->group(function () {
+                Route::get('/', 'index')->name('practice-list-part4');
+                Route::get('detail/{id}', 'show');
+                Route::get('result-detail/{id}', 'showResultDetail')->name('part4.result.detail');
+            });
+        });
+    });
+
+    Route::prefix('practice-reading')->group(function () {
+        Route::controller(ClientController::class)->group(function () {
+            Route::get('/', 'showPartReading')->name('client.reading.list');
+            Route::post('submit', 'submit')->name('submit');
+            Route::get('result/{id}', 'showResult')->name('result');
+        });
+        Route::controller(PartFivePracticeController::class)->group(function () {
+            Route::prefix('part5')->group(function () {
+                Route::get('/', 'index')->name('practice-list-part5');
+                Route::get('detail/{id}', 'show');
+                Route::get('result-detail/{id}', 'showResultDetail')->name('part5.result.detail');
+            });
+        });
+        Route::controller(PartSixPracticeController::class)->group(function () {
+            Route::prefix('part6')->group(function () {
+                Route::get('/', 'index')->name('practice-list-part6');
+                Route::get('detail/{id}', 'show');
+                Route::get('result-detail/{id}', 'showResultDetail')->name('part6.result.detail');
+            });
+        });
+        Route::controller(PartSevenPracticeController::class)->group(function () {
+            Route::prefix('part7')->group(function () {
+                Route::get('/', 'index')->name('practice-list-part7');
+                Route::get('detail/{id}', 'show');
+                Route::get('result-detail/{id}', 'showResultDetail')->name('part7.result.detail');
             });
         });
     });

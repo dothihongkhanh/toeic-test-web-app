@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Client;
 
+use App\Enums\PartType;
 use App\Http\Controllers\Controller;
 use App\Models\Answer;
 use App\Models\Exam;
@@ -19,11 +20,23 @@ class ClientController extends Controller
 
     public function showPartListening()
     {
-        $listeningParts = Part::where('name_part', 'like', 'Part %')
-            ->whereRaw('CAST(SUBSTRING(name_part, 6) AS UNSIGNED) BETWEEN 1 AND 4')
+        $listeningParts = Part::where('id', 'like', PartType::PartOne)
+            ->orWhere('id', 'like', PartType::PartTwo)
+            ->orWhere('id', 'like', PartType::PartThree)
+            ->orWhere('id', 'like', PartType::PartFour)
             ->get();
 
         return view('client.listening.index', compact('listeningParts'));
+    }
+
+    public function showPartReading()
+    {
+        $readingParts = Part::where('id', 'like', PartType::PartFive)
+            ->orWhere('id', 'like', PartType::PartSix)
+            ->orWhere('id', 'like', PartType::PartSeven)
+            ->get();
+
+        return view('client.reading.index', compact('readingParts'));
     }
 
     public function submit(Request $request)
@@ -73,8 +86,14 @@ class ClientController extends Controller
 
         $idExam = $userExam->id_exam;
         $exam = Exam::findOrFail($idExam);
-        $totalQuestions = $exam->questions->count();
-        $totalSkipped = $totalQuestions - ($totalCorrect + $totalWrong);
+
+        $totalChildQuestions = 0;
+
+        foreach ($exam->questions as $question) {
+            $totalChildQuestions += $question->questionChilds()->count();
+        }
+
+        $totalSkipped = $totalChildQuestions - ($totalCorrect + $totalWrong);
 
         return view('client.result', compact('exam', 'userExam', 'totalCorrect', 'totalWrong', 'totalSkipped'));
     }

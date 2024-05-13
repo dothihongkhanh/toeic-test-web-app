@@ -17,7 +17,7 @@
                             <a href="{{ route('client.listening.list') }}" class="nav-link text-left">Listening</a>
                         </li>
                         <li>
-                            <a href="courses.html" class="nav-link text-left">Reading</a>
+                            <a href="{{ route('client.reading.list') }}" class="nav-link text-left">Reading</a>
                         </li>
                         <li>
                             <a href="courses.html" class="nav-link text-left">Full test</a>

@@ -18,13 +18,6 @@
                                 </div>
                                 <div class="card-body">
                                     <div class="row">
-                                        <div class="col-lg-12 mb-2">
-                                            <audio class="w-100" controls>
-                                                <source src="{{ $question->url_audio }}" type="audio/mpeg">
-                                            </audio>
-                                        </div>
-                                    </div>
-                                    <div class="row">
                                         <div class="col-md-12">
                                             @foreach($child->answers as $answer)
                                             <p>
@@ -44,7 +37,8 @@
                 <div class="col-lg-3">
                     <div class="card shadow mb-4 test-nav" style="position: sticky; top: 90px; max-width: 100%;">
                         <div class="card-body">
-                            <p class="text-primary">Part 2</p>
+                            <span class="text-primary">Part 5</span>
+                            <br>
                             <b>Thời gian làm bài:</b>
                             <input type="hidden" name="timeElapsed" id="timeElapsed" value="">
                             <div id="timer" class="text-black">00:00</div>
@@ -59,7 +53,7 @@
                                 @endforeach
                                 @endforeach
                             </div>
-                            <button class="btn btn-primary w-100 mt-4" type="submit">Submit</button>
+                            <button class="btn btn-primary w-100 mt-3" type="submit">Submit</button>
                         </div>
                     </div>
                 </div>

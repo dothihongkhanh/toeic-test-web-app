@@ -11,32 +11,37 @@
                     @foreach($questions as $question)
                     <div class="row">
                         <div class="col-lg-12">
-                            @foreach($question->questionChilds as $child)
-                            <div id="{{ $child->id }}" class="card shadow mb-4 ">
+                            <div class="card shadow mb-4 ">
                                 <div class="card-header py-3">
-                                    <h6 class="m-0 font-weight-bold text-primary">{{ $child->question_number }}. {{ $child->question_title }}</h6>
+                                    <audio class="w-100" controls>
+                                        <source src="{{ $question->url_audio }}" type="audio/mpeg">
+                                    </audio>
                                 </div>
                                 <div class="card-body">
                                     <div class="row">
-                                        <div class="col-lg-12 mb-2">
-                                            <audio class="w-100" controls>
-                                                <source src="{{ $question->url_audio }}" type="audio/mpeg">
-                                            </audio>
+                                        <div class="col-md-6">
+                                            <div class="row">
+                                                @foreach($question->questionChilds as $child)
+                                                <div id="{{ $child->id }}" class="col-md-12">
+                                                    <h6 class="m-0 font-weight-bold text-primary">{{ $child->question_number }}. {{ $child->question_title }}</h6>
+                                                    @foreach($child->answers as $answer)
+                                                    <p>
+                                                        <input name="answer[{{ $child->id }}]" type="radio" class="mr-2" value="{{ $answer->id }}" />
+                                                        {{ $answer->answer_text }}
+                                                    </p>
+                                                    @endforeach
+                                                </div>
+                                                @endforeach
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-12">
-                                            @foreach($child->answers as $answer)
-                                            <p>
-                                                <input name="answer[{{ $child->id }}]" type="radio" class="mr-2" value="{{ $answer->id }}" />
-                                                {{ $answer->answer_text }}
-                                            </p>
+                                        <div class="col-md-6">
+                                            @foreach($question->images as $image)
+                                            <img src="{{ $image->url_image }}" alt="Question Image" class="img-fluid">
                                             @endforeach
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            @endforeach
                         </div>
                     </div>
                     @endforeach
@@ -44,14 +49,14 @@
                 <div class="col-lg-3">
                     <div class="card shadow mb-4 test-nav" style="position: sticky; top: 90px; max-width: 100%;">
                         <div class="card-body">
-                            <p class="text-primary">Part 2</p>
+                            <p class="text-primary">Part 4</p>
                             <b>Thời gian làm bài:</b>
                             <input type="hidden" name="timeElapsed" id="timeElapsed" value="">
                             <div id="timer" class="text-black">00:00</div>
-                            <div class="row">
+                            <div class="row d-flex justify-content-center align-items-center">
                                 @foreach ($questions as $question)
                                 @foreach($question->questionChilds as $child)
-                                <div class="col-lg-4 mb-2">
+                                <div class="mb-2">
                                     <div class="test-nav-item border d-flex justify-content-center align-items-center p-1" data-question-id="{{ $child->id }}">
                                         {{ $child->question_number }}
                                     </div>

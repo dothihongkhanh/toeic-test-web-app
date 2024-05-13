@@ -59,7 +59,7 @@
                 @endforeach
             </div>
             <div class="col-lg-3">
-                <div class="card shadow mb-4 test-nav" style="position: sticky; top: 90px; max-width: 200px;">
+                <div class="card shadow mb-4 test-nav" style="position: sticky; top: 90px; max-width: 100%;">
                     <div class="card-body">
                         <p class="text-primary">Part 2</p>
                         <div class="row">
