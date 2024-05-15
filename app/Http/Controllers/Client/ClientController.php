@@ -67,13 +67,11 @@ class ClientController extends Controller
         // return redirect()->route('result.detail', ['id' => $idExam]);
     }
 
-    public function showResult(string $id)
+    public function calculateResults($userAnswers, $exam)
     {
-        $userExam = UserExam::findOrFail($id);
-        $userAnswers = UserAnswer::where('id_user_exam', $userExam->id)->get();
-
         $totalCorrect = 0;
         $totalWrong = 0;
+        $totalSkipped = 0;
 
         foreach ($userAnswers as $userAnswer) {
             $isCorrect = Answer::where('id', $userAnswer->id_user_answer)->value('is_correct');
@@ -84,9 +82,6 @@ class ClientController extends Controller
             }
         }
 
-        $idExam = $userExam->id_exam;
-        $exam = Exam::findOrFail($idExam);
-
         $totalChildQuestions = 0;
 
         foreach ($exam->questions as $question) {
@@ -95,6 +90,52 @@ class ClientController extends Controller
 
         $totalSkipped = $totalChildQuestions - ($totalCorrect + $totalWrong);
 
-        return view('client.result', compact('exam', 'userExam', 'totalCorrect', 'totalWrong', 'totalSkipped'));
+        return [
+            'totalChildQuestions' => $totalChildQuestions,
+            'totalCorrect' => $totalCorrect,
+            'totalWrong' => $totalWrong,
+            'totalSkipped' => $totalSkipped
+        ];
+    }
+
+    public function showResult(string $id)
+    {
+        $userExam = UserExam::findOrFail($id);
+        $userAnswers = UserAnswer::where('id_user_exam', $userExam->id)->get();
+
+        $exam = Exam::findOrFail($userExam->id_exam);
+
+        $results = $this->calculateResults($userAnswers, $exam);
+
+        return view('client.result', compact('exam', 'userExam'))->with($results);
+    }
+
+    public function showHistory(string $examId)
+    {
+        $exam = Exam::findOrFail($examId);
+        $userExams = UserExam::where('id_exam', $examId)
+            ->where('id_user', auth()->id())
+            ->orderBy('date', 'desc')
+            ->get();
+
+        $totalChildQuestions = 0;
+        foreach ($exam->questions as $question) {
+            $totalChildQuestions += $question->questionChilds()->count();
+        }
+
+        $resultsArray = [];
+        foreach ($userExams as $userExam) {
+            $userAnswers = UserAnswer::where('id_user_exam', $userExam->id)->get();
+            $results = $this->calculateResults($userAnswers, $exam);
+            $resultsArray[] = [
+                'date' => $userExam->date,
+                'idUserExam' => $userExam->id,
+                'total_time' => $userExam->total_time,
+                'totalCorrect' => $results['totalCorrect'],
+                'totalChildQuestions' => $totalChildQuestions,
+            ];
+        }
+
+        return view('client.history', compact('exam', 'userExams', 'resultsArray'));
     }
 }

@@ -124,6 +124,7 @@ Route::middleware(['verified'])->group(function () {
             Route::get('/', 'showPartListening')->name('client.listening.list');
             Route::post('submit', 'submit')->name('submit');
             Route::get('result/{id}', 'showResult')->name('result');
+            Route::get('history/{id}', 'showHistory');
         });
         Route::controller(PartOnePracticeController::class)->group(function () {
             Route::prefix('part1')->group(function () {

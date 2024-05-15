@@ -11,32 +11,47 @@
                 <p class="m-0 font-weight-bold text-primary d-inline">PART 3</p>
             </div>
 
+            @if (!$examsInPart3->isEmpty())
             <div class="card-body">
-                <div class="table-responsive">
-                    <table class="table table-bordered table-hover" id="dataTable" width="100%" cellspacing="0">
-                        <thead>
-                            <tr>
-                                <th>ID</th>
-                                <th>Name</th>
-                                <th>Price</th>
-                                <th>Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach ($examsInPart3 as $exam)
-                            <tr>
-                                <td>{{ $exam->id }}</td>
-                                <td>{{ $exam->name_exam }}</td>
-                                <td>{{ $exam->price }}</td>
-                                <td>
-                                    <a href="/practice-listening/part3/detail/{{ $exam->id }}" class="btn btn-primary">Test now</a>
-                                </td>
-                            </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
+                @foreach ($examsInPart3 as $exam)
+                <div class="card shadow mb-4">
+                    <div class="card-body d-flex align-items-center">
+                        <div>
+                            <span class="font-weight-bold text-black">{{ $exam->name_exam }}</span>
+                            @if ($exam->users()->where('id_user', auth()->id())->exists())
+                            <span class="text-primary font-italic">(Hoàn thành)</span>
+                            @else
+                            <span class="text-danger font-italic">(Chưa làm)</span>
+                            @endif
+                            <br>
+                            @if($exam->price > 0)
+                            <div class="text-danger d-inline-block pl-1 pr-1" style="border: 1px solid red; border-radius: 5px">{{ $exam->price }}</div>
+                            @else
+                            <div class="text-primary d-inline-block pl-1 pr-1" style="border: 1px solid #51be78; border-radius: 5px">free</div>
+                            @endif
+                        </div>
+                        <div class="ml-auto">
+                            @if($exam->price > 0)
+                            <form action="{{ url('/vnpay_payment') }}" method="POST">
+                                @csrf
+                                <input name="price" value="{{ $exam->price }}" type="hidden">
+                                <button type="submit" name="redirect" class="btn btn-primary">Pay to Test</button>
+                            </form>
+
+                            @else
+                            <a href="/practice-listening/part3/detail/{{ $exam->id }}" class="btn btn-primary">Test now</a>
+                            @endif
+                            <a href="/practice-listening/history/{{ $exam->id }}" class="btn btn-outline-primary">Xem lịch sử</a>
+                        </div>
+                    </div>
                 </div>
+                @endforeach
             </div>
+            @else
+            <div class="m-4 text-center">
+                <h4>Chưa có đề thi!</h4>
+            </div>
+            @endif
         </div>
     </div>
 </div>

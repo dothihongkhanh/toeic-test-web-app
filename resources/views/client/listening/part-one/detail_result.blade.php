@@ -68,10 +68,23 @@
                     <div class="card-body">
                         <p class="text-primary">Part 1</p>
                         <div class="row">
-                            @foreach ($questions as $question)
+                        @foreach ($questions as $question)
                             @foreach($question->questionChilds as $child)
-                            <div class="col-lg-4 mb-2">
-                                <div class="test-nav-item border d-flex justify-content-center align-items-center p-1" data-question-id="{{ $child->id }}">
+                            <?php
+                            $bgClass = '';
+                            foreach ($child->answers as $answer) {
+                                if ($userAnswers->contains('id_user_answer', $answer->id)) {
+                                    if ($answer->is_correct) {
+                                        $bgClass = 'bg-primary text-white';
+                                    } else {
+                                        $bgClass = 'bg-danger text-white';
+                                    }
+                                    break;
+                                }
+                            }
+                            ?>
+                            <div class="col-lg-4 mb-1">
+                                <div class="test-nav-item border d-flex justify-content-center align-items-center p-1 {{ $bgClass }}" data-question-id="{{ $child->id }}">
                                     {{ $child->question_number }}
                                 </div>
                             </div>

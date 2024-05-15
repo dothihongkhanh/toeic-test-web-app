@@ -2,11 +2,9 @@
 
 namespace App\Imports;
 
-use App\Enums\ExamType;
 use App\Enums\PartType;
 use App\Models\Answer;
 use App\Models\Exam;
-use App\Models\ExamQuestion;
 use App\Models\Image;
 use App\Models\Question;
 use App\Models\QuestionChild;
@@ -37,6 +35,7 @@ class PartOneImport implements ToModel, WithHeadingRow
         $parentQuestion = Question::where('code', $row['question_id'])->first();
 
         if (!$parentQuestion) {
+
             foreach ($this->audioFiles as $audioFile) {
                 $audioName = $audioFile->getClientOriginalName();
                 if (preg_match('/(\d+)_audio_/', $audioName, $matches)) {

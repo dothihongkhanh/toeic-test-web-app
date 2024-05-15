@@ -50,4 +50,9 @@ class User extends Authenticatable implements MustVerifyEmail
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    public function exams()
+    {
+        return $this->belongsToMany(Exam::class, 'user_exams', 'id_user', 'id_exam');
+    }
 }

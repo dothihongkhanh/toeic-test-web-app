@@ -25,4 +25,9 @@ class Exam extends Model
     {
         return $this->belongsTo(Part::class, 'id_part');
     }
+
+    public function users()
+    {
+        return $this->belongsToMany(User::class, 'user_exams', 'id_exam', 'id_user');
+    }
 }
