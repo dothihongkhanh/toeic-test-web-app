@@ -23,25 +23,28 @@
                             <span class="text-danger font-italic">(Chưa làm)</span>
                             @endif
                             <br>
-                            @if($exam->price > 0)
+                            @if($exam->isPaidByUser(auth()->id()))
+                            <div class="text-primary d-inline-block pl-1 pr-1" style="border: 1px solid #51be78; border-radius: 5px">{{ $exam->price }}</div>
+                            @elseif($exam->price > 0)
                             <div class="text-danger d-inline-block pl-1 pr-1" style="border: 1px solid red; border-radius: 5px">{{ $exam->price }}</div>
                             @else
                             <div class="text-primary d-inline-block pl-1 pr-1" style="border: 1px solid #51be78; border-radius: 5px">free</div>
                             @endif
                         </div>
                         <div class="ml-auto">
-                            @if($exam->price > 0)
+                            @if($exam->price > 0 && !$exam->isPaidByUser(auth()->id()))
                             <form action="{{ url('/vnpay_payment') }}" method="POST">
                                 @csrf
+                                <input name="id_exam" value="{{ $exam->id }}" type="hidden">
                                 <input name="price" value="{{ $exam->price }}" type="hidden">
-                                <button type="submit" name="redirect" class="btn btn-primary">Pay to Test</button>
+                                <button type="submit" name="redirect" class="btn btn-primary">Thanh toán</button>
                             </form>
-
                             @else
-                            <a href="/practice-listening/part5/detail/{{ $exam->id }}" class="btn btn-primary">Test now</a>
+                            <a href="/practice-listening/part5/detail/{{ $exam->id }}" class="btn btn-primary">Bắt đầu</a>
                             @endif
                             <a href="/practice-listening/history/{{ $exam->id }}" class="btn btn-outline-primary">Xem lịch sử</a>
                         </div>
+
                     </div>
                 </div>
                 @endforeach

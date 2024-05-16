@@ -12,6 +12,7 @@ use App\Http\Controllers\Admin\Reading\PartSevenController;
 use App\Http\Controllers\Admin\Reading\PartSixController;
 use App\Http\Controllers\Admin\Reading\ReadingController;
 use App\Http\Controllers\Auth\LoginGoogleController;
+use App\Http\Controllers\Client\CheckoutController;
 use App\Http\Controllers\Client\ClientController;
 use App\Http\Controllers\Client\HomeController as ClientHomeController;
 use App\Http\Controllers\Client\Listening\ListeningController as ListeningListeningController;
@@ -165,7 +166,7 @@ Route::middleware(['verified'])->group(function () {
         Route::controller(PartFivePracticeController::class)->group(function () {
             Route::prefix('part5')->group(function () {
                 Route::get('/', 'index')->name('practice-list-part5');
-                Route::get('detail/{id}', 'show');
+                Route::get('detail/{id}', 'show')->name('practice.part5.detail');;
                 Route::get('result-detail/{id}', 'showResultDetail')->name('part5.result.detail');
             });
         });
@@ -184,4 +185,8 @@ Route::middleware(['verified'])->group(function () {
             });
         });
     });
+
+    Route::controller(CheckoutController::class)->group(function () {
+        Route::post('/vnpay_payment', 'vnpay_payment');
+        Route::get('/vnpay-callback', 'vnpay_callback');});
 });

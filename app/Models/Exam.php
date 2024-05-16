@@ -30,4 +30,14 @@ class Exam extends Model
     {
         return $this->belongsToMany(User::class, 'user_exams', 'id_exam', 'id_user');
     }
+
+    public function isPaidByUser($userId)
+    {
+        return $this->payments()->where('id_user', $userId)->exists();
+    }
+
+    public function payments()
+    {
+        return $this->hasMany(Payment::class, 'id_exam');
+    }
 }
