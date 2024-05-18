@@ -6,12 +6,11 @@
         <div class="container">
             <div class="row align-items-center">
                 <div class="col-lg-12 mx-auto text-center" data-aos="fade-up">
-                    <h1>Success with  <br> TOEIC Practice!</h1>
+                    <h1>Success with <br> TOEIC Practice!</h1>
                 </div>
             </div>
         </div>
     </div>
-
     <div class="intro-section" style="background-image: url('https://education.ec.europa.eu/sites/default/files/2022-01/study-online-header-1200.jpg');">
         <div class="container">
             <div class="row align-items-center">
@@ -21,12 +20,7 @@
             </div>
         </div>
     </div>
-
 </div>
-
-
-<div></div>
-
 <div class="site-section">
     <div class="container">
         <div class="row mb-5 justify-content-center text-center">
@@ -77,12 +71,8 @@
         </div>
     </div>
 </div>
-
-
 <div class="site-section">
     <div class="container">
-
-
         <div class="row mb-5 justify-content-center text-center">
             <div class="col-lg-6 mb-5">
                 <h2 class="section-title-underline mb-3">
@@ -230,10 +220,6 @@
 
             </div>
         </div>
-
-
-
     </div>
 </div>
-
 @endsection

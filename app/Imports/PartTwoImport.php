@@ -5,6 +5,8 @@ namespace App\Imports;
 use App\Enums\PartType;
 use App\Models\Answer;
 use App\Models\Exam;
+use App\Models\ExamPart;
+use App\Models\ExamQuestion;
 use App\Models\Question;
 use App\Models\QuestionChild;
 use Illuminate\Support\Facades\Storage;
@@ -28,7 +30,9 @@ class PartTwoImport implements ToModel, WithHeadingRow
             return null;
         }
 
-        $parentQuestion = Question::where('code', $row['question_id'])->first();
+        $parentQuestion = Question::where('id_part', PartType::PartTwo)
+            ->where('code', $row['question_id'])
+            ->first();
 
         if (!$parentQuestion) {
             foreach ($this->audioFiles as $audioFile) {
@@ -37,17 +41,9 @@ class PartTwoImport implements ToModel, WithHeadingRow
                     $idQuestionFromAudioName = $matches[1];
                     if ($row['question_id'] == $idQuestionFromAudioName) {
                         $audioPath = $audioFile->store('listening/part2/audios', 'public');
-
-                        $exam = Exam::firstOrCreate([
-                            'name_exam' => request()->input('name_practice'),
-                            'price' => request()->input('price'),
-                            'time' => null,
-                            'id_part' => PartType::PartTwo,
-                        ]);
-
                         $parentQuestion = Question::create([
                             'code' => $row['question_id'],
-                            'id_exam' =>$exam->id,
+                            'id_part' => PartType::PartTwo,
                             'url_audio' => Storage::url($audioPath),
                             'transcript' => $row['transcript'],
                         ]);
@@ -63,6 +59,22 @@ class PartTwoImport implements ToModel, WithHeadingRow
                 'question_number' => $row['question_number'],
                 'question_title' => null,
                 'explanation' => $row['explanation'],
+            ]);
+
+            $exam = Exam::firstOrCreate([
+                'name_exam' => request()->input('name_practice'),
+                'price' => request()->input('price'),
+                'time' => null,
+            ]);
+
+            ExamQuestion::firstOrCreate([
+                'id_exam' => $exam->id,
+                'id_question' => $parentQuestion->id,
+            ]);
+
+            ExamPart::firstOrCreate([
+                'id_exam' => $exam->id,
+                'id_part' => PartType::PartTwo,
             ]);
 
             for ($i = 1; $i <= 3; $i++) {

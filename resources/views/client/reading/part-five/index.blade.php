@@ -40,9 +40,9 @@
                                 <button type="submit" name="redirect" class="btn btn-primary">Thanh toán</button>
                             </form>
                             @else
-                            <a href="/practice-listening/part5/detail/{{ $exam->id }}" class="btn btn-primary">Bắt đầu</a>
+                            <a href="/practice-reading/part5/detail/{{ $exam->id }}" class="btn btn-primary">Bắt đầu</a>
                             @endif
-                            <a href="/practice-listening/history/{{ $exam->id }}" class="btn btn-outline-primary">Xem lịch sử</a>
+                            <a href="/practice-reading/history/{{ $exam->id }}" class="btn btn-outline-primary">Xem lịch sử</a>
                         </div>
 
                     </div>

@@ -6,7 +6,7 @@ use App\Enums\PartType;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\PartTwoRequest;
 use App\Imports\PartTwoImport;
-use App\Models\Exam;
+use App\Models\Part;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -17,7 +17,8 @@ class PartTwoController extends Controller
      */
     public function index()
     {
-        $examsInPart2 = Exam::where('id_part', PartType::PartTwo)->get();
+        $part2 = Part::where('id', PartType::PartTwo)->first();
+        $examsInPart2 = $part2->exams()->get();
 
         return view('admin.listening.part-two.index', compact('examsInPart2'));
     }

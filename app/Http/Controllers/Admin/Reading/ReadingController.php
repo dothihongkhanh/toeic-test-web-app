@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin\Reading;
 
+use App\Enums\PartType;
 use App\Http\Controllers\Controller;
 use App\Models\Exam;
 use App\Models\Level;
@@ -11,30 +12,14 @@ use Illuminate\Http\Request;
 
 class ReadingController extends Controller
 {
-    protected $part;
-
-    public function __construct(Part $part)
-    {
-        $this->part = $part;
-    }
-
-    protected function getLevels()
-    {
-        return Level::get(['id', 'name_level']);
-    }
-
-    protected function getTypes()
-    {
-        return Type::get(['id', 'name_type']);
-    }
-
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $readingParts = $this->part::where('name_part', 'like', 'Part %')
-            ->whereRaw('CAST(SUBSTRING(name_part, 6) AS UNSIGNED) BETWEEN 5 AND 7')
+        $readingParts = Part::where('id', 'like', PartType::PartFive)
+            ->orWhere('id', 'like', PartType::PartSix)
+            ->orWhere('id', 'like', PartType::PartSeven)
             ->get();
 
         return view('admin.reading.index', compact('readingParts'));

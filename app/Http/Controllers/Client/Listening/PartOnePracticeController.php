@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Client\Listening;
 use App\Enums\PartType;
 use App\Http\Controllers\Controller;
 use App\Models\Exam;
+use App\Models\Part;
 use App\Models\UserAnswer;
 use App\Models\UserExam;
 
@@ -15,7 +16,8 @@ class PartOnePracticeController extends Controller
      */
     public function index()
     {
-        $examsInPart1 = Exam::where('id_part', PartType::PartOne)->get();
+        $part1 = Part::where('id', PartType::PartOne)->first();
+        $examsInPart1 = $part1->exams()->get();
 
         return view('client.listening.part-one.index', compact('examsInPart1'));
     }

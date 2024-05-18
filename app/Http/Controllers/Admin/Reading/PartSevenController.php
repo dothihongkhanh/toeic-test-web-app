@@ -6,7 +6,7 @@ use App\Enums\PartType;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\PartSeven\CreatePartSevenRequest;
 use App\Imports\PartSevenImport;
-use App\Models\Exam;
+use App\Models\Part;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -17,7 +17,9 @@ class PartSevenController extends Controller
      */
     public function index()
     {
-        $examsInPart7 = Exam::where('id_part', PartType::PartSeven)->get();
+        $part7 = Part::where('id', PartType::PartSeven)->first();
+        $examsInPart7 = $part7->exams()->get();
+
 
         return view('admin.reading.part-seven.index', compact('examsInPart7'));
     }

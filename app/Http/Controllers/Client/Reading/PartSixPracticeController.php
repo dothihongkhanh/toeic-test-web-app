@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Client\Reading;
 use App\Enums\PartType;
 use App\Http\Controllers\Controller;
 use App\Models\Exam;
+use App\Models\Part;
 use App\Models\UserAnswer;
 use App\Models\UserExam;
 
@@ -12,7 +13,8 @@ class PartSixPracticeController extends Controller
 {
     public function index()
     {
-        $examsInPart6 = Exam::where('id_part', PartType::PartSix)->get();
+        $part6 = Part::where('id', PartType::PartSix)->first();
+        $examsInPart6 = $part6->exams()->get();
 
         return view('client.reading.part-six.index', compact('examsInPart6'));
     }

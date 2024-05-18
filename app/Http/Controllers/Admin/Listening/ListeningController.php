@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin\Listening;
 
+use App\Enums\PartType;
 use App\Http\Controllers\Controller;
 use App\Models\Exam;
 use App\Models\Level;
@@ -11,20 +12,15 @@ use Illuminate\Http\Request;
 
 class ListeningController extends Controller
 {
-    protected $part;
-
-    public function __construct(Part $part)
-    {
-        $this->part = $part;
-    }
-
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $listeningParts = $this->part::where('name_part', 'like', 'Part %')
-            ->whereRaw('CAST(SUBSTRING(name_part, 6) AS UNSIGNED) BETWEEN 1 AND 4')
+        $listeningParts = Part::where('id', 'like', PartType::PartOne)
+            ->orWhere('id', 'like', PartType::PartTwo)
+            ->orWhere('id', 'like', PartType::PartThree)
+            ->orWhere('id', 'like', PartType::PartFour)
             ->get();
 
         return view('admin.listening.index', compact('listeningParts'));

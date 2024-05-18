@@ -13,7 +13,6 @@
             <div class="card-body">
                 <div class="row">
                     <div class="col-md-12">
-
                         <ul class="timeline">
                             @foreach($resultsArray as $result)
                             <li>
@@ -23,6 +22,7 @@
                                 <br>
                                 Thời gian hoàn thành: {{ $result['total_time'] }}<br>
                                 <a href="{{ route('part1.result.detail', ['id' => $result['idUserExam']]) }}" class="btn btn-outline-primary">Xem chi tiết</a>
+                                <a href="{{ route('part1-detail', ['id' => $result['idUserExam']]) }}" class="btn btn-outline-danger">Làm lại câu sai</a>
                             </li>
                             @endforeach
                         </ul>

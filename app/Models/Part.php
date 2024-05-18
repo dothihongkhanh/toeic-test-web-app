@@ -16,9 +16,12 @@ class Part extends Model
         'number_question'
     ];
 
-    public function exams()
+    public function questions()
     {
         return $this->hasMany(Question::class, 'id_part');
     }
-
+    public function exams()
+    {
+        return $this->belongsToMany(Exam::class, 'exam_parts', 'id_part', 'id_exam');
+    }
 }

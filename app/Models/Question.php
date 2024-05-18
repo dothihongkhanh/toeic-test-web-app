@@ -11,15 +11,10 @@ class Question extends Model
 
     protected $fillable = [
         'code',
-        'id_exam',
         'url_audio',
         'transcript',
+        'id_part',
     ];
-
-    public function exam()
-    {
-        return $this->belongsTo(Exam::class, 'id_exam');
-    }
 
     public function questionChilds()
     {
@@ -29,5 +24,15 @@ class Question extends Model
     public function images()
     {
         return $this->hasMany(Image::class, 'id_question');
+    }
+
+    public function part()
+    {
+        return $this->belongsTo(Part::class, 'id_part');
+    }
+
+    public function exams()
+    {
+        return $this->belongsToMany(Exam::class, 'exam_questions', 'id_question', 'id_exam');
     }
 }

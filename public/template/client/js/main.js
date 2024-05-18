@@ -290,11 +290,6 @@ jQuery(document).ready(function($) {
 	};
 	siteDatePicker();
 
-	var siteSticky = function() {
-		$(".js-sticky-header").sticky({topSpacing:0});
-	};
-	siteSticky();
-
 	// navigation
   var OnePageNavigation = function() {
     var navToggler = $('.site-menu-toggle');
@@ -315,19 +310,6 @@ jQuery(document).ready(function($) {
 
   var siteScroll = function() {
 
-  	
-
-  	$(window).scroll(function() {
-
-  		var st = $(this).scrollTop();
-
-  		if (st > 100) {
-  			$('.js-sticky-header').addClass('shrink');
-  		} else {
-  			$('.js-sticky-header').removeClass('shrink');
-  		}
-
-  	}) 
 
   };
 	siteScroll();

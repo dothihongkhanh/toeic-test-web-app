@@ -1,4 +1,4 @@
-<header class="site-navbar js-sticky-header site-navbar-target" role="banner">
+<header class="site-navbar bg-white" style="position: sticky; top: 0px; max-width: 100%; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);" role="banner">
 
     <div class="container">
         <div class="d-flex align-items-center">

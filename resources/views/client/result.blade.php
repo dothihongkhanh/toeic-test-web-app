@@ -36,21 +36,33 @@
                         <p class="text-warning">{{ $totalSkipped }}</p>
                     </div>
                 </div>
-                @if ($exam->part->id === App\Enums\PartType::PartOne)
+                @foreach ($exam->parts as $part)
+                @switch($part->id)
+                @case(App\Enums\PartType::PartOne)
                 <a href="{{ route('part1.result.detail', ['id' => $userExam->id]) }}">Xem chi tiết đáp án</a>
-                @elseif ($exam->part->id === App\Enums\PartType::PartTwo)
+                @break
+                @case(App\Enums\PartType::PartTwo)
                 <a href="{{ route('part2.result.detail', ['id' => $userExam->id]) }}">Xem chi tiết đáp án</a>
-                @elseif ($exam->part->id === App\Enums\PartType::PartThree)
+                @break
+                @case(App\Enums\PartType::PartThree)
                 <a href="{{ route('part3.result.detail', ['id' => $userExam->id]) }}">Xem chi tiết đáp án</a>
-                @elseif ($exam->part->id === App\Enums\PartType::PartFour)
+                @break
+                @case(App\Enums\PartType::PartFour)
                 <a href="{{ route('part4.result.detail', ['id' => $userExam->id]) }}">Xem chi tiết đáp án</a>
-                @elseif ($exam->part->id === App\Enums\PartType::PartFive)
+                @break
+                @case(App\Enums\PartType::PartFive)
                 <a href="{{ route('part5.result.detail', ['id' => $userExam->id]) }}">Xem chi tiết đáp án</a>
-                @elseif ($exam->part->id === App\Enums\PartType::PartSix)
+                @break
+                @case(App\Enums\PartType::PartSix)
                 <a href="{{ route('part6.result.detail', ['id' => $userExam->id]) }}">Xem chi tiết đáp án</a>
-                @elseif ($exam->part->id === App\Enums\PartType::PartSeven)
+                @break
+                @case(App\Enums\PartType::PartSeven)
                 <a href="{{ route('part7.result.detail', ['id' => $userExam->id]) }}">Xem chi tiết đáp án</a>
-                @endif
+                @break
+                @default
+                <p>Part không xác định</p>
+                @endswitch
+                @endforeach
             </div>
         </div>
     </div>

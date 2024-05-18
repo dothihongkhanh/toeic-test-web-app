@@ -6,7 +6,7 @@ use App\Enums\PartType;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\PartThree\CreatePartThreeRequest;
 use App\Imports\PartThreeImport;
-use App\Models\Exam;
+use App\Models\Part;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -18,7 +18,9 @@ class PartThreeController extends Controller
      */
     public function index()
     {
-        $examsInPart3 = Exam::where('id_part', PartType::PartThree)->get();
+        $part3 = Part::where('id', PartType::PartThree)->first();
+        $examsInPart3 = $part3->exams()->get();
+
 
         return view('admin.listening.part-three.index', compact('examsInPart3'));
     }

@@ -73,6 +73,7 @@ class ClientController extends Controller
         $totalWrong = 0;
         $totalSkipped = 0;
 
+
         foreach ($userAnswers as $userAnswer) {
             $isCorrect = Answer::where('id', $userAnswer->id_user_answer)->value('is_correct');
             if ($isCorrect) {
@@ -118,14 +119,25 @@ class ClientController extends Controller
             ->orderBy('date', 'desc')
             ->get();
 
-        $totalChildQuestions = 0;
-        foreach ($exam->questions as $question) {
-            $totalChildQuestions += $question->questionChilds()->count();
-        }
-
         $resultsArray = [];
         foreach ($userExams as $userExam) {
             $userAnswers = UserAnswer::where('id_user_exam', $userExam->id)->get();
+
+            $totalChildQuestions = 0;
+            $wrongQuestionChildIds = [];
+            foreach ($exam->questions as $question) {
+                $totalChildQuestions += $question->questionChilds()->count();
+                foreach ($question->questionChilds as $questionChild) {
+                    foreach ($questionChild->answers as $answer) {
+                        if ($userAnswers->contains('id_user_answer', $answer->id)) {
+                            if (!$answer->is_correct) {
+                                $wrongQuestionChildIds[] = $questionChild->id;
+                            }
+                        }
+                    }
+                }
+            }
+
             $results = $this->calculateResults($userAnswers, $exam);
             $resultsArray[] = [
                 'date' => $userExam->date,
@@ -133,6 +145,7 @@ class ClientController extends Controller
                 'total_time' => $userExam->total_time,
                 'totalCorrect' => $results['totalCorrect'],
                 'totalChildQuestions' => $totalChildQuestions,
+                'wrongQuestionChildIds' => $wrongQuestionChildIds,
             ];
         }
 
