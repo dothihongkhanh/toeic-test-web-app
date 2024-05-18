@@ -77,3 +77,8 @@
         color: #000;
     }
 </style>
+<script>
+    window.onbeforeunload = function() {
+        return "Changes you made may not be saved.";
+    }
+</script>
