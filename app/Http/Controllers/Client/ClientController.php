@@ -151,4 +151,20 @@ class ClientController extends Controller
 
         return view('client.history', compact('exam', 'userExams', 'resultsArray'));
     }
+
+    public function showPart()
+    {
+        $listeningParts = Part::where('id', 'like', PartType::PartOne)
+            ->orWhere('id', 'like', PartType::PartTwo)
+            ->orWhere('id', 'like', PartType::PartThree)
+            ->orWhere('id', 'like', PartType::PartFour)
+            ->get();
+
+        $readingParts = Part::where('id', 'like', PartType::PartFive)
+            ->orWhere('id', 'like', PartType::PartSix)
+            ->orWhere('id', 'like', PartType::PartSeven)
+            ->get();
+
+        return view('client.part.index', compact('listeningParts', 'readingParts'));
+    }
 }

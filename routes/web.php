@@ -116,8 +116,11 @@ Route::middleware(['verified'])->group(function () {
         });
     });
 });
-
-Route::get('/', [ClientController::class, 'index']);
+// client
+Route::controller(ClientController::class)->group(function () {
+    Route::get('/', 'index');
+    Route::get('part', 'showPart');
+});
 
 Route::middleware(['verified'])->group(function () {
     Route::prefix('practice-listening')->group(function () {

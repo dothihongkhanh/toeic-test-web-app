@@ -23,10 +23,10 @@
                             <a href="courses.html" class="nav-link text-left">Full test</a>
                         </li>
                         <li class="has-children">
-                            <a href="about.html" class="nav-link text-left">Information</a>
+                            <a href="" class="nav-link text-left">Information</a>
                             <ul class="dropdown">
-                                <li><a href="teachers.html">Part</a></li>
-                                <li><a href="about.html">IIG</a></li>
+                                <li><a href="/part">Part</a></li>
+                                <li><a href="">IIG</a></li>
                             </ul>
                         </li>
                         <li>

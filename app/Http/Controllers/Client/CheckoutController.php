@@ -119,7 +119,10 @@ class CheckoutController extends Controller
             //return redirect()->route('checkout-success', ['vnp_TxnRef' => $vnp_TxnRef]);
             toastr()->success('Thanh toán thành công!');
 
-            return redirect();
+            $history = session('url_history', []);
+            $redirectUrl = isset($history[3]) ? $history[3] : url('/');
+
+            return redirect($redirectUrl);
         }
     }
 }
