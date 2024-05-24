@@ -10,6 +10,7 @@ use App\Models\Part;
 use App\Models\UserAnswer;
 use App\Models\UserExam;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ClientController extends Controller
 {
@@ -166,5 +167,12 @@ class ClientController extends Controller
             ->get();
 
         return view('client.part.index', compact('listeningParts', 'readingParts'));
+    }
+
+    public function showProfile()
+    {
+        $user = Auth::user();
+
+        return view('client.profile', compact('user'));
     }
 }

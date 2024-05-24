@@ -47,11 +47,16 @@
                             </a>
 
                             <ul class="dropdown" aria-labelledby="navbarDropdown">
-                                <li><a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault();
+                                <li><a href="{{ route('client.profile') }}">Thông tin cá nhân</a></li>
+                                <li><a href="{{ route('client.profile') }}">Thống kê kết quả luyện tập</a></li>
+                                <li><a href="{{ route('client.showTimeNotify') }}">Đặt giờ thông báo luyện tập</a></li>
+
+                                <li>
+                                    <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">
                                         {{ __('Logout') }}
-                                    </a></li>
-
+                                    </a>
+                                </li>
                                 <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
                                     @csrf
                                 </form>

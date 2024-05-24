@@ -11,6 +11,7 @@ use App\Http\Controllers\Admin\Reading\PartFiveController;
 use App\Http\Controllers\Admin\Reading\PartSevenController;
 use App\Http\Controllers\Admin\Reading\PartSixController;
 use App\Http\Controllers\Admin\Reading\ReadingController;
+use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Auth\LoginGoogleController;
 use App\Http\Controllers\Client\CheckoutController;
 use App\Http\Controllers\Client\ClientController;
@@ -21,6 +22,7 @@ use App\Http\Controllers\Client\Listening\PartFourPracticeController;
 use App\Http\Controllers\Client\Listening\PartOnePracticeController;
 use App\Http\Controllers\Client\Listening\PartThreePracticeController;
 use App\Http\Controllers\Client\Listening\PartTwoPracticeController;
+use App\Http\Controllers\Client\NotifyController;
 use App\Http\Controllers\Client\Reading\PartFivePracticeController;
 use App\Http\Controllers\Client\Reading\PartSevenPracticeController;
 use App\Http\Controllers\Client\Reading\PartSixPracticeController;
@@ -54,7 +56,8 @@ Route::controller(LoginGoogleController::class)->group(function () {
 // admin
 Route::middleware(['verified'])->group(function () {
     Route::prefix('admin')->group(function () {
-        Route::get('', [DashboardController::class, 'index'])->name('admin');
+        Route::get('/', [DashboardController::class, 'index'])->name('admin');
+        Route::get('/user', [UserController::class, 'index'])->name('admin.user');
 
         Route::prefix('parts')->group(function () {
             Route::controller(PartController::class)->group(function () {
@@ -123,6 +126,16 @@ Route::controller(ClientController::class)->group(function () {
 });
 
 Route::middleware(['verified'])->group(function () {
+    Route::controller(NotifyController::class)->group (function () {
+        Route::get('/showTimeNotify', 'showTimeNotify')->name('client.showTimeNotify');
+        Route::post('/setNotify', 'setNotify')->name('client.setNotify');
+        Route::delete('/deleteNotify/{id}', 'deleteNotify')->name('client.deleteNotify');
+    });
+
+    Route::controller(ClientController::class)->group(function () {
+        Route::get('/profile', 'showProfile')->name('client.profile');
+    });    
+
     Route::prefix('practice-listening')->group(function () {
         Route::controller(ClientController::class)->group(function () {
             Route::get('/', 'showPartListening')->name('client.listening.list');

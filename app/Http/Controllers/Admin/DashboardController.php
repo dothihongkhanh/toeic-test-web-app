@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Enums\UserRole;
 use App\Http\Controllers\Controller;
+use App\Models\Exam;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class DashboardController extends Controller
@@ -24,6 +27,9 @@ class DashboardController extends Controller
      */
     public function index()
     {
-        return view('admin.dashboard.index');
+        $countUser = User::where('id_role', 'like', UserRole::Client)->count();
+        $countExam = Exam::count();
+
+        return view('admin.dashboard.index', compact('countUser', 'countExam'));
     }
 }
