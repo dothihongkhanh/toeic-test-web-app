@@ -23,6 +23,7 @@
         <h1>ToeicStudy</h1>
         <p>Hi, đến giờ luyện tập rồi <b>{{ $user->name }}</b> ơi.</p>
         <p>Hãy vào luyện tập nhé!!!</p>
+        <i><a href="http://127.0.0.1:8000/">Click để đến trang luyện tập</a></i>
     </div>
 </body>
 

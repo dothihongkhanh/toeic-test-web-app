@@ -5,9 +5,8 @@ namespace App\Http\Controllers\Admin\Reading;
 use App\Enums\PartType;
 use App\Http\Controllers\Controller;
 use App\Models\Exam;
-use App\Models\Level;
 use App\Models\Part;
-use App\Models\Type;
+use App\Models\Question;
 use Illuminate\Http\Request;
 
 class ReadingController extends Controller
@@ -57,7 +56,9 @@ class ReadingController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $question = Question::findOrFail($id);
+
+        return view('admin.reading.edit', compact('question'));
     }
 
     /**

@@ -27,7 +27,7 @@
                         <td>{{ $exam->name_exam }}</td>
                         <td>{{ $exam->price }}</td>
                         <td>
-                            <a href="/admin/listening/detail/{{ $exam->id }}" class="btn btn-warning">Detail</a>
+                            <a href="/admin/listening/detail-part3/{{ $exam->id }}" class="btn btn-warning">Detail</a>
                         </td>
                     </tr>
                     @endforeach

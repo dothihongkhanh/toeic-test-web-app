@@ -5,9 +5,8 @@ namespace App\Http\Controllers\Admin\Listening;
 use App\Enums\PartType;
 use App\Http\Controllers\Controller;
 use App\Models\Exam;
-use App\Models\Level;
 use App\Models\Part;
-use App\Models\Type;
+use App\Models\Question;
 use Illuminate\Http\Request;
 
 class ListeningController extends Controller
@@ -59,7 +58,8 @@ class ListeningController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $question = Question::findOrFail($id);
+        return view('admin.listening.edit', compact('question'));
     }
 
     /**

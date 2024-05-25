@@ -5,9 +5,11 @@ namespace App\Http\Controllers\Admin\Reading;
 use App\Enums\PartType;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\PartFive\CreatePartFiveRequest;
+use App\Http\Requests\PartFive\UpdatePartFiveRequest;
 use App\Imports\PartFiveImport;
+use App\Models\Exam;
 use App\Models\Part;
-use Illuminate\Http\Request;
+use App\Models\Question;
 use Maatwebsite\Excel\Facades\Excel;
 
 class PartFiveController extends Controller
@@ -60,7 +62,10 @@ class PartFiveController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $exam = Exam::findOrFail($id);
+        $questions = $exam->questions()->get();
+
+        return view('admin.reading.part-five.detail', compact('exam', 'questions'));
     }
 
     /**
@@ -68,15 +73,36 @@ class PartFiveController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $question = Question::findOrFail($id);
+
+        return view('admin.reading.part-five.update', compact('question'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(UpdatePartFiveRequest $request, string $id)
     {
-        //
+        $question = Question::findOrFail($id);
+
+        foreach ($question->questionChilds as $child) {
+            $childId = $child->id;
+            $child->question_title = $request->input("question_title.$childId");
+            $child->explanation = $request->input("explanation.$childId");
+            $child->save();
+
+            foreach ($child->answers as $answer) {
+                $answerId = $answer->id;
+                if (isset($request->answers[$answerId])) {
+                    $answer->answer_text = $request->input("answers.$answerId");
+                    $answer->is_correct = $request->input("correct_answer.$childId") == $answerId;
+                    $answer->save();
+                }
+            }
+        }
+        toastr()->success('Cập nhật thành công!');
+
+        return redirect()->back();
     }
 
     /**

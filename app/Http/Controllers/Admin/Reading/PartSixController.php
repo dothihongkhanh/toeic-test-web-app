@@ -5,9 +5,13 @@ namespace App\Http\Controllers\Admin\Reading;
 use App\Enums\PartType;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\PartSix\CreatePartSixRequest;
+use App\Http\Requests\PartSix\UpdatePartSixRequest;
 use App\Imports\PartSixImport;
+use App\Models\Exam;
+use App\Models\Image;
 use App\Models\Part;
-use Illuminate\Http\Request;
+use App\Models\Question;
+use Illuminate\Support\Facades\Storage;
 use Maatwebsite\Excel\Facades\Excel;
 
 class PartSixController extends Controller
@@ -61,7 +65,10 @@ class PartSixController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $exam = Exam::findOrFail($id);
+        $questions = $exam->questions()->get();
+
+        return view('admin.reading.part-six.detail', compact('exam', 'questions'));
     }
 
     /**
@@ -69,15 +76,65 @@ class PartSixController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $question = Question::findOrFail($id);
+
+        return view('admin.reading.part-six.update', compact('question'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(UpdatePartSixRequest $request, string $id)
     {
-        //
+        $question = Question::findOrFail($id);
+        $questionId = $question->id;
+        $question->transcript = $request->input("transcript.$questionId");
+        $question->save();
+
+        if ($request->hasFile('image')) {
+            $imageFile = $request->file('image');
+            $imageName = $imageFile->getClientOriginalName();
+            if (preg_match('/(\d+)_image_/', $imageName, $matches)) {
+                $idQuestionFromimageName = $matches[1];
+                if ($question->code == $idQuestionFromimageName) {
+                    $imagePath = $imageFile->store('reading/part6/images', 'public');
+                    $image = Image::where('id_question', $questionId)->first();
+                    if ($image) {
+                        $image->url_image = Storage::url($imagePath);
+                        $image->save();
+                    } else {
+                        Image::create([
+                            'url_image' => Storage::url($imagePath),
+                            'id_question' => $questionId,
+                        ]);
+                    }
+                } else {
+                    toastr()->error('Nội dung hình ảnh không khớp với câu hỏi');
+                    return redirect()->back();
+                }
+            } else {
+                toastr()->error('Tên ảnh không đúng định dạng');
+                return redirect()->back();
+            }
+        }
+
+        foreach ($question->questionChilds as $child) {
+            $childId = $child->id;
+            $child->explanation = $request->input("explanation.$childId");
+            $child->save();
+
+            foreach ($child->answers as $answer) {
+                $answerId = $answer->id;
+                if (isset($request->answers[$answerId])) {
+                    $answer->answer_text = $request->input("answers.$answerId");
+                    $answer->is_correct = $request->input("correct_answer.$childId") == $answerId;
+                    $answer->save();
+                }
+            }
+        }
+        toastr()->success('Cập nhật thành công!');
+
+        return redirect()->back();
     }
 
     /**

@@ -73,48 +73,70 @@ Route::middleware(['verified'])->group(function () {
         Route::prefix('listening')->group(function () {
             Route::controller(ListeningController::class)->group(function () {
                 Route::get('list', 'index')->name('admin.listening.list');
-                Route::get('detail/{id}', 'show');
             });
             Route::controller(PartOneController::class)->group(function () {
                 Route::get('create-part1', 'create');
                 Route::post('create-part1', 'store');
                 Route::get('list-part1', 'index')->name('list-part1');
+                Route::get('detail-part1/{id}', 'show')->name('detail-part1');;
+                Route::get('update-part1/{id}', 'edit');
+                Route::post('update-part1/{id}', 'update');
             });
             Route::controller(PartTwoController::class)->group(function () {
                 Route::get('create-part2', 'create');
                 Route::post('create-part2', 'store');
                 Route::get('list-part2', 'index')->name('list-part2');
+                Route::get('detail-part2/{id}', 'show')->name('detail-part2');;
+                Route::get('update-part2/{id}', 'edit');
+                Route::post('update-part2/{id}', 'update');
             });
             Route::controller(PartThreeController::class)->group(function () {
                 Route::get('create-part3', 'create');
                 Route::post('create-part3', 'store');
                 Route::get('list-part3', 'index')->name('list-part3');
+                Route::get('detail-part3/{id}', 'show')->name('detail-part3');;
+                Route::get('update-part3/{id}', 'edit');
+                Route::post('update-part3/{id}', 'update');
             });
             Route::controller(PartFourController::class)->group(function () {
                 Route::get('create-part4', 'create');
                 Route::post('create-part4', 'store');
                 Route::get('list-part4', 'index')->name('list-part4');
+                Route::get('detail-part4/{id}', 'show')->name('detail-part4');;
+                Route::get('update-part4/{id}', 'edit');
+                Route::post('update-part4/{id}', 'update');
             });
         });
         Route::prefix('reading')->group(function () {
             Route::controller(ReadingController::class)->group(function () {
                 Route::get('list', 'index')->name('admin.reading.list');
                 Route::get('detail/{id}', 'show');
+                Route::get('update/{id}', 'edit');
+                Route::post('update/{id}', 'update');
             });
             Route::controller(PartFiveController::class)->group(function () {
                 Route::get('create-part5', 'create');
                 Route::post('create-part5', 'store');
                 Route::get('list-part5', 'index')->name('list-part5');
+                Route::get('detail-part5/{id}', 'show')->name('detail-part5');;
+                Route::get('update-part5/{id}', 'edit');
+                Route::post('update-part5/{id}', 'update');
             });
             Route::controller(PartSixController::class)->group(function () {
                 Route::get('create-part6', 'create');
                 Route::post('create-part6', 'store');
                 Route::get('list-part6', 'index')->name('list-part6');
+                Route::get('detail-part6/{id}', 'show')->name('detail-part6');;
+                Route::get('update-part6/{id}', 'edit');
+                Route::post('update-part6/{id}', 'update');
             });
             Route::controller(PartSevenController::class)->group(function () {
                 Route::get('create-part7', 'create');
                 Route::post('create-part7', 'store');
                 Route::get('list-part7', 'index')->name('list-part7');
+                Route::get('detail-part7/{id}', 'show')->name('detail-part7');;
+                Route::get('update-part7/{id}', 'edit');
+                Route::post('update-part7/{id}', 'update');
             });
         });
     });
@@ -126,7 +148,7 @@ Route::controller(ClientController::class)->group(function () {
 });
 
 Route::middleware(['verified'])->group(function () {
-    Route::controller(NotifyController::class)->group (function () {
+    Route::controller(NotifyController::class)->group(function () {
         Route::get('/showTimeNotify', 'showTimeNotify')->name('client.showTimeNotify');
         Route::post('/setNotify', 'setNotify')->name('client.setNotify');
         Route::delete('/deleteNotify/{id}', 'deleteNotify')->name('client.deleteNotify');
@@ -134,7 +156,7 @@ Route::middleware(['verified'])->group(function () {
 
     Route::controller(ClientController::class)->group(function () {
         Route::get('/profile', 'showProfile')->name('client.profile');
-    });    
+    });
 
     Route::prefix('practice-listening')->group(function () {
         Route::controller(ClientController::class)->group(function () {
@@ -205,5 +227,6 @@ Route::middleware(['verified'])->group(function () {
 
     Route::controller(CheckoutController::class)->group(function () {
         Route::post('/vnpay_payment', 'vnpay_payment');
-        Route::get('/vnpay-callback', 'vnpay_callback');});
+        Route::get('/vnpay-callback', 'vnpay_callback');
+    });
 });

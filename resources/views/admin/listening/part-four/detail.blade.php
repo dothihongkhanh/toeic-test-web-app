@@ -3,14 +3,20 @@
 @section('content')
 <div class="card shadow mb-4">
     <div class="card-header py-3 d-flex justify-content-between">
-        <a href="{{ route('admin.reading.list') }}">
-            <i class="fas fa-fw fa-arrow-left"></i>
-            List Listening question
-        </a>
+        <b class="text-primary">{{ $exam->name_exam }}</b>
     </div>
-    <h4 class="m-4 font-weight-bold text-primary">{{ $exam->name_exam }}</h4>
     @foreach($questions as $question)
     <div class="card-body">
+        <div class="row">
+            <div class="col-md-2">
+                <p>Audio</p>
+            </div>
+            <div class="col-md-8">
+                <audio controls>
+                    <source src="{{ $question->url_audio }}" type="audio/mpeg">
+                </audio>
+            </div>
+        </div>
         @if($question->images->isNotEmpty())
         @foreach($question->images as $image)
         <div class="row">
@@ -23,7 +29,6 @@
         </div>
         @endforeach
         @endif
-        @if($question->transcript)
         <div class="row">
             <div class="col-md-2">
                 <p>Transcript</p>
@@ -32,7 +37,6 @@
                 <p style="white-space: pre-line;">{{ $question->transcript }}</p>
             </div>
         </div>
-        @endif
         @foreach($question->questionChilds as $child)
         <div>
             <div class="row">
@@ -43,7 +47,6 @@
                     <p>{{ $child->question_number }}</p>
                 </div>
             </div>
-            @if($child->question_title)
             <div class="row">
                 <div class="col-md-2">
                     <p>Question title</p>
@@ -52,7 +55,6 @@
                     <p>{{ $child->question_title }}</p>
                 </div>
             </div>
-            @endif
             <div class="row">
                 <div class="col-md-2">
                     <p>Answers</p>
@@ -85,8 +87,8 @@
             </div>
         </div>
         @endforeach
+        <a href="/admin/listening/update-part4/{{ $question->id }}" class="btn btn-warning mb-4">Edit</a>
     </div>
-    <a href="/admin/reading/update/{{ $question->id }}" class="btn btn-warning mb-4">Edit</a>
     <div style="border-top: 1px solid rgba(0, 0, 0);"></div>
     @endforeach
 </div>
