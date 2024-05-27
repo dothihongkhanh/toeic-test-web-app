@@ -10,11 +10,14 @@ use App\Imports\PartTwoImport;
 use App\Models\Exam;
 use App\Models\Part;
 use App\Models\Question;
+use App\Traits\NotificationUpdateQuestionTrait;
 use Illuminate\Support\Facades\Storage;
 use Maatwebsite\Excel\Facades\Excel;
 
 class PartTwoController extends Controller
 {
+    use NotificationUpdateQuestionTrait;
+
     /**
      * Display a listing of the resource.
      */
@@ -124,6 +127,7 @@ class PartTwoController extends Controller
                 }
             }
         }
+        $this->notifyUsersAboutUpdatedQuestion($question, $child);
         toastr()->success('Cập nhật thành công!');
 
         return redirect()->back();
