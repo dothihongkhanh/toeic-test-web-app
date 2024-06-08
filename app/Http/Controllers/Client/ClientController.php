@@ -9,11 +9,14 @@ use App\Models\Exam;
 use App\Models\Part;
 use App\Models\UserAnswer;
 use App\Models\UserExam;
+use App\Traits\CalculateResultTrait;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class ClientController extends Controller
 {
+    use CalculateResultTrait;
+
     public function index()
     {
         return view('client.home');
@@ -68,37 +71,37 @@ class ClientController extends Controller
         // return redirect()->route('result.detail', ['id' => $idExam]);
     }
 
-    public function calculateResults($userAnswers, $exam)
-    {
-        $totalCorrect = 0;
-        $totalWrong = 0;
-        $totalSkipped = 0;
+    // public function calculateResults($userAnswers, $exam)
+    // {
+    //     $totalCorrect = 0;
+    //     $totalWrong = 0;
+    //     $totalSkipped = 0;
 
 
-        foreach ($userAnswers as $userAnswer) {
-            $isCorrect = Answer::where('id', $userAnswer->id_user_answer)->value('is_correct');
-            if ($isCorrect) {
-                $totalCorrect++;
-            } else {
-                $totalWrong++;
-            }
-        }
+    //     foreach ($userAnswers as $userAnswer) {
+    //         $isCorrect = Answer::where('id', $userAnswer->id_user_answer)->value('is_correct');
+    //         if ($isCorrect) {
+    //             $totalCorrect++;
+    //         } else {
+    //             $totalWrong++;
+    //         }
+    //     }
 
-        $totalChildQuestions = 0;
+    //     $totalChildQuestions = 0;
 
-        foreach ($exam->questions as $question) {
-            $totalChildQuestions += $question->questionChilds()->count();
-        }
+    //     foreach ($exam->questions as $question) {
+    //         $totalChildQuestions += $question->questionChilds()->count();
+    //     }
 
-        $totalSkipped = $totalChildQuestions - ($totalCorrect + $totalWrong);
+    //     $totalSkipped = $totalChildQuestions - ($totalCorrect + $totalWrong);
 
-        return [
-            'totalChildQuestions' => $totalChildQuestions,
-            'totalCorrect' => $totalCorrect,
-            'totalWrong' => $totalWrong,
-            'totalSkipped' => $totalSkipped
-        ];
-    }
+    //     return [
+    //         'totalChildQuestions' => $totalChildQuestions,
+    //         'totalCorrect' => $totalCorrect,
+    //         'totalWrong' => $totalWrong,
+    //         'totalSkipped' => $totalSkipped
+    //     ];
+    // }
 
     public function showResult(string $id)
     {
