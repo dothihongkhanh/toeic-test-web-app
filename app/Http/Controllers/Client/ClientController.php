@@ -6,9 +6,13 @@ use App\Enums\PartType;
 use App\Http\Controllers\Controller;
 use App\Models\Answer;
 use App\Models\Exam;
+use App\Models\ExamQuestion;
 use App\Models\Part;
+use App\Models\Question;
+use App\Models\User;
 use App\Models\UserAnswer;
 use App\Models\UserExam;
+use App\Services\AiAnalysisService;
 use App\Traits\CalculateResultTrait;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -177,5 +181,57 @@ class ClientController extends Controller
         $user = Auth::user();
 
         return view('client.profile', compact('user'));
+    }
+
+    public function showAnalytics($idUserExam)
+    {
+        $user = Auth::user();
+        $results = [];
+
+        $userAnswers = UserAnswer::where('id_user_exam', $idUserExam)->get();
+
+        foreach ($userAnswers as $userAnswer) {
+            // Lấy thông tin của Answer
+            $answer = Answer::with('questionChild')->find($userAnswer->id_user_answer);
+            if ($answer) {
+                $questionChild = $answer->questionChild;
+                $isCorrect = $answer->is_correct;
+                $question = $questionChild->question;
+                $images = $question->images;
+
+                $imageUrls = [];
+                foreach ($images as $image) {
+                    $imageUrls[] = $image->url_image;
+                }
+
+                $results[] = [
+                    "Images" => $imageUrls ?? 'N/A',
+                    "Audio" => $question->url_audio ?? 'N/A',
+                    "Number question" => $questionChild->question_number,
+                    "QuestionChild" => $questionChild->question_title ?? 'N/A',
+                    "Chosen Answer" => $answer->answer_text,
+                    "Is Correct" => $isCorrect ? "true" : "false",
+                ];
+            }
+        }
+
+        try {
+            $analysis = resolve(AiAnalysisService::class)->analyzeResults($results);
+            if (isset($analysis['candidates'][0]['content']['parts'][0]['text'])) {
+                $textAnalysis = $analysis['candidates'][0]['content']['parts'][0]['text'];
+
+                $userExam = UserExam::find($idUserExam)->first();
+                if ($userExam) {
+                    $userExam->analysis = $textAnalysis;
+                    $userExam->save();
+                }
+            } else {
+                $textAnalysis = 'Có lỗi trong quá trình phân tích. Vui lòng thử lại!';
+            }
+
+            return view('client.analytics', compact('textAnalysis', 'user'));
+        } catch (\Exception $e) {
+            return view('client.analytics')->with('error', $e->getMessage());
+        }
     }
 }

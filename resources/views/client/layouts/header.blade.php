@@ -48,7 +48,7 @@
 
                             <ul class="dropdown" aria-labelledby="navbarDropdown">
                                 <li><a href="{{ route('client.profile') }}">Thông tin cá nhân</a></li>
-                                <li><a href="{{ route('client.profile') }}">Thống kê kết quả luyện tập</a></li>
+                                <li><a href="">Thống kê kết quả luyện tập</a></li>
                                 <li><a href="{{ route('client.showTimeNotify') }}">Đặt giờ thông báo luyện tập</a></li>
 
                                 <li>

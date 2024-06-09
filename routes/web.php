@@ -156,6 +156,7 @@ Route::middleware(['verified'])->group(function () {
 
     Route::controller(ClientController::class)->group(function () {
         Route::get('/profile', 'showProfile')->name('client.profile');
+        Route::get('/analytics/id={id}', 'showAnalytics')->name('client.analytics');
     });
 
     Route::prefix('practice-listening')->group(function () {

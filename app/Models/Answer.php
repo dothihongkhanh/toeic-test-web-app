@@ -14,4 +14,9 @@ class Answer extends Model
         'answer_text',
         'is_correct'
     ];
+
+    public function questionChild()
+    {
+        return $this->belongsTo(QuestionChild::class, 'id_question_child');
+    }
 }

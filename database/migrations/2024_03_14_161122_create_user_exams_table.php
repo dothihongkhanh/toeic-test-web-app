@@ -17,6 +17,7 @@ return new class extends Migration
             $table->unsignedBigInteger('id_exam');
             $table->dateTime('date');
             $table->string('total_time');
+            $table->longText('analysis')->nullable();
             $table->timestamps();
 
             $table->foreign('id_exam')

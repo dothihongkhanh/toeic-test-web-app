@@ -36,6 +36,7 @@
                         <p class="text-warning">{{ $totalSkipped }}</p>
                     </div>
                 </div>
+                <a href="{{  route('client.analytics', ['id' => $userExam->id]) }}" class="btn btn-outline-primary mr-3">Xem phân tích kết quả</a>
                 @foreach ($exam->parts as $part)
                 @switch($part->id)
                 @case(App\Enums\PartType::PartOne)

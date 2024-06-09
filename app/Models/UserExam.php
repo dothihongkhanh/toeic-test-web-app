@@ -15,4 +15,9 @@ class UserExam extends Model
         'date',
         'total_time',
     ];
+
+    public function userAnswers()
+    {
+        return $this->hasMany(UserAnswer::class, 'id_user_exam');
+    }
 }
