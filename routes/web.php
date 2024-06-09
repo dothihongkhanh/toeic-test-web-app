@@ -157,13 +157,14 @@ Route::middleware(['verified'])->group(function () {
     Route::controller(ClientController::class)->group(function () {
         Route::get('/profile', 'showProfile')->name('client.profile');
         Route::get('/analytics/id={id}', 'showAnalytics')->name('client.analytics');
+        Route::get('/statistical', 'showStatistical')->name('client.statistical');        
+        Route::get('result/{id}', 'showResult')->name('result');
     });
 
     Route::prefix('practice-listening')->group(function () {
         Route::controller(ClientController::class)->group(function () {
             Route::get('/', 'showPartListening')->name('client.listening.list');
             Route::post('submit', 'submit')->name('submit');
-            Route::get('result/{id}', 'showResult')->name('result');
             Route::get('history/{id}', 'showHistory');
         });
         Route::controller(PartOnePracticeController::class)->group(function () {
@@ -200,7 +201,6 @@ Route::middleware(['verified'])->group(function () {
         Route::controller(ClientController::class)->group(function () {
             Route::get('/', 'showPartReading')->name('client.reading.list');
             Route::post('submit', 'submit')->name('submit');
-            Route::get('result/{id}', 'showResult')->name('result');
             Route::get('history/{id}', 'showHistory');
         });
         Route::controller(PartFivePracticeController::class)->group(function () {

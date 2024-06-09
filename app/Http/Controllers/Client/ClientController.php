@@ -6,10 +6,7 @@ use App\Enums\PartType;
 use App\Http\Controllers\Controller;
 use App\Models\Answer;
 use App\Models\Exam;
-use App\Models\ExamQuestion;
 use App\Models\Part;
-use App\Models\Question;
-use App\Models\User;
 use App\Models\UserAnswer;
 use App\Models\UserExam;
 use App\Services\AiAnalysisService;
@@ -186,52 +183,88 @@ class ClientController extends Controller
     public function showAnalytics($idUserExam)
     {
         $user = Auth::user();
-        $results = [];
+        $userExam = UserExam::find($idUserExam);
 
-        $userAnswers = UserAnswer::where('id_user_exam', $idUserExam)->get();
-
-        foreach ($userAnswers as $userAnswer) {
-            // Lấy thông tin của Answer
-            $answer = Answer::with('questionChild')->find($userAnswer->id_user_answer);
-            if ($answer) {
-                $questionChild = $answer->questionChild;
-                $isCorrect = $answer->is_correct;
-                $question = $questionChild->question;
-                $images = $question->images;
-
-                $imageUrls = [];
-                foreach ($images as $image) {
-                    $imageUrls[] = $image->url_image;
-                }
-
-                $results[] = [
-                    "Images" => $imageUrls ?? 'N/A',
-                    "Audio" => $question->url_audio ?? 'N/A',
-                    "Number question" => $questionChild->question_number,
-                    "QuestionChild" => $questionChild->question_title ?? 'N/A',
-                    "Chosen Answer" => $answer->answer_text,
-                    "Is Correct" => $isCorrect ? "true" : "false",
-                ];
-            }
+        if (!$userExam) {
+            return redirect()->back()->with('error', 'Không tìm thấy kỳ thi.');
         }
 
-        try {
-            $analysis = resolve(AiAnalysisService::class)->analyzeResults($results);
-            if (isset($analysis['candidates'][0]['content']['parts'][0]['text'])) {
-                $textAnalysis = $analysis['candidates'][0]['content']['parts'][0]['text'];
+        if ($userExam->id_user !== $user->id) {
+            return redirect()->back()->with('error', 'Bạn không có quyền truy cập vào kỳ thi này.');
+        }
 
-                $userExam = UserExam::find($idUserExam)->first();
-                if ($userExam) {
+        if (isset($userExam->analysis)) {
+            $textAnalysis = $userExam->analysis;
+        } else {
+            $results = [];
+            $userAnswers = UserAnswer::where('id_user_exam', $idUserExam)->get();
+
+            foreach ($userAnswers as $userAnswer) {
+                $answer = Answer::with('questionChild')->find($userAnswer->id_user_answer);
+                if ($answer) {
+                    $questionChild = $answer->questionChild;
+                    $isCorrect = $answer->is_correct;
+                    $question = $questionChild->question;
+                    $images = $question->images;
+
+                    $imageUrls = [];
+                    foreach ($images as $image) {
+                        $imageUrls[] = $image->url_image;
+                    }
+
+                    $results[] = [
+                        "Images" => $imageUrls ?? 'N/A',
+                        "Audio" => $question->url_audio ?? 'N/A',
+                        "Number question" => $questionChild->question_number,
+                        "QuestionChild" => $questionChild->question_title ?? 'N/A',
+                        "Chosen Answer" => $answer->answer_text,
+                        "Is Correct" => $isCorrect,
+                    ];
+                }
+            }
+
+            try {
+                $analysis = resolve(AiAnalysisService::class)->analyzeResults($results);
+                if (isset($analysis['candidates'][0]['content']['parts'][0]['text'])) {
+                    $textAnalysis = $analysis['candidates'][0]['content']['parts'][0]['text'];
                     $userExam->analysis = $textAnalysis;
                     $userExam->save();
+                } else {
+                    $textAnalysis = 'Có lỗi trong quá trình phân tích. Vui lòng thử lại!';
                 }
-            } else {
-                $textAnalysis = 'Có lỗi trong quá trình phân tích. Vui lòng thử lại!';
+            } catch (\Exception $e) {
+                return view('client.analytics')->with('error', $e->getMessage());
             }
-
-            return view('client.analytics', compact('textAnalysis', 'user'));
-        } catch (\Exception $e) {
-            return view('client.analytics')->with('error', $e->getMessage());
         }
+
+        return view('client.analytics', compact('textAnalysis', 'user'));
+    }
+
+    public function showStatistical()
+    {
+        $user = Auth::user();
+        $userExams = UserExam::where('id_user', $user->id)->get();
+        foreach ($userExams as $userExam) {
+            $userAnswers = UserAnswer::where('id_user_exam', $userExam->id)->get();
+            $results = $this->calculateResults($userAnswers, $userExam->exam);
+            $userExam->totalChildQuestions = $results['totalChildQuestions'];
+            $userExam->totalCorrect = $results['totalCorrect'];
+        }
+
+        $countUserExams = $userExams->count();
+
+        $totalMinutes = 0;
+
+        foreach ($userExams as $exam) {
+            list($hours, $minutes) = explode(':', $exam->total_time);
+            $totalMinutes += $hours * 60 + $minutes;
+        }
+
+        $totalHours = floor($totalMinutes / 60);
+        $totalRemainingMinutes = $totalMinutes % 60;
+
+        $totalTime = sprintf('%02d:%02d', $totalHours, $totalRemainingMinutes);
+
+        return view('client.statistical', compact('user', 'userExams', 'countUserExams', 'totalTime'));
     }
 }
