@@ -57,7 +57,14 @@ Route::controller(LoginGoogleController::class)->group(function () {
 Route::middleware(['verified'])->group(function () {
     Route::prefix('admin')->group(function () {
         Route::get('/', [DashboardController::class, 'index'])->name('admin');
-        Route::get('/user', [UserController::class, 'index'])->name('admin.user');
+
+        Route::prefix('users')->group(function () {
+            Route::controller(UserController::class)->group(function () {
+                Route::get('/', 'index')->name('admin.user');
+                Route::delete('delete/{id}', 'destroy')->name('admin.users.destroy');
+                Route::patch('restore/{id}', 'restore')->name('admin.users.restore');
+            });
+        });
 
         Route::prefix('parts')->group(function () {
             Route::controller(PartController::class)->group(function () {
@@ -157,7 +164,7 @@ Route::middleware(['verified'])->group(function () {
     Route::controller(ClientController::class)->group(function () {
         Route::get('/profile', 'showProfile')->name('client.profile');
         Route::get('/analytics/id={id}', 'showAnalytics')->name('client.analytics');
-        Route::get('/statistical', 'showStatistical')->name('client.statistical');        
+        Route::get('/statistical', 'showStatistical')->name('client.statistical');
         Route::get('result/{id}', 'showResult')->name('result');
     });
 

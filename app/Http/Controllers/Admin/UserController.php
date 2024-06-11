@@ -14,11 +14,11 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users = User::where('id_role', 'like', UserRole::Client)->get();
+        $users = User::withTrashed()->where('id_role', UserRole::Client)->get();
 
         return view('admin.user.index', compact('users'));
-
     }
+
 
     /**
      * Show the form for creating a new resource.
@@ -65,6 +65,33 @@ class UserController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        try {
+            $user = User::findOrFail($id);
+            $user->delete();
+
+            toastr()->success('Khóa tài khoản thành công!');
+
+            return redirect()->back();
+        } catch (\Exception $e) {
+            toastr()->error('Có lỗi khi khóa người dùng!');
+
+            return redirect()->back();
+        }
+    }
+
+    public function restore(string $id)
+    {
+        try {
+            $user = User::withTrashed()->findOrFail($id);
+            $user->restore(); // Sử dụng phương thức restore để khôi phục người dùng
+
+            toastr()->success('Mở khóa tài khoản thành công!');
+
+            return redirect()->back();
+        } catch (\Exception $e) {
+            toastr()->error('Có lỗi khi mở khóa người dùng!');
+
+            return redirect()->back();
+        }
     }
 }
