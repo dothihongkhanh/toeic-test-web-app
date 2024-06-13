@@ -27,7 +27,7 @@ class UserSeeder extends Seeder
                 'google_id' => null,
             ],
             [
-                'name' => 'khanh kkkk',
+                'name' => 'Khánh Đỗ',
                 'email' => 'khanhne@spambox.xyz',
                 'email_verified_at' => Carbon::now(),
                 'password' => bcrypt('123456789'),
@@ -38,7 +38,7 @@ class UserSeeder extends Seeder
                 'google_id' => null,
             ],
             [
-                'name' => 'khanh22 hhhh',
+                'name' => 'Hồng Khánh',
                 'email' => '9377architectural@fthcapital.com',
                 'email_verified_at' => Carbon::now(),
                 'password' => bcrypt('123123'),

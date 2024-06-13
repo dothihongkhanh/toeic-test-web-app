@@ -12,6 +12,7 @@ use App\Http\Controllers\Admin\Reading\PartSevenController;
 use App\Http\Controllers\Admin\Reading\PartSixController;
 use App\Http\Controllers\Admin\Reading\ReadingController;
 use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\AdminStatisticsController;
 use App\Http\Controllers\Auth\LoginGoogleController;
 use App\Http\Controllers\Client\CheckoutController;
 use App\Http\Controllers\Client\ClientController;
@@ -238,3 +239,4 @@ Route::middleware(['verified'])->group(function () {
         Route::get('/vnpay-callback', 'vnpay_callback');
     });
 });
+

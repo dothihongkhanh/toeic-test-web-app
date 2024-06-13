@@ -10,6 +10,7 @@ use App\Models\Part;
 use App\Models\UserAnswer;
 use App\Models\UserExam;
 use App\Services\AiAnalysisService;
+use App\Services\ExamStatisticService;
 use App\Traits\CalculateResultTrait;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -243,12 +244,23 @@ class ClientController extends Controller
     public function showStatistical()
     {
         $user = Auth::user();
+
+        $totalCorrect = 0;
+        $totalWrong = 0;
+        $totalSkipped = 0;
+        $totalQuestions = 0;
+
         $userExams = UserExam::where('id_user', $user->id)->get();
         foreach ($userExams as $userExam) {
             $userAnswers = UserAnswer::where('id_user_exam', $userExam->id)->get();
             $results = $this->calculateResults($userAnswers, $userExam->exam);
             $userExam->totalChildQuestions = $results['totalChildQuestions'];
             $userExam->totalCorrect = $results['totalCorrect'];
+
+            $totalQuestions += $results['totalChildQuestions'];
+            $totalCorrect += $results['totalCorrect'];
+            $totalWrong += $results['totalWrong'];
+            $totalSkipped += $results['totalSkipped'];
         }
 
         $countUserExams = $userExams->count();
@@ -265,6 +277,23 @@ class ClientController extends Controller
 
         $totalTime = sprintf('%02d:%02d', $totalHours, $totalRemainingMinutes);
 
-        return view('client.statistical', compact('user', 'userExams', 'countUserExams', 'totalTime'));
+        // statistics on the number of exams
+        $userId = $user->id;
+        $examResultsCurrentUser = resolve(ExamStatisticService::class)->getExamResults($userId);
+
+        $correctPercentage = ($totalQuestions > 0) ? ($totalCorrect / $totalQuestions) * 100 : 0;
+        $wrongPercentage = ($totalQuestions > 0) ? ($totalWrong / $totalQuestions) * 100 : 0;
+        $skippedPercentage = ($totalQuestions > 0) ? ($totalSkipped / $totalQuestions) * 100 : 0;
+
+        return view('client.statistical', compact(
+            'user',
+            'userExams',
+            'countUserExams',
+            'totalTime',
+            'examResultsCurrentUser',
+            'correctPercentage',
+            'wrongPercentage',
+            'skippedPercentage'
+        ));
     }
 }
