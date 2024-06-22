@@ -47,7 +47,7 @@
                 <div class="col-md-8">
                     <div class="form-group">
                         <input type="file" class="form-control" accept="image/*" id="image" name="image" onchange="displayOldImage()">
-                        <img id="oldImage" src="{{ $image->url_image }}" alt="Question Image" style="width: 50%;">
+                        <img id="oldImage" src="{{ $image->url_image }}" alt="Question Image" style="width: 20%;">
                     </div>
                 </div>
             </div>

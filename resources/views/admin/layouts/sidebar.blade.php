@@ -9,7 +9,7 @@
     <hr class="sidebar-divider my-0">
 
     <!-- Nav Item - Dashboard -->
-    <li class="nav-item active">
+    <li class="nav-item ">
         <a class="nav-link" href="{{ route('admin') }}">
             <i class="fas fa-fw fa-tachometer-alt"></i>
             <span>Dashboard</span></a>
@@ -18,31 +18,25 @@
     <!-- Divider -->
     <hr class="sidebar-divider">
 
-    <li class="nav-item">
+    <li class="nav-item ">
         <a class="nav-link" href="{{ route('admin.parts.list') }}">
             <i class="fas fa-fw fa-bookmark"></i>
             <span>Part</span></a>
     </li>
 
-    <li class="nav-item">
+    <li class="nav-item ">
         <a class="nav-link" href="{{ route('admin.listening.list') }}">
             <i class="fas fa-fw fa-headphones"></i>
             <span>Listening</span></a>
     </li>
 
-    <li class="nav-item">
+    <li class="nav-item ">
         <a class="nav-link" href="{{ route('admin.reading.list') }}">
             <i class="fas fa-fw fa-book-open"></i>
             <span>Reading</span></a>
     </li>
 
-    <li class="nav-item">
-        <a class="nav-link" href="">
-            <i class="fas fa-fw fa-table"></i>
-            <span>Full test</span></a>
-    </li>
-
-    <li class="nav-item">
+    <li class="nav-item active">
         <a class="nav-link" href="{{ route('admin.user') }}">
             <i class="fas fa-fw fa-users"></i>
             <span>Users</span></a>

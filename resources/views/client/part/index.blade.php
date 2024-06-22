@@ -14,6 +14,7 @@
                             <tr>
                                 <th>Part</th>
                                 <th>Mô tả</th>
+                                <th>Hướng dẫn</th>
                                 <th>Số câu</th>
                                 <th></th>
                             </tr>
@@ -23,6 +24,7 @@
                             <tr>
                                 <td>{{ $listeningPart->name_part }}</td>
                                 <td>{{ $listeningPart->desc }}</td>
+                                <td>{{ $listeningPart->direction }}</td>
                                 <td>{{ $listeningPart->number_question }}</td>
                                 <td>
                                     <a href="/practice-listening/part{{ $listeningPart->id }}" class="btn btn-outline-primary">Vào thi {{ $listeningPart->name_part}}</a>
@@ -45,6 +47,7 @@
                             <tr>
                                 <th>Part</th>
                                 <th>Mô tả</th>
+                                <th>Hướng dẫn</th>
                                 <th>Số câu</th>
                                 <th></th>
                             </tr>
@@ -54,6 +57,7 @@
                             <tr>
                                 <td>{{ $readingPart->name_part }}</td>
                                 <td>{{ $readingPart->desc }}</td>
+                                <td>{{ $listeningPart->direction }}</td>
                                 <td>{{ $readingPart->number_question }}</td>
                                 <td>
                                     <a href="/practice-reading/part{{ $readingPart->id }}" class="btn btn-outline-primary">Vào thi {{ $readingPart->name_part}}</a>

@@ -14,6 +14,7 @@ class UserExam extends Model
         'id_exam',
         'date',
         'total_time',
+        'analysis',
     ];
 
     public function userAnswers()

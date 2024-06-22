@@ -36,16 +36,16 @@
                                                     </span>
                                                     @enderror
                                                 </div>
-                                                <div class="col-md-12 form-group">
+                                                <!-- <div class="col-md-12 form-group">
                                                     <input class="form-group-input " type="checkbox" name="remember" id="remember" {{ old('remember') ? 'checked' : '' }}>
                                                     <label class="form-group-label" for="remember">
                                                         {{ __('Remember Me') }}
                                                     </label>
-                                                </div>
+                                                </div> -->
                                             </div>
                                             <div class="row">
                                                 <div class="col-12">
-                                                    <button type="submit" class="btn btn-primary btn-block py-2">
+                                                    <button type="submit" class="btn btn-primary btn-block py-2 mt-5">
                                                         {{ __('Login') }}
                                                     </button>
                                                 </div>

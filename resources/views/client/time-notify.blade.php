@@ -5,7 +5,7 @@
     <div class="container">
         <div class="card shadow mb-4">
             <div class="card-header py-3 d-flex">
-                <p class="m-0 font-weight-bold text-primary">Nhận thông báo</p>
+                <p class="m-0 font-weight-bold text-primary">Đặt giờ nhận thông báo nhắc nhở luyện tập</p>
             </div>
             <div class="card-body">
                 <div class="row">

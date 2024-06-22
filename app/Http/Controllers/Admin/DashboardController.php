@@ -47,6 +47,13 @@ class DashboardController extends Controller
         $filterMonth = $request->input('selectedMonthYear');
         $examResultsAllUsers = resolve(ExamStatisticService::class)->getExamResults(null, $filterMonth);
 
-        return view('admin.dashboard.index', compact('countUser', 'countExam', 'examResultsAllUsers', 'recordCount', 'monthYears'));
+        $popularExams = UserExam::select('exams.id', 'exams.name_exam', DB::raw('COUNT(user_exams.id_exam) as total'))
+            ->join('exams', 'user_exams.id_exam', '=', 'exams.id')
+            ->take(5)
+            ->groupBy('exams.id', 'exams.name_exam')
+            ->orderBy('total', 'desc')
+            ->get();
+
+        return view('admin.dashboard.index', compact('countUser', 'countExam', 'examResultsAllUsers', 'recordCount', 'monthYears', 'popularExams'));
     }
 }

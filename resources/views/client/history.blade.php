@@ -22,7 +22,6 @@
                                 <br>
                                 Thời gian hoàn thành: {{ $result['total_time'] }}<br>
                                 <a href="{{ route('part1.result.detail', ['id' => $result['idUserExam']]) }}" class="btn btn-outline-primary">Xem chi tiết</a>
-                                <a href="{{ route('part1-detail', ['id' => $result['idUserExam']]) }}" class="btn btn-outline-danger">Làm lại câu sai</a>
                             </li>
                             @endforeach
                         </ul>
@@ -31,7 +30,7 @@
             </div>
             @else
             <div class="m-4 text-center">
-                <h4>Bạn chưa thực hiện bài thi!</h4>
+                <h4>Chưa có lịch sử luyện tập!</h4>
             </div>
             @endif
         </div>

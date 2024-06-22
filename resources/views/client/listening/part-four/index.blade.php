@@ -25,14 +25,14 @@
                             @endif
                             <br>
                             @if($exam->isPaidByUser(auth()->id()))
-                            <div class="text-primary d-inline-block pl-1 pr-1" style="border: 1px solid #51be78; border-radius: 5px">{{ $exam->price }}</div>
+                            <div class="text-primary d-inline-block pl-1 pr-1" style="border: 1px solid #51be78; border-radius: 5px">{{ number_format($exam->price, 0, ',', '.') }} VND</div>
                             @elseif($exam->price > 0)
-                            <div class="text-danger d-inline-block pl-1 pr-1" style="border: 1px solid red; border-radius: 5px">{{ $exam->price }}</div>
+                            <div class="text-danger d-inline-block pl-1 pr-1" style="border: 1px solid red; border-radius: 5px">{{ number_format($exam->price, 0, ',', '.') }} VND</div>
                             @else
                             <div class="text-primary d-inline-block pl-1 pr-1" style="border: 1px solid #51be78; border-radius: 5px">free</div>
                             @endif
                         </div>
-                        <div class="ml-auto">
+                        <div class="ml-auto d-flex">
                             @if($exam->price > 0 && !$exam->isPaidByUser(auth()->id()))
                             <form action="{{ url('/vnpay_payment') }}" method="POST">
                                 @csrf
@@ -43,7 +43,7 @@
                             @else
                             <a href="/practice-listening/part4/detail/{{ $exam->id }}" class="btn btn-primary">Bắt đầu</a>
                             @endif
-                            <a href="/practice-listening/history/{{ $exam->id }}" class="btn btn-outline-primary">Xem lịch sử</a>
+                            <a href="/practice-listening/history/{{ $exam->id }}" class="btn btn-outline-primary ml-2">Xem lịch sử</a>
                         </div>
                     </div>
                 </div>

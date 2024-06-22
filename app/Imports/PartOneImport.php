@@ -64,10 +64,15 @@ class PartOneImport implements ToModel, WithHeadingRow
                     $idQuestionFromImageName = $matches[1];
                     if ($row['question_id'] == $idQuestionFromImageName) {
                         $imagePath = $imageFile->store('listening/part1/images', 'public');
-                        Image::firstOrCreate([
-                            'url_image' => Storage::url($imagePath),
-                            'id_question' => $parentQuestion->id,
-                        ]);
+                        $existingImage = Image::where('id_question', $parentQuestion->id)
+                            ->first();
+
+                        if (!$existingImage) {
+                            Image::create([
+                                'url_image' => Storage::url($imagePath),
+                                'id_question' => $parentQuestion->id,
+                            ]);
+                        }
                         break;
                     }
                 } else {
@@ -75,7 +80,7 @@ class PartOneImport implements ToModel, WithHeadingRow
                 }
             }
 
-            $questionChild = QuestionChild::create([
+            $questionChild = QuestionChild::firstOrCreate([
                 'id_question' => $parentQuestion->id,
                 'question_number' => $row['question_number'],
                 'question_title' => null,
@@ -97,7 +102,7 @@ class PartOneImport implements ToModel, WithHeadingRow
                 'id_exam' => $exam->id,
                 'id_part' => PartType::PartOne,
             ]);
-            
+
             for ($i = 1; $i <= 4; $i++) {
                 Answer::firstOrCreate([
                     'id_question_child' => $questionChild->id,
