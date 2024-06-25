@@ -16,11 +16,6 @@ class Exam extends Model
         'id_part',
     ];
 
-    public function parts()
-    {
-        return $this->belongsToMany(Part::class, 'exam_parts', 'id_exam', 'id_part');
-    }
-
     public function questions()
     {
         return $this->belongsToMany(Question::class, 'exam_questions', 'id_exam', 'id_question');

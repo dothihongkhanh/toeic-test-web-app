@@ -5,7 +5,6 @@ namespace App\Imports;
 use App\Enums\PartType;
 use App\Models\Answer;
 use App\Models\Exam;
-use App\Models\ExamPart;
 use App\Models\ExamQuestion;
 use App\Models\Image;
 use App\Models\Question;
@@ -96,11 +95,6 @@ class PartOneImport implements ToModel, WithHeadingRow
             ExamQuestion::firstOrCreate([
                 'id_exam' => $exam->id,
                 'id_question' => $parentQuestion->id,
-            ]);
-
-            ExamPart::firstOrCreate([
-                'id_exam' => $exam->id,
-                'id_part' => PartType::PartOne,
             ]);
 
             for ($i = 1; $i <= 4; $i++) {

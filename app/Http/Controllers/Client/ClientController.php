@@ -10,6 +10,7 @@ use App\Models\Part;
 use App\Models\UserAnswer;
 use App\Models\UserExam;
 use App\Services\AiAnalysisService;
+use App\Services\ExamService;
 use App\Services\ExamStatisticService;
 use App\Traits\CalculateResultTrait;
 use Illuminate\Http\Request;
@@ -111,10 +112,11 @@ class ClientController extends Controller
         $userAnswers = UserAnswer::where('id_user_exam', $userExam->id)->get();
 
         $exam = Exam::findOrFail($userExam->id_exam);
+        $partOfExam = resolve(ExamService::class)->getPartByExam($exam->id)->first()->id;
 
         $results = $this->calculateResults($userAnswers, $exam);
 
-        return view('client.result', compact('exam', 'userExam'))->with($results);
+        return view('client.result', compact('exam', 'userExam', 'partOfExam'))->with($results);
     }
 
     public function showHistory(string $examId)

@@ -37,8 +37,7 @@
                     </div>
                 </div>
                 <a href="{{  route('client.analytics', ['id' => $userExam->id]) }}" class="btn btn-outline-primary mr-3">Xem phân tích kết quả</a>
-                @foreach ($exam->parts as $part)
-                @switch($part->id)
+                @switch($partOfExam)
                 @case(App\Enums\PartType::PartOne)
                 <a href="{{ route('part1.result.detail', ['id' => $userExam->id]) }}">Xem chi tiết đáp án</a>
                 @break
@@ -63,7 +62,6 @@
                 @default
                 <p>Part không xác định</p>
                 @endswitch
-                @endforeach
             </div>
         </div>
     </div>

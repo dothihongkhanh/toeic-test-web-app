@@ -10,6 +10,7 @@ use App\Imports\PartFiveImport;
 use App\Models\Exam;
 use App\Models\Part;
 use App\Models\Question;
+use App\Services\ExamService;
 use App\Traits\NotificationUpdateQuestionTrait;
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -22,8 +23,7 @@ class PartFiveController extends Controller
      */
     public function index()
     {
-        $part5 = Part::where('id', PartType::PartFive)->first();
-        $examsInPart5 = $part5->exams()->get();
+        $examsInPart5 = resolve(ExamService::class)->getExamsByPart(PartType::PartFive);
 
         return view('admin.reading.part-five.index', compact('examsInPart5'));
     }

@@ -8,13 +8,13 @@ use App\Models\Exam;
 use App\Models\Part;
 use App\Models\UserAnswer;
 use App\Models\UserExam;
+use App\Services\ExamService;
 
 class PartThreePracticeController extends Controller
 {
     public function index()
     {
-        $part3 = Part::where('id', PartType::PartThree)->first();
-        $examsInPart3 = $part3->exams()->get();
+        $examsInPart3 = resolve(ExamService::class)->getExamsByPart(PartType::PartThree);
 
         return view('client.listening.part-three.index', compact('examsInPart3'));
     }

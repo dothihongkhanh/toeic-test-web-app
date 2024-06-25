@@ -12,7 +12,6 @@ trait CalculateResultTrait
         $totalWrong = 0;
         $totalSkipped = 0;
 
-
         foreach ($userAnswers as $userAnswer) {
             $isCorrect = Answer::where('id', $userAnswer->id_user_answer)->value('is_correct');
             if ($isCorrect) {

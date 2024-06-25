@@ -11,6 +11,7 @@ use App\Models\Exam;
 use App\Models\Image;
 use App\Models\Part;
 use App\Models\Question;
+use App\Services\ExamService;
 use App\Traits\NotificationUpdateQuestionTrait;
 use Illuminate\Support\Facades\Storage;
 use Maatwebsite\Excel\Facades\Excel;
@@ -24,10 +25,8 @@ class PartSevenController extends Controller
      */
     public function index()
     {
-        $part7 = Part::where('id', PartType::PartSeven)->first();
-        $examsInPart7 = $part7->exams()->get();
-
-
+        $examsInPar7 = resolve(ExamService::class)->getExamsByPart(PartType::PartSeven);
+        
         return view('admin.reading.part-seven.index', compact('examsInPart7'));
     }
 
