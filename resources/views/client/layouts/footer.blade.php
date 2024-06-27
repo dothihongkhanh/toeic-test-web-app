@@ -1,18 +1,18 @@
-<div class="site-section ftco-subscribe-1" style="background-image: url('https://img.lovepik.com/element/40066/4011.png_300.png')">
+<!-- <div class="site-section ftco-subscribe-1" style="background-image: url('https://img.lovepik.com/element/40066/4011.png_300.png')">
     <div class="container">
         <div class="row align-items-center">
             <div class="col-lg-7">
-                <h2>Subscribe to us!</h2>
+                <h2>Liên hệ với chúng tôi!</h2>
             </div>
             <div class="col-lg-5">
                 <form action="" class="d-flex">
-                    <input type="text" class="rounded form-control mr-2 py-3" placeholder="Enter your email">
+                    <input type="text" class="rounded form-control mr-2 py-3" placeholder="Nhập ">
                     <button class="btn btn-primary rounded py-3 px-4" type="submit">Send</button>
                 </form>
             </div>
         </div>
     </div>
-</div>
+</div> -->
 <div class="footer py-4">
     <div class="container">
         <div class="row">
@@ -22,7 +22,7 @@
                         <h2 class="text-primary"><b>Toeic</b>Study</h2>
                     </a>
                 </div>
-                <p>Hệ thống hỗ trợ luyện tập TOEIC tích hợp AI phân tích kết quả bài làm</p>
+                <p>Website hỗ trợ luyện tập TOEIC tích hợp AI phân tích kết quả bài làm</p>
             </div>
             <div class="col-lg-3">
                 <h3 class="footer-heading"><span>Bài tập</span></h3>
@@ -56,7 +56,7 @@
                     <p>
                         Copyright &copy;<script>
                             document.write(new Date().getFullYear());
-                        </script> All rights reserved 
+                        </script> Thiết kế bởi Đỗ Thị Hồng Khánh
                     </p>
                 </div>
             </div>

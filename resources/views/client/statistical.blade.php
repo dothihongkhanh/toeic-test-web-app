@@ -117,7 +117,7 @@
                                     const myChart = new Chart(ctx, {
                                         type: 'pie',
                                         data: {
-                                            labels: ['Correct', 'Wrong', 'Skipped'],
+                                            labels: ['Đúng', 'Sai', 'Chưa chọn'],
                                             datasets: [{
                                                 label: 'My Answers',
                                                 data: [correctPercentage, wrongPercentage, skippedPercentage],

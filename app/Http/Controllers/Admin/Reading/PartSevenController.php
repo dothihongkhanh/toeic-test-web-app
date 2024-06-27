@@ -25,7 +25,7 @@ class PartSevenController extends Controller
      */
     public function index()
     {
-        $examsInPar7 = resolve(ExamService::class)->getExamsByPart(PartType::PartSeven);
+        $examsInPart7 = resolve(ExamService::class)->getExamsByPart(PartType::PartSeven);
         
         return view('admin.reading.part-seven.index', compact('examsInPart7'));
     }
@@ -50,14 +50,14 @@ class PartSevenController extends Controller
             $result = Excel::import($import, $file);
 
             if ($result && $import->importSuccess()) {
-                toastr()->success('Part 7 has been saved successfully!');
+                toastr()->success('Part 7 đã được lưu thành công!');
                 return redirect()->route('list-part7');
             } else {
-                toastr()->error('An error has occurred during import. Please select the correct file.');
+                toastr()->error('Đã xảy ra lỗi trong quá trình nhập. Vui lòng chọn đúng tập tin.');
                 return redirect()->back();
             }
         } else {
-            toastr()->error('An error has occurred please try again later.');
+            toastr()->error('Đã xảy ra lỗi, vui lòng thử lại sau.');
 
             return redirect()->back();
         }

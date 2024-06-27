@@ -1,5 +1,5 @@
 @extends('client.layouts.app')
-@section('title', config('app.name'). ' - Register')
+@section('title', config('app.name'). ' - Đăng ký')
 @section('content')
 <div class="bg-primary">
     <div class="site-section">
@@ -12,14 +12,14 @@
                                 <div class="col-lg-10">
                                     <div class="p-5">
                                         <div class="text-center">
-                                            <h3 class="text-primary mb-4"><b>Create new accout</b></h3>
+                                            <h3 class="text-primary mb-4"><b>Đăng ký</b></h3>
                                         </div>
                                         <form method="POST" action="{{ route('register') }}">
                                             @csrf
 
                                             <div class="row">
                                                 <div class="col-md-12 form-group">
-                                                    <input id="name" type="text" class="form-control form-control-lg @error('name') is-invalid @enderror" name="name" value="{{ old('name') }}" required autocomplete="name" autofocus placeholder="Enter name">
+                                                    <input id="name" type="text" class="form-control form-control-lg @error('name') is-invalid @enderror" name="name" value="{{ old('name') }}" required autocomplete="name" autofocus placeholder="Nhập tên người dùng">
 
                                                     @error('name')
                                                     <span class="invalid-feedback" role="alert">
@@ -28,7 +28,7 @@
                                                     @enderror
                                                 </div>
                                                 <div class="col-md-12 form-group">
-                                                    <input id="email" type="email" class="form-control form-control-lg @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email" placeholder="Enter email">
+                                                    <input id="email" type="email" class="form-control form-control-lg @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email" placeholder="Nhập email">
 
                                                     @error('email')
                                                     <span class="invalid-feedback" role="alert">
@@ -37,7 +37,7 @@
                                                     @enderror
                                                 </div>
                                                 <div class="col-md-12 form-group">
-                                                    <input id="password" type="password" class="form-control form-control-lg @error('password') is-invalid @enderror" name="password" required placeholder="Enter password">
+                                                    <input id="password" type="password" class="form-control form-control-lg @error('password') is-invalid @enderror" name="password" required placeholder="Nhập mật khẩu">
 
                                                     @error('password')
                                                     <span class="invalid-feedback" role="alert">
@@ -46,7 +46,7 @@
                                                     @enderror
                                                 </div>
                                                 <div class="col-md-12 form-group">
-                                                    <input id="password-confirm" type="password" class="form-control form-control-lg" name="password_confirmation" required autocomplete="new-password" placeholder="Enter confirm password">
+                                                    <input id="password-confirm" type="password" class="form-control form-control-lg" name="password_confirmation" required autocomplete="new-password" placeholder="Nhập xác nhận mật khẩu">
 
                                                     @error('password')
                                                     <span class="invalid-feedback" role="alert">
@@ -58,7 +58,7 @@
                                             <div class="row">
                                                 <div class="col-12">
                                                     <button type="submit" class="btn btn-primary btn-block py-2">
-                                                        {{ __('Register') }}
+                                                        {{ __('Đăng ký') }}
                                                     </button>
                                                 </div>
                                             </div>

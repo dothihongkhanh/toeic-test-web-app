@@ -52,12 +52,12 @@ class PartController extends Controller
         ]);
 
         if ($part instanceof Part) {
-            toastr()->success('Part has been saved successfully!');
+            toastr()->success('Partđã được lưu thành công!');
 
             return redirect()->route('admin.parts.list');
         }
 
-        toastr()->error('An error has occurred please try again later.');
+        toastr()->error('Đã xảy ra lỗi, vui lòng thử lại sau.');
 
         return redirect()->back();
     }

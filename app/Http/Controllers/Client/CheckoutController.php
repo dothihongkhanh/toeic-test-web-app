@@ -7,6 +7,7 @@ use App\Models\Payment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Str;
 
@@ -28,12 +29,11 @@ class CheckoutController extends Controller
         // Thêm tham số vào sau cùng của URL
         $vnp_Returnurl .= "id_exam={$data['id_exam']}&price={$data['price']}";
 
-
-        $vnp_TmnCode = "CGXZLS0Z";; //Mã website tại VNPAY 
-        $vnp_HashSecret = "XNBCJFAKAZQSGTARRLGCHVZWCIOIGSHN"; //Chuỗi bí mật
+        $vnp_TmnCode = env('vnp_TmnCode');
+        $vnp_HashSecret = env('vnp_HashSecret');
 
         $vnp_TxnRef = Str::uuid();
-        $vnp_OrderInfo = 'Thanh toan hoa don';
+        $vnp_OrderInfo = 'Thanh toan bai tap TOEIC';
         $vnp_OrderType = 'bill payment';
         $vnp_Amount = $data['price'] * 100;
         $vnp_Locale = 'VN';
@@ -100,11 +100,14 @@ class CheckoutController extends Controller
         $vnp_ResponseCode = $request->input('vnp_ResponseCode');
         $price = $request->input('price');
         $idExam = $request->input('id_exam');
+
+        Log::info("VNPay Callback: vnp_TxnRef = $vnp_TxnRef, vnp_ResponseCode = $vnp_ResponseCode, price = $price, id_exam = $idExam");
+
         if ($vnp_ResponseCode == '00') {
             DB::beginTransaction();
             try {
                 $payment = new Payment();
-                $payment->vnp_TxnRef = $vnp_TxnRef; // Sử dụng UUID
+                $payment->vnp_TxnRef = $vnp_TxnRef;
                 $payment->id_user = Auth::id();
                 $payment->id_exam = $idExam;
                 $payment->payment_time = now();
@@ -114,15 +117,18 @@ class CheckoutController extends Controller
                 DB::commit();
             } catch (\Exception $e) {
                 DB::rollback();
-                dd($e->getMessage());
+                Log::error("Payment Save Error: " . $e->getMessage());
+                return response()->json(['message' => 'Payment failed'], 500);
             }
-            //return redirect()->route('checkout-success', ['vnp_TxnRef' => $vnp_TxnRef]);
-            toastr()->success('Thanh toán thành công!');
 
+            toastr()->success('Thanh toán thành công!');
             $history = session('url_history', []);
             $redirectUrl = isset($history[3]) ? $history[3] : url('/');
 
             return redirect($redirectUrl);
+        } else {
+            Log::error("VNPay Response Error: vnp_ResponseCode = $vnp_ResponseCode");
+            return response()->json(['message' => 'Payment failed'], 500);
         }
     }
 }

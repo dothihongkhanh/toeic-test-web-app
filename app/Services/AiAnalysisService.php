@@ -11,12 +11,13 @@ class AiAnalysisService
 
     public function __construct()
     {
-        $this->apiUrl = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent';
+        $this->apiUrl = env('API_AI_URL');
         $this->apiKey = env('GOOGLE_API_KEY');
     }
 
     public function analyzeResults($results)
     {
+        dd($results);
         $response = Http::withHeaders([
             'Content-Type' => 'application/json',
         ])

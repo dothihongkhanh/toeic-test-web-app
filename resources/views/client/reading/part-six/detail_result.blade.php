@@ -30,9 +30,9 @@
                                                 <p>
                                                     @if ($userAnswers->contains('id_user_answer', $answer->id))
                                                     @if ($answer->is_correct)
-                                                    <b class="text-primary">{{ $answer->answer_text }} - Correct</b>
+                                                    <b class="text-primary">{{ $answer->answer_text }} - Đúng</b>
                                                     @else
-                                                    <b class="text-danger">{{ $answer->answer_text }} - Incorrect</b>
+                                                    <b class="text-danger">{{ $answer->answer_text }} - Sai</b>
                                                     @endif
                                                     @else
                                                     {{ $answer->answer_text }}

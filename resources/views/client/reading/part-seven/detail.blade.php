@@ -62,7 +62,7 @@
                                 @endforeach
                                 @endforeach
                             </div>
-                            <button class="btn btn-primary w-100 mt-2" type="submit">Submit</button>
+                            <button class="btn btn-primary w-100 mt-2" type="submit">Nộp bài</button>
                         </div>
                     </div>
                 </div>

@@ -1,5 +1,5 @@
 @extends('client.layouts.app')
-@section('title', config('app.name'). ' - Login')
+@section('title', config('app.name'). ' - Đăng nhập')
 @section('content')
 <div class="bg-primary">
     <div class="site-section">
@@ -12,14 +12,14 @@
                                 <div class="col-lg-10">
                                     <div class="p-5">
                                         <div class="text-center">
-                                            <h3 class="text-primary mb-4"><b>Welcome Back!</b></h3>
+                                            <h3 class="text-primary mb-4"><b>Đăng nhập</b></h3>
 
                                         </div>
                                         <form method="POST" action="{{ route('login') }}">
                                             @csrf
                                             <div class="row">
                                                 <div class="col-md-12 form-group">
-                                                    <input id="email" type="email" class="form-control form-control-lg @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email" autofocus placeholder="Enter email">
+                                                    <input id="email" type="email" class="form-control form-control-lg @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email" autofocus placeholder="Nhập email">
 
                                                     @error('email')
                                                     <span class="invalid-feedback" role="alert">
@@ -28,7 +28,7 @@
                                                     @enderror
                                                 </div>
                                                 <div class="col-md-12 form-group">
-                                                    <input id="password" type="password" class="form-control form-control-lg @error('password') is-invalid @enderror" name="password" required autocomplete="current-password" placeholder="Enter password">
+                                                    <input id="password" type="password" class="form-control form-control-lg @error('password') is-invalid @enderror" name="password" required autocomplete="current-password" placeholder="Nhập mật khẩu">
 
                                                     @error('password')
                                                     <span class="invalid-feedback" role="alert">
@@ -46,7 +46,7 @@
                                             <div class="row">
                                                 <div class="col-12">
                                                     <button type="submit" class="btn btn-primary btn-block py-2 mt-5">
-                                                        {{ __('Login') }}
+                                                        {{ __('Đăng nhập') }}
                                                     </button>
                                                 </div>
                                             </div>
@@ -54,11 +54,11 @@
                                         <hr>
                                         <div class="row">
                                             <div class="col-12 text-center">
-                                                <label>Or</label>
+                                                <label>Hoặc</label>
                                             </div>
                                             <div class="col-12">
                                                 <a class="btn btn-primary btn-block py-2" href="{{ route('auth.google') }}">
-                                                    <i class="fab fa-google fa-fw"></i> Login with Google
+                                                    <i class="fab fa-google fa-fw"></i> Đăng nhập với Google
                                                 </a>
                                             </div>
                                         </div>
@@ -66,23 +66,20 @@
                                         <div class="text-center">
                                             @if (Route::has('password.request'))
                                             <a class="btn btn-link" href="{{ route('password.request') }}">
-                                                {{ __('Forgot Your Password?') }}
+                                                {{ __('Quên mật khẩu?') }}
                                             </a>
                                             @endif
                                         </div>
                                         <div class="text-center">
-                                            <a class="btn btn-link" href="register.html">Create an Account!</a>
+                                            <a class="btn btn-link" href="register.html">Đăng ký ngay!</a>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-
                 </div>
-
             </div>
-
         </div>
     </div>
 </div>

@@ -1,5 +1,5 @@
 @extends('admin.layouts.app')
-@section('title', 'Detail - ' .$exam->name_exam)
+@section('title', 'Chi tiết - ' .$exam->name_exam)
 @section('content')
 <div class="card shadow mb-4">
     <div class="card-header py-3 d-flex justify-content-between">

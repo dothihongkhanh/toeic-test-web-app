@@ -9,7 +9,6 @@ use App\Http\Requests\PartThree\UpdatePartThreeRequest;
 use App\Imports\PartThreeImport;
 use App\Models\Exam;
 use App\Models\Image;
-use App\Models\Part;
 use App\Models\Question;
 use App\Services\ExamService;
 use App\Traits\NotificationUpdateQuestionTrait;
@@ -51,14 +50,14 @@ class PartThreeController extends Controller
             $result = Excel::import($import, $file);
 
             if ($result && $import->importSuccess()) {
-                toastr()->success('Part 3 has been saved successfully!');
+                toastr()->success('Part 3 đã được lưu thành công!');
                 return redirect()->route('list-part3');
             } else {
-                toastr()->error('An error has occurred during import. Please select the correct file.');
+                toastr()->error('Đã xảy ra lỗi trong quá trình nhập. Vui lòng chọn đúng tập tin.');
                 return redirect()->back();
             }
         } else {
-            toastr()->error('An error has occurred please try again later.');
+            toastr()->error('Đã xảy ra lỗi, vui lòng thử lại sau.');
 
             return redirect()->back();
         }

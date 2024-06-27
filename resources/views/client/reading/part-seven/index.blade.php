@@ -28,7 +28,7 @@
                             @elseif($exam->price > 0)
                             <div class="text-danger d-inline-block pl-1 pr-1" style="border: 1px solid red; border-radius: 5px">{{ number_format($exam->price, 0, ',', '.') }} VND</div>
                             @else
-                            <div class="text-primary d-inline-block pl-1 pr-1" style="border: 1px solid #51be78; border-radius: 5px">free</div>
+                            <div class="text-primary d-inline-block pl-1 pr-1" style="border: 1px solid #51be78; border-radius: 5px">Miễn phí</div>
                             @endif
                         </div>
                         <div class="ml-auto d-flex">

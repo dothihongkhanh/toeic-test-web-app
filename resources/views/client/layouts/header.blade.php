@@ -10,19 +10,19 @@
                 <nav class="site-navigation position-relative text-right" role="navigation">
                     <ul class="site-menu main-menu js-clone-nav mr-auto d-none d-lg-block">
                         <li class="">
-                            <a href="/" class="nav-link text-left">Home</a>
+                            <a href="/" class="nav-link text-left">Trang chủ</a>
                         </li>
-                        <li class="">
+                        <li class="active">
                             <a href="{{ route('client.listening.list') }}" class="nav-link text-left">Listening</a>
                         </li>
-                        <li>
+                        <li class="">
                             <a href="{{ route('client.reading.list') }}" class="nav-link text-left">Reading</a>
                         </li>
-                        <li class="has-children">
-                            <a href="" class="nav-link text-left">Information</a>
+                        <li class="has-children ">
+                            <a href="" class="nav-link text-left">Thông tin</a>
                             <ul class="dropdown">
                                 <li><a href="/part">Part</a></li>
-                                <li><a href="">IIG</a></li>
+                                <li><a href="https://iigvietnam.com/vi/" target="_blank">IIG</a></li>
                             </ul>
                         </li>
                     </ul>
@@ -31,11 +31,11 @@
             <div class="ml-auto d-flex align-items-center">
                 @guest
                 @if (Route::has('login'))
-                <a class="btn btn-primary mr-3 text-white font-weight-bold" href="{{ route('login') }}">{{ __('Login') }}</a>
+                <a class="btn btn-primary mr-3 text-white font-weight-bold" href="{{ route('login') }}">{{ __('Đăng nhập') }}</a>
                 @endif
 
                 @if (Route::has('register'))
-                <a class="btn btn-outline-primary font-weight-bold" href="{{ route('register') }}">{{ __('Register') }}</a>
+                <a class="btn btn-outline-primary font-weight-bold" href="{{ route('register') }}">{{ __('Đăng ký') }}</a>
                 @endif
                 @else
                 <nav class="site-navigation position-relative text-right" role="navigation">
@@ -46,14 +46,14 @@
                             </a>
 
                             <ul class="dropdown" aria-labelledby="navbarDropdown">
-                                <li><a href="{{ route('client.profile') }}">Thông tin cá nhân</a></li>
+                                <!-- <li><a href="{{ route('client.profile') }}">Thông tin cá nhân</a></li> -->
                                 <li><a href="{{ route('client.statistical') }}">Thống kê kết quả luyện tập</a></li>
                                 <li><a href="{{ route('client.showTimeNotify') }}">Đặt giờ nhắc nhở luyện tập</a></li>
 
                                 <li>
                                     <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">
-                                        {{ __('Logout') }}
+                                        {{ __('Đăng xuất') }}
                                     </a>
                                 </li>
                                 <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">

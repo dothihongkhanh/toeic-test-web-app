@@ -6,7 +6,7 @@
         <div class="container">
             <div class="row align-items-center">
                 <div class="col-lg-12 mx-auto text-center" data-aos="fade-up">
-                    <h1>Success with <br> TOEIC Practice!</h1>
+                    <h1>Ôn luyện TOEIC, bứt phá điểm số!</h1>
                 </div>
             </div>
         </div>
@@ -15,7 +15,7 @@
         <div class="container">
             <div class="row align-items-center">
                 <div class="col-lg-12 mx-auto text-center" data-aos="fade-up">
-                    <h1>You Can Learn Anything</h1>
+                    <h1>Luyện tập đa dạng, chinh phục TOEIC!</h1>
                 </div>
             </div>
         </div>
@@ -25,7 +25,7 @@
     <div class="container">
         <div class="row mb-5 justify-content-center text-center">
             <div class="col-lg-6 mb-5">
-                <h2 class="section-title-underline mb-5">
+                <h2 class="section-title-underline mb-2">
                     <span>Chinh phục TOEIC cùng chúng tôi!</span>
                 </h2>
             </div>

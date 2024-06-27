@@ -53,14 +53,14 @@ class PartOneController extends Controller
             $result = Excel::import($import, $file);
 
             if ($result && $import->importSuccess()) {
-                toastr()->success('Part 1 has been saved successfully!');
+                toastr()->success('Part 1 đã được lưu thành công!');
                 return redirect()->route('list-part1');
             } else {
                 toastr()->error('An error has occurred during import. Please try again later.');
                 return redirect()->back();
             }
         } else {
-            toastr()->error('An error has occurred please try again later.');
+            toastr()->error('Đã xảy ra lỗi, vui lòng thử lại sau.');
             return redirect()->back();
         }
     }

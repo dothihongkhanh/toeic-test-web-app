@@ -1,8 +1,9 @@
 @extends('admin.layouts.app')
-@section('title', 'Update Question')
+@section('title', 'Cập nhật câu hỏi')
 @section('content')
 <div class="card shadow mb-4">
     <div class="card-header py-3 d-flex justify-content-between">
+    <b class="text-primary">Cập nhật câu hỏi</b>
     </div>
     <div class="card-body">
         <form action="" method="POST" enctype="multipart/form-data">
@@ -10,7 +11,7 @@
             @foreach($question->images as $image)
             <div class="row mb-3">
                 <div class="col-md-2">
-                    <p>Image</p>
+                    <p>Hình ảnh</p>
                 </div>
                 <div class="col-md-8">
                     <div class="form-group">
@@ -22,7 +23,7 @@
             @endforeach
             <div class="row mb-3">
                 <div class="col-md-2">
-                    <p>Transcript</p>
+                    <p>Dịch nghĩa</p>
                 </div>
                 <div class="col-md-8">
                     <textarea name="transcript[{{ $question->id }}]" class="form-control" style="height: 300px;">{{ old('transcript.' . $question->id, $question->transcript) }}</textarea>
@@ -34,7 +35,7 @@
             @foreach($question->questionChilds as $child)
             <div class="row mb-3">
                 <div class="col-md-2">
-                    <p>Question number</p>
+                    <p>Số thứ tự</p>
                 </div>
                 <div class="col-md-8">
                     <p>{{ $child->question_number }}</p>
@@ -42,7 +43,7 @@
             </div>
             <div class="row mb-3">
                 <div class="col-md-2">
-                    <p>Answers</p>
+                    <p>Đáp án</p>
                 </div>
                 <div class="col-md-8">
                     @foreach($child->answers as $index => $answer)
@@ -61,7 +62,7 @@
             </div>
             <div class="row mb-3">
                 <div class="col-md-2">
-                    <p>Explanation</p>
+                    <p>Giải thích</p>
                 </div>
                 <div class="col-md-8">
                     <textarea name="explanation[{{ $child->id }}]" class="form-control" style="height: 150px;">{{ old('explanation.' . $child->id, $child->explanation) }}</textarea>
@@ -71,7 +72,7 @@
                 </div>
             </div>
             @endforeach
-            <button type="submit" class="btn btn-primary mb-4">Save changes</button>
+            <button type="submit" class="btn btn-primary mb-4">Lưu thay đổi</button>
         </form>
     </div>
 </div>
