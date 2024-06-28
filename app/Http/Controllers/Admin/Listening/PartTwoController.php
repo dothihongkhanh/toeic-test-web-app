@@ -8,7 +8,6 @@ use App\Http\Requests\PartTwo\UpdatePartTwoRequest;
 use App\Http\Requests\PartTwoRequest;
 use App\Imports\PartTwoImport;
 use App\Models\Exam;
-use App\Models\Part;
 use App\Models\Question;
 use App\Services\ExamService;
 use App\Traits\NotificationUpdateQuestionTrait;

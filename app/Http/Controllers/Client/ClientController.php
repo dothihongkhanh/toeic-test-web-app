@@ -210,6 +210,7 @@ class ClientController extends Controller
                     $question = $questionChild->question;
                     $images = $question->images;
 
+
                     $imageUrls = [];
                     foreach ($images as $image) {
                         $imageUrls[] = $image->url_image;
@@ -222,6 +223,8 @@ class ClientController extends Controller
                         "QuestionChild" => $questionChild->question_title ?? 'N/A',
                         "Chosen Answer" => $answer->answer_text,
                         "Is Correct" => $isCorrect,
+                        "Explanation" => $questionChild->explanation,
+                        "Transcript" => $question->transcript
                     ];
                 }
             }

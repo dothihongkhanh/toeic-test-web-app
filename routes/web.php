@@ -81,6 +81,8 @@ Route::middleware(['verified'])->group(function () {
         Route::prefix('listening')->group(function () {
             Route::controller(ListeningController::class)->group(function () {
                 Route::get('list', 'index')->name('admin.listening.list');
+                Route::delete('delete/{id}', 'destroy');
+                Route::patch('restore/{id}', 'restore');
             });
             Route::controller(PartOneController::class)->group(function () {
                 Route::get('create-part1', 'create');
@@ -121,6 +123,8 @@ Route::middleware(['verified'])->group(function () {
                 Route::get('detail/{id}', 'show');
                 Route::get('update/{id}', 'edit');
                 Route::post('update/{id}', 'update');
+                Route::delete('delete/{id}', 'destroy');
+                Route::patch('restore/{id}', 'restore');
             });
             Route::controller(PartFiveController::class)->group(function () {
                 Route::get('create-part5', 'create');

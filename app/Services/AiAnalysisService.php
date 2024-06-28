@@ -17,7 +17,6 @@ class AiAnalysisService
 
     public function analyzeResults($results)
     {
-        dd($results);
         $response = Http::withHeaders([
             'Content-Type' => 'application/json',
         ])
@@ -42,25 +41,40 @@ class AiAnalysisService
 
     protected function generatePrompt($results)
     {
-        $prompt = "Phân tích kết quả luyện tập TOEIC sau và xác định điểm mạnh dựa trên những câu hỏi có kết quả là 'True' và điểm yếu dựa trên những câu hỏi có kết quả là 'False'. Hãy cung cấp đánh giá chi tiết. Đặc biệt, lưu ý đến các kỹ năng ngôn ngữ cụ thể như từ vựng, ngữ pháp, và khả năng hiểu ngữ cảnh.
+        $prompt = "Phân tích kết quả luyện tập TOEIC sau và 
+                    xác định điểm mạnh dựa trên những câu hỏi có kết quả Is Correct là '1' (True) và 
+                    điểm yếu dựa trên những câu hỏi có kết quả là '0' (False). 
+                    Hãy cung cấp đánh giá chi tiết. 
+                    Đặc biệt, lưu ý đến các kỹ năng ngôn ngữ cụ thể như từ vựng, ngữ pháp, và khả năng hiểu ngữ cảnh.
                     Dữ liệu kết quả bài kiểm tra bao gồm thông tin sau:
+                    - Kết quả: {Is Correct}
                     - URL âm thanh: {Audio}
                     - Số thứ tự câu hỏi: {Number question}
                     - ID câu con: {QuestionChild}
+                    - dịch nghĩa {Transcript}
+                    - Giải thích {Explanation}
                     - Câu trả lời đã chọn: {Chosen Answer}
-                    - Kết quả: {Is Correct}
                     - URL hình ảnh: {Images}
                     Dưới đây là các kết quả chi tiết:";
 
         foreach ($results as $result) {
-            $url_audio = $result["Audio"] ?? 'N/A';
-            $numberQuestion = $result["Number question"] ?? 'N/A';
-            $questionChild = $result["QuestionChild"] ?? 'N/A';
-            $chosenAnswer = $result["Chosen Answer"] ?? 'N/A';
             $isCorrect = $result["Is Correct"];
+            $url_audio = $result["Audio"] ?? "N/A";
+            $numberQuestion = $result["Number question"];
+            $questionChild = $result["QuestionChild"];
+            $explanation = $result["Explanation"];
+            $transcript = $result["Transcript"];
+            $chosenAnswer = $result["Chosen Answer"];
             $imageUrls = $result["Images"];
 
-            $prompt .= "File âm thanh: {$url_audio}\nSố thứ tự: {$numberQuestion}\nID Câu con: {$questionChild}\nCâu trả lời: {$chosenAnswer}\nKết quả: {$isCorrect}\n";
+            $prompt .= "
+            File âm thanh: {$url_audio}\n
+            Số thứ tự: {$numberQuestion}\n
+            ID Câu con: {$questionChild}\n
+            Câu trả lời: {$chosenAnswer}\n
+            Kết quả: {$isCorrect}\n
+            Giải thích: {$explanation}\n
+            Dịch nghĩa: {$transcript}\n";
 
             foreach ($imageUrls as $imageUrl) {
                 $prompt .= "URL hình ảnh: {$imageUrl}\n";

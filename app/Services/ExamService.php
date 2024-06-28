@@ -14,8 +14,7 @@ class ExamService
             ->join('questions', 'exam_questions.id_question', '=', 'questions.id')
             ->join('parts', 'questions.id_part', '=', 'parts.id')
             ->where('parts.id', $partId)
-            ->distinct()
-            ->get();
+            ->distinct()->withTrashed()->get();;
 
         return $exams;
     }

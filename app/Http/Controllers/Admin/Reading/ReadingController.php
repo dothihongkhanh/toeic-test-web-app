@@ -74,6 +74,33 @@ class ReadingController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        try {
+            $user = Exam::findOrFail($id);
+            $user->delete();
+
+            toastr()->success('Ẩn bài tập thành công!');
+
+            return redirect()->back();
+        } catch (\Exception $e) {
+            toastr()->error('Có lỗi khi ẩn bài tập!');
+
+            return redirect()->back();
+        }
+    }
+
+    public function restore(string $id)
+    {
+        try {
+            $user = Exam::withTrashed()->findOrFail($id);
+            $user->restore();
+
+            toastr()->success('Hoàn tác ấn bài tập thành công!');
+
+            return redirect()->back();
+        } catch (\Exception $e) {
+            toastr()->error('Có lỗi khi hoàn tác ẩn bài tập!');
+
+            return redirect()->back();
+        }
     }
 }

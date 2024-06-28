@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Enums\UserRole;
 use App\Http\Controllers\Controller;
 use App\Models\Exam;
+use App\Models\Payment;
 use App\Models\User;
 use App\Models\UserExam;
 use App\Services\ExamStatisticService;
@@ -33,6 +34,7 @@ class DashboardController extends Controller
         $countUser = User::where('id_role', UserRole::Client)->count();
         $countExam = Exam::count();
         $recordCount = UserExam::count();
+        $revenue = Payment::sum('payment_amount');
 
         $userExams = UserExam::all();
         $monthYears = [];
@@ -54,6 +56,6 @@ class DashboardController extends Controller
             ->orderBy('total', 'desc')
             ->get();
 
-        return view('admin.dashboard.index', compact('countUser', 'countExam', 'examResultsAllUsers', 'recordCount', 'monthYears', 'popularExams'));
+        return view('admin.dashboard.index', compact('countUser', 'countExam', 'examResultsAllUsers', 'recordCount', 'monthYears', 'popularExams', 'revenue'));
     }
 }

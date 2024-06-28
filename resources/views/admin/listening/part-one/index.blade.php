@@ -28,6 +28,19 @@
                         <td>{{ $exam->price }}</td>
                         <td>
                             <a href="/admin/listening/detail-part1/{{ $exam->id }}" class="btn btn-warning">Chi tiết</a>
+                            @if (is_null($exam->deleted_at))
+                            <form id="delete-form-{{ $exam->id }}" action="/admin/listening/delete/{{ $exam->id }}" method="POST" style="display: inline;">
+                                @csrf
+                                @method('DELETE')
+                                <button type="button" class="btn btn-delete btn-secondary" onclick="confirmDelete({{ $exam->id }})">Ẩn</button>
+                            </form>
+                            @else
+                            <form id="restore-form-{{ $exam->id }}" action="/admin/listening/restore/{{ $exam->id }}" method="POST" style="display: inline;">
+                                @csrf
+                                @method('PATCH')
+                                <button type="button" class="btn btn-restore btn-secondary" onclick="confirmRestore({{ $exam->id }})">Mở</button>
+                            </form>
+                            @endif
                         </td>
                     </tr>
                     @endforeach
@@ -37,3 +50,16 @@
     </div>
 </div>
 @endsection
+<script>
+    function confirmDelete(id) {
+        if (confirm('Bạn chắc chắn muốn ẩn bài tập này?')) {
+            document.getElementById('delete-form-' + id).submit();
+        }
+    }
+
+    function confirmRestore(id) {
+        if (confirm('Bạn chắc chắn muốn hiển thị bài tập này?')) {
+            document.getElementById('restore-form-' + id).submit();
+        }
+    }
+</script>

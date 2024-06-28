@@ -16,7 +16,7 @@
         </div>
     </div>
     <div class="col-xl-3 col-md-6 mb-4">
-        <div class="card border-left-success shadow h-100 py-2">
+        <div class="card border-left-warning shadow h-100 py-2">
             <div class="card-body">
                 <div class="row no-gutters align-items-center">
                     <div class="col mr-2">
@@ -41,10 +41,24 @@
             </div>
         </div>
     </div>
+
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card border-left-success shadow h-100 py-2">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Doanh thu</div>
+                        <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">{{ number_format($revenue, 0, ',', '.') }} VND</div>
+                        <a href="https://sandbox.vnpayment.vn/merchantv2/Home/Dashboard.htm" target="_blank">Xem chi tiết</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 <div class="row">
-<div class="col-xl-4 col-lg-5">
+    <div class="col-xl-4 col-lg-5">
         <div class="card shadow mb-4">
             <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
                 <h6 class="m-0 font-weight-bold text-primary">Bài tập có lượt luyện tập nhiều nhất</h6>

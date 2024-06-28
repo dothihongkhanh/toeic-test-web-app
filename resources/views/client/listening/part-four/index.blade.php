@@ -14,6 +14,7 @@
             @if (!$examsInPart4->isEmpty())
             <div class="card-body">
                 @foreach ($examsInPart4 as $exam)
+                @if($exam->deleted_at === null)
                 <div class="card shadow mb-4">
                     <div class="card-body d-flex align-items-center">
                         <div>
@@ -47,6 +48,7 @@
                         </div>
                     </div>
                 </div>
+                @endif
                 @endforeach
             </div>
             @else

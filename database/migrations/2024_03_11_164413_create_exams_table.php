@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('price');
             $table->time('time')->nullable();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
