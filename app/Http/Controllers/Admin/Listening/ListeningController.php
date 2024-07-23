@@ -2,43 +2,27 @@
 
 namespace App\Http\Controllers\Admin\Listening;
 
+use App\Enums\PartType;
 use App\Http\Controllers\Controller;
 use App\Models\Exam;
-use App\Models\Level;
 use App\Models\Part;
-use App\Models\Type;
+use App\Models\Question;
 use Illuminate\Http\Request;
 
 class ListeningController extends Controller
 {
-    protected $part;
-
-    public function __construct(Part $part)
-    {
-        $this->part = $part;
-    }
-
-    protected function getLevels()
-    {
-        return Level::get(['id', 'name_level']);
-    }
-
-    protected function getTypes()
-    {
-        return Type::get(['id', 'name_type']);
-    }
-
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $listeningParts = $this->part::where('name_part', 'like', 'Part %')
-            ->whereRaw('CAST(SUBSTRING(name_part, 6) AS UNSIGNED) BETWEEN 1 AND 4')
+        $listeningParts = Part::where('id', 'like', PartType::PartOne)
+            ->orWhere('id', 'like', PartType::PartTwo)
+            ->orWhere('id', 'like', PartType::PartThree)
+            ->orWhere('id', 'like', PartType::PartFour)
             ->get();
 
-        $levels = Level::get(['id', 'name_level']);
-        return view('admin.listening.index', compact('listeningParts', 'levels'));
+        return view('admin.listening.index', compact('listeningParts'));
     }
 
     /**
@@ -74,7 +58,8 @@ class ListeningController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $question = Question::findOrFail($id);
+        return view('admin.listening.edit', compact('question'));
     }
 
     /**
@@ -90,6 +75,33 @@ class ListeningController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        try {
+            $user = Exam::findOrFail($id);
+            $user->delete();
+
+            toastr()->success('Ẩn bài tập thành công!');
+
+            return redirect()->back();
+        } catch (\Exception $e) {
+            toastr()->error('Có lỗi khi ẩn bài tập!');
+
+            return redirect()->back();
+        }
+    }
+
+    public function restore(string $id)
+    {
+        try {
+            $user = Exam::withTrashed()->findOrFail($id);
+            $user->restore();
+
+            toastr()->success('Hoàn tác ấn bài tập thành công!');
+
+            return redirect()->back();
+        } catch (\Exception $e) {
+            toastr()->error('Có lỗi khi hoàn tác ẩn bài tập!');
+
+            return redirect()->back();
+        }
     }
 }

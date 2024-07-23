@@ -1,5 +1,5 @@
 @extends('admin.layouts.app')
-@section('title', 'Detail - ' .$exam->name_exam)
+@section('title', 'Chi tiết - ' .$exam->name_exam)
 @section('content')
 <div class="card shadow mb-4">
     <div class="card-header py-3 d-flex justify-content-between">
@@ -11,18 +11,19 @@
     <h4 class="m-4 font-weight-bold text-primary">{{ $exam->name_exam }}</h4>
     @foreach($questions as $question)
     <div class="card-body">
+        @if($question->images->isNotEmpty())
+        @foreach($question->images as $image)
         <div class="row">
             <div class="col-md-2">
                 <p>Image</p>
             </div>
             <div class="col-md-8">
-                @if($question->images->isNotEmpty())
-                @foreach($question->images as $image)
                 <img src="{{ $image->url_image }}" alt="Question Image" style="width: 80%;">
-                @endforeach
-                @endif
             </div>
         </div>
+        @endforeach
+        @endif
+        @if($question->transcript)
         <div class="row">
             <div class="col-md-2">
                 <p>Transcript</p>
@@ -31,6 +32,7 @@
                 <p style="white-space: pre-line;">{{ $question->transcript }}</p>
             </div>
         </div>
+        @endif
         @foreach($question->questionChilds as $child)
         <div>
             <div class="row">
@@ -41,6 +43,7 @@
                     <p>{{ $child->question_number }}</p>
                 </div>
             </div>
+            @if($child->question_title)
             <div class="row">
                 <div class="col-md-2">
                     <p>Question title</p>
@@ -49,6 +52,7 @@
                     <p>{{ $child->question_title }}</p>
                 </div>
             </div>
+            @endif
             <div class="row">
                 <div class="col-md-2">
                     <p>Answers</p>
@@ -82,7 +86,7 @@
         </div>
         @endforeach
     </div>
-
+    <a href="/admin/reading/update/{{ $question->id }}" class="btn btn-warning mb-4">Edit</a>
     <div style="border-top: 1px solid rgba(0, 0, 0);"></div>
     @endforeach
 </div>

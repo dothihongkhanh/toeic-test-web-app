@@ -1,7 +1,7 @@
-<ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+<ul class="navbar-nav bg-primary sidebar sidebar-dark accordion !text-white" id="accordionSidebar">
 
     <!-- Sidebar - Brand -->
-    <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
+    <a class="sidebar-brand d-flex align-items-center justify-content-center" href="/admin">
         <div class="sidebar-brand-text mx-3">Toeic Study</div>
     </a>
 
@@ -12,40 +12,34 @@
     <li class="nav-item active">
         <a class="nav-link" href="{{ route('admin') }}">
             <i class="fas fa-fw fa-tachometer-alt"></i>
-            <span>Dashboard</span></a>
+            <span>Thống kê</span></a>
     </li>
 
     <!-- Divider -->
     <hr class="sidebar-divider">
 
-    <li class="nav-item">
+    <li class="nav-item ">
         <a class="nav-link" href="{{ route('admin.parts.list') }}">
             <i class="fas fa-fw fa-bookmark"></i>
             <span>Part</span></a>
     </li>
 
-    <li class="nav-item">
+    <li class="nav-item ">
         <a class="nav-link" href="{{ route('admin.listening.list') }}">
             <i class="fas fa-fw fa-headphones"></i>
             <span>Listening</span></a>
     </li>
 
-    <li class="nav-item">
+    <li class="nav-item ">
         <a class="nav-link" href="{{ route('admin.reading.list') }}">
             <i class="fas fa-fw fa-book-open"></i>
             <span>Reading</span></a>
     </li>
 
-    <li class="nav-item">
-        <a class="nav-link" href="">
-            <i class="fas fa-fw fa-table"></i>
-            <span>Full test</span></a>
-    </li>
-
-    <li class="nav-item">
-        <a class="nav-link" href="">
+    <li class="nav-item ">
+        <a class="nav-link" href="{{ route('admin.user') }}">
             <i class="fas fa-fw fa-users"></i>
-            <span>Users</span></a>
+            <span>Người dùng</span></a>
     </li>
 
     <!-- Divider -->

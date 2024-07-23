@@ -2,46 +2,30 @@
 
 namespace App\Http\Controllers\Admin\Listening;
 
-use App\Enums\ExamType;
 use App\Enums\PartType;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\PartTwo\UpdatePartTwoRequest;
 use App\Http\Requests\PartTwoRequest;
 use App\Imports\PartTwoImport;
-use App\Models\Level;
-use App\Models\Type;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
+use App\Models\Exam;
+use App\Models\Question;
+use App\Services\ExamService;
+use App\Traits\NotificationUpdateQuestionTrait;
+use Illuminate\Support\Facades\Storage;
 use Maatwebsite\Excel\Facades\Excel;
 
 class PartTwoController extends Controller
 {
-    protected function getLevels()
-    {
-        return Level::get(['id', 'name_level']);
-    }
-
-    protected function getTypes()
-    {
-        return Type::get(['id', 'name_type']);
-    }
+    use NotificationUpdateQuestionTrait;
 
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $exams_in_part2 = DB::table('parts')
-            ->select('exams.id', 'exams.name_exam', 'exams.price', 'levels.name_level')
-            ->join('questions', 'parts.id', '=', 'questions.id_part')
-            ->join('exam_questions', 'questions.id', '=', 'exam_questions.id_question')
-            ->join('exams', 'exam_questions.id_exam', '=', 'exams.id')
-            ->join('levels', 'exams.id_level', '=', 'levels.id') // Thêm mối quan hệ với bảng levels
-            ->where('parts.id', PartType::PartTwo)
-            ->distinct()
-            ->groupBy('exams.id', 'exams.name_exam', 'exams.price', 'levels.name_level')
-            ->get();
+        $examsInPart2 = resolve(ExamService::class)->getExamsByPart(PartType::PartTwo);
 
-        return view('admin.listening.part-two.index', compact('exams_in_part2'));
+        return view('admin.listening.part-two.index', compact('examsInPart2'));
     }
 
     /**
@@ -49,15 +33,7 @@ class PartTwoController extends Controller
      */
     public function create()
     {
-        $levels = $this->getLevels();
-        $types = $this->getTypes();
-        foreach ($types as $type) {
-            if ($type['id'] == ExamType::ListeningPractice) {
-                $nameType = $type['name_type'];
-            }
-        }
-
-        return view('admin.listening.part-two.create', compact('levels', 'nameType'));
+        return view('admin.listening.part-two.create');
     }
 
     /**
@@ -65,25 +41,29 @@ class PartTwoController extends Controller
      */
     public function store(PartTwoRequest $request)
     {
-        $levelId = $request->input('id_level');
         if ($request->validated()) {
             $file = $request->file('file_upload');
+            $rows = Excel::toArray([], $file);
+            $rowCount = count($rows[0]);
             $audioFiles = $request->file('audio_upload');
 
-            $import = new PartTwoImport($levelId, $audioFiles);
+            if ($rowCount == 26) {
+                $import = new PartTwoImport($audioFiles);
+                $result = Excel::import($import, $file);
 
-            $result = Excel::import($import, $file);
-
-            if ($result && $import->importSuccess()) {
-                toastr()->success('Part 2 has been saved successfully!');
-                return redirect()->route('list-part2');
+                if ($result && $import->importSuccess()) {
+                    toastr()->success('Part 2 đã được lưu thành công!');
+                    return redirect()->route('list-part2');
+                } else {
+                    toastr()->error('Đã xảy ra lỗi trong quá trình nhập. Vui lòng chọn đúng tập tin.');
+                    return redirect()->back();
+                }
             } else {
-                toastr()->error('An error has occurred during import. Please select the correct file.');
+                toastr()->error('Tập tin phải chứa chính xác 25 câu hỏi. Vui lòng chọn đúng tập tin.');
                 return redirect()->back();
             }
         } else {
-            toastr()->error('An error has occurred please try again later.');
-
+            toastr()->error('Đã xảy ra lỗi, vui lòng thử lại sau.');
             return redirect()->back();
         }
     }
@@ -93,7 +73,10 @@ class PartTwoController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $exam = Exam::findOrFail($id);
+        $questions = $exam->questions()->get();
+
+        return view('admin.listening.part-two.detail', compact('exam', 'questions'));
     }
 
     /**
@@ -101,15 +84,57 @@ class PartTwoController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $question = Question::findOrFail($id);
+
+        return view('admin.listening.part-two.update', compact('question'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(UpdatePartTwoRequest $request, string $id)
     {
-        //
+        $question = Question::findOrFail($id);
+        $questionId = $question->id;
+        $question->transcript = $request->input("transcript.$questionId");
+        $question->save();
+
+        if ($request->hasFile('audio')) {
+            $audioFile = $request->file('audio');
+            $audioName = $audioFile->getClientOriginalName();
+            if (preg_match('/(\d+)_audio_/', $audioName, $matches)) {
+                $idQuestionFromAudioName = $matches[1];
+                if ($question->code == $idQuestionFromAudioName) {
+                    $audioPath = $audioFile->store('listening/part2/audios', 'public');
+                    $question->url_audio = Storage::url($audioPath);
+                } else {
+                    toastr()->error('Nội dung audio không khớp với câu hỏi');
+                    return redirect()->back();
+                }
+            } else {
+                toastr()->error('Tên audio không đúng định dạng');
+                return redirect()->back();
+            }
+        }
+
+        foreach ($question->questionChilds as $child) {
+            $childId = $child->id;
+            $child->explanation = $request->input("explanation.$childId");
+            $child->save();
+
+            foreach ($child->answers as $answer) {
+                $answerId = $answer->id;
+                if (isset($request->answers[$answerId])) {
+                    $answer->answer_text = $request->input("answers.$answerId");
+                    $answer->is_correct = $request->input("correct_answer.$childId") == $answerId;
+                    $answer->save();
+                }
+            }
+        }
+        $this->notifyUsersAboutUpdatedQuestion($question, $child);
+        toastr()->success('Cập nhật thành công!');
+
+        return redirect()->back();
     }
 
     /**

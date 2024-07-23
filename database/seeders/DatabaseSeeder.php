@@ -25,8 +25,6 @@ class DatabaseSeeder extends Seeder
             RoleSeeder::class,
             UserSeeder::class,
             PartSeeder::class,
-            LevelSeeder::class,
-            TypeSeeder::class,
         ]);
     }
 }

@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::table('users', function (Blueprint $table) {
             $table->unsignedBigInteger('id_role');
             $table->string('google_id')->nullable();
+            $table->softDeletes();
 
             $table->foreign('id_role')
                 ->references('id')->on('roles')->onUpdate('cascade')->onDelete('cascade');
@@ -26,7 +27,9 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('users', function (Blueprint $table) {
-            //
+            $table->dropForeign(['id_role']);
+            $table->dropColumn('id_role');
+            $table->dropColumn('google_id');
         });
     }
 };

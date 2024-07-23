@@ -2,46 +2,30 @@
 
 namespace App\Http\Controllers\Admin\Reading;
 
-use App\Enums\ExamType;
 use App\Enums\PartType;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\PartFive\CreatePartFiveRequest;
+use App\Http\Requests\PartFive\UpdatePartFiveRequest;
 use App\Imports\PartFiveImport;
-use App\Models\Level;
-use App\Models\Type;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
+use App\Models\Exam;
+use App\Models\Part;
+use App\Models\Question;
+use App\Services\ExamService;
+use App\Traits\NotificationUpdateQuestionTrait;
 use Maatwebsite\Excel\Facades\Excel;
 
 class PartFiveController extends Controller
 {
-    protected function getLevels()
-    {
-        return Level::get(['id', 'name_level']);
-    }
-
-    protected function getTypes()
-    {
-        return Type::get(['id', 'name_type']);
-    }
+    use NotificationUpdateQuestionTrait;
 
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $exams_in_part5 = DB::table('parts')
-            ->select('exams.id', 'exams.name_exam', 'exams.price', 'levels.name_level')
-            ->join('questions', 'parts.id', '=', 'questions.id_part')
-            ->join('exam_questions', 'questions.id', '=', 'exam_questions.id_question')
-            ->join('exams', 'exam_questions.id_exam', '=', 'exams.id')
-            ->join('levels', 'exams.id_level', '=', 'levels.id')
-            ->where('parts.id', PartType::PartFive)
-            ->distinct()
-            ->groupBy('exams.id', 'exams.name_exam', 'exams.price', 'levels.name_level')
-            ->get();
+        $examsInPart5 = resolve(ExamService::class)->getExamsByPart(PartType::PartFive);
 
-        return view('admin.reading.part-five.index', compact('exams_in_part5'));
+        return view('admin.reading.part-five.index', compact('examsInPart5'));
     }
 
     /**
@@ -49,15 +33,7 @@ class PartFiveController extends Controller
      */
     public function create()
     {
-        $levels = $this->getLevels();
-        $types = $this->getTypes();
-        foreach ($types as $type) {
-            if ($type['id'] == ExamType::ReadingPractice) {
-                $nameType = $type['name_type'];
-            }
-        }
-
-        return view('admin.reading.part-five.create', compact('levels', 'nameType'));
+        return view('admin.reading.part-five.create');
     }
 
     /**
@@ -65,22 +41,28 @@ class PartFiveController extends Controller
      */
     public function store(CreatePartFiveRequest $request)
     {
-        $levelId = $request->input('id_level');
         if ($request->validated()) {
             $file = $request->file('file_upload');
-            $import = new PartFiveImport($levelId);
-            $result = Excel::import($import, $file);
+            $rows = Excel::toArray([], $file);
+            $rowCount = count($rows[0]);
 
-            if ($result && $import->importSuccess()) {
-                toastr()->success('Part 5 has been saved successfully!');
-                return redirect()->route('list-part5');
+            if ($rowCount == 31) {
+                $import = new PartFiveImport();
+                $result = Excel::import($import, $file);
+
+                if ($result && $import->importSuccess()) {
+                    toastr()->success('Part 5 đã được lưu thành công!');
+                    return redirect()->route('list-part5');
+                } else {
+                    toastr()->error('Đã xảy ra lỗi trong quá trình nhập. Vui lòng chọn đúng tập tin.');
+                    return redirect()->back();
+                }
             } else {
-                toastr()->error('An error has occurred during import. Please select the correct file.');
+                toastr()->error('Tập tin phải chứa chính xác 30 câu hỏi. Vui lòng chọn đúng tập tin.');
                 return redirect()->back();
             }
         } else {
-            toastr()->error('An error has occurred please try again later.');
-
+            toastr()->error('Đã xảy ra lỗi, vui lòng thử lại sau.');
             return redirect()->back();
         }
     }
@@ -90,7 +72,10 @@ class PartFiveController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $exam = Exam::findOrFail($id);
+        $questions = $exam->questions()->get();
+
+        return view('admin.reading.part-five.detail', compact('exam', 'questions'));
     }
 
     /**
@@ -98,15 +83,37 @@ class PartFiveController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $question = Question::findOrFail($id);
+
+        return view('admin.reading.part-five.update', compact('question'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(UpdatePartFiveRequest $request, string $id)
     {
-        //
+        $question = Question::findOrFail($id);
+
+        foreach ($question->questionChilds as $child) {
+            $childId = $child->id;
+            $child->question_title = $request->input("question_title.$childId");
+            $child->explanation = $request->input("explanation.$childId");
+            $child->save();
+
+            foreach ($child->answers as $answer) {
+                $answerId = $answer->id;
+                if (isset($request->answers[$answerId])) {
+                    $answer->answer_text = $request->input("answers.$answerId");
+                    $answer->is_correct = $request->input("correct_answer.$childId") == $answerId;
+                    $answer->save();
+                }
+            }
+        }
+        $this->notifyUsersAboutUpdatedQuestion($question, $child);
+        toastr()->success('Cập nhật thành công!');
+
+        return redirect()->back();
     }
 
     /**

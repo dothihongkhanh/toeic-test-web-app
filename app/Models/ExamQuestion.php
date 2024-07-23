@@ -13,4 +13,14 @@ class ExamQuestion extends Model
         'id_exam',
         'id_question',
     ];
+
+    public function question()
+    {
+        return $this->belongsTo(Question::class, 'id_question');
+    }
+
+    public function exam()
+    {
+        return $this->belongsTo(Exam::class, 'id_exam');
+    }
 }

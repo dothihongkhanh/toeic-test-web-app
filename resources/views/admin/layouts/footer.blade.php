@@ -5,7 +5,7 @@
                 <script>
                     document.write(new Date().getFullYear())
                 </script>
-                - Designed by HK
+                - Thiết kế bởi Đỗ Thị Hồng Khánh
             </span>
         </div>
     </div>

@@ -2,39 +2,23 @@
 
 namespace App\Http\Controllers\Admin\Reading;
 
+use App\Enums\PartType;
 use App\Http\Controllers\Controller;
 use App\Models\Exam;
-use App\Models\Level;
 use App\Models\Part;
-use App\Models\Type;
+use App\Models\Question;
 use Illuminate\Http\Request;
 
 class ReadingController extends Controller
 {
-    protected $part;
-
-    public function __construct(Part $part)
-    {
-        $this->part = $part;
-    }
-
-    protected function getLevels()
-    {
-        return Level::get(['id', 'name_level']);
-    }
-
-    protected function getTypes()
-    {
-        return Type::get(['id', 'name_type']);
-    }
-
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $readingParts = $this->part::where('name_part', 'like', 'Part %')
-            ->whereRaw('CAST(SUBSTRING(name_part, 6) AS UNSIGNED) BETWEEN 5 AND 7')
+        $readingParts = Part::where('id', 'like', PartType::PartFive)
+            ->orWhere('id', 'like', PartType::PartSix)
+            ->orWhere('id', 'like', PartType::PartSeven)
             ->get();
 
         return view('admin.reading.index', compact('readingParts'));
@@ -72,7 +56,9 @@ class ReadingController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $question = Question::findOrFail($id);
+
+        return view('admin.reading.edit', compact('question'));
     }
 
     /**
@@ -88,6 +74,33 @@ class ReadingController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        try {
+            $user = Exam::findOrFail($id);
+            $user->delete();
+
+            toastr()->success('Ẩn bài tập thành công!');
+
+            return redirect()->back();
+        } catch (\Exception $e) {
+            toastr()->error('Có lỗi khi ẩn bài tập!');
+
+            return redirect()->back();
+        }
+    }
+
+    public function restore(string $id)
+    {
+        try {
+            $user = Exam::withTrashed()->findOrFail($id);
+            $user->restore();
+
+            toastr()->success('Hoàn tác ấn bài tập thành công!');
+
+            return redirect()->back();
+        } catch (\Exception $e) {
+            toastr()->error('Có lỗi khi hoàn tác ẩn bài tập!');
+
+            return redirect()->back();
+        }
     }
 }

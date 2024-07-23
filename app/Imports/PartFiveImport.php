@@ -2,7 +2,6 @@
 
 namespace App\Imports;
 
-use App\Enums\ExamType;
 use App\Enums\PartType;
 use App\Models\Answer;
 use App\Models\Exam;
@@ -14,28 +13,27 @@ use Maatwebsite\Excel\Concerns\WithHeadingRow;
 
 class PartFiveImport implements ToModel, WithHeadingRow
 {
-    protected $levelId;
     protected $importSuccess;
 
-    public function __construct($levelId)
+    public function __construct()
     {
-        $this->levelId = $levelId;
         $this->importSuccess = false;
     }
 
     public function model(array $row)
     {
-        if (empty($row['question_id']) || $row['question_id'] == 'question_id') {
+        if (empty($row['code_part5']) || $row['code_part5'] == 'code_part5') {
+            $this->importSuccess = false;
             return null;
         }
 
         $parentQuestion = Question::where('id_part', PartType::PartFive)
-            ->where('code', $row['question_id'])
+            ->where('code', $row['code_part5'])
             ->first();
 
         if (!$parentQuestion) {
             $parentQuestion = Question::create([
-                'code' => $row['question_id'],
+                'code' => $row['code_part5'],
                 'id_part' => PartType::PartFive,
                 'url_audio' => null,
                 'transcript' => null,
@@ -43,20 +41,17 @@ class PartFiveImport implements ToModel, WithHeadingRow
         }
 
         if ($parentQuestion) {
-            $questionChild = QuestionChild::create([
+            $questionChild = QuestionChild::firstOrCreate([
                 'id_question' => $parentQuestion->id,
                 'question_number' => $row['question_number'],
                 'question_title' => $row['title_question'],
                 'explanation' => $row['explanation'],
             ]);
 
-            $level = $this->levelId;
             $exam = Exam::firstOrCreate([
                 'name_exam' => request()->input('name_practice'),
                 'price' => request()->input('price'),
                 'time' => null,
-                'id_type' => ExamType::ReadingPractice,
-                'id_level' => $level,
             ]);
 
             ExamQuestion::firstOrCreate([

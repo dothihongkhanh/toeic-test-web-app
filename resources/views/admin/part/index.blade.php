@@ -3,10 +3,10 @@
 @section('content')
 <div class="card shadow mb-4">
     <div class="card-header py-3 d-flex justify-content-between">
-        <h6 class="m-0 font-weight-bold text-primary">List Part</h6>
+        <h6 class="m-0 font-weight-bold text-primary">Danh sách Part</h6>
         <a href="/admin/parts/create" class="btn btn-primary">
             <i class="fas fa-fw fa-plus"></i>
-            <span>Add Part</span>
+            <span>Thêm Part</span>
         </a>
     </div>
     <div class="card-body">
@@ -15,11 +15,11 @@
                 <thead>
                     <tr>
                         <th>ID</th>
-                        <th>Name</th>
-                        <th>Direction</th>
-                        <th>Description</th>
-                        <th>Number question</th>
-                        <th>Action</th>
+                        <th>Tên</th>
+                        <th>Hướng dẫn</th>
+                        <th>Mô tả</th>
+                        <th>Số câu hỏi</th>
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -31,15 +31,15 @@
                         <td>{{ $part->desc }}</td>
                         <td>{{ $part->number_question }}</td>
                         <td>
-                            <a href="/admin/parts/update/{{ $part->id }}" class="btn btn-warning">Edit</a>
+                            <a href="/admin/parts/update/{{ $part->id }}" class="btn btn-warning">Sửa</a>
                             <form id="delete-form-{{ $part->id }}" action="/admin/parts/delete/{{ $part->id }}" method="POST" style="display: inline;">
                                 @csrf
                                 @method('DELETE')
-                                <button type="button" class="btn btn-delete btn-danger" onclick="confirmDelete({{ $part->id }})">Delete</button>
+                                <button type="button" class="btn btn-delete btn-danger" onclick="confirmDelete({{ $part->id }})">Xóa</button>
                             </form>
                             <script>
                                 function confirmDelete(id) {
-                                    if (confirm('Are you sure to delete this part?')) {
+                                    if (confirm('Bạn có muốn xóa Part này?')) {
                                         document.getElementById('delete-form-' + id).submit();
                                     }
                                 }

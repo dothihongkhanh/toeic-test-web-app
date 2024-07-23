@@ -6,13 +6,14 @@ namespace App\Models;
 
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
-    use HasApiTokens, HasFactory, Notifiable;
+    use HasApiTokens, HasFactory, Notifiable, SoftDeletes;
 
     /**
      * The attributes that are mass assignable.
@@ -50,4 +51,19 @@ class User extends Authenticatable implements MustVerifyEmail
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    public function exams()
+    {
+        return $this->belongsToMany(Exam::class, 'user_exams', 'id_user', 'id_exam');
+    }
+
+    public function notifications()
+    {
+        return $this->hasMany(Notification::class, 'id_user', 'id');
+    }
+
+    public function numberOfExams()
+    {
+        return $this->exams()->count();
+    }
 }
