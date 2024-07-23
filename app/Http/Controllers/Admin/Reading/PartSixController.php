@@ -19,7 +19,7 @@ use Maatwebsite\Excel\Facades\Excel;
 class PartSixController extends Controller
 {
     use NotificationUpdateQuestionTrait;
-    
+
     /**
      * Display a listing of the resource.
      */
@@ -45,20 +45,27 @@ class PartSixController extends Controller
     {
         if ($request->validated()) {
             $file = $request->file('file_upload');
+            $rows = Excel::toArray([], $file);
+            $rowCount = count($rows[0]);
             $imageFiles = $request->file('image_upload');
-            $import = new PartSixImport($imageFiles);
-            $result = Excel::import($import, $file);
 
-            if ($result && $import->importSuccess()) {
-                toastr()->success('Part 6 đã được lưu thành công!');
-                return redirect()->route('list-part6');
+            if ($rowCount == 17) {
+                $import = new PartSixImport($imageFiles);
+                $result = Excel::import($import, $file);
+
+                if ($result && $import->importSuccess()) {
+                    toastr()->success('Part 6 đã được lưu thành công!');
+                    return redirect()->route('list-part6');
+                } else {
+                    toastr()->error('Đã xảy ra lỗi trong quá trình nhập. Vui lòng chọn đúng tập tin.');
+                    return redirect()->back();
+                }
             } else {
-                toastr()->error('Đã xảy ra lỗi trong quá trình nhập. Vui lòng chọn đúng tập tin.');
+                toastr()->error('Tập tin phải chứa chính xác 16 câu hỏi. Vui lòng chọn đúng tập tin.');
                 return redirect()->back();
             }
         } else {
             toastr()->error('Đã xảy ra lỗi, vui lòng thử lại sau.');
-
             return redirect()->back();
         }
     }

@@ -11,7 +11,7 @@
             @foreach($question->images as $image)
             <div class="row mb-3">
                 <div class="col-md-2">
-                    <p>Hình ảnh</p>
+                    <p>Hình ảnh<span class="text-danger">*</span></p>
                 </div>
                 <div class="col-md-8">
                     <div class="form-group">
@@ -23,7 +23,7 @@
             @endforeach
             <div class="row mb-3">
                 <div class="col-md-2">
-                    <p>Dịch nghĩa</p>
+                    <p>Dịch nghĩa<span class="text-danger">*</span></p>
                 </div>
                 <div class="col-md-8">
                     <textarea name="transcript[{{ $question->id }}]" class="form-control" style="height: 300px;">{{ old('transcript.' . $question->id, $question->transcript) }}</textarea>
@@ -35,7 +35,7 @@
             @foreach($question->questionChilds as $child)
             <div class="row mb-3">
                 <div class="col-md-2">
-                    <p>Số thứ tự</p>
+                    <p>Số thứ tự<span class="text-danger">*</span></p>
                 </div>
                 <div class="col-md-8">
                     <p>{{ $child->question_number }}</p>
@@ -43,7 +43,7 @@
             </div>
             <div class="row mb-3">
                 <div class="col-md-2">
-                    <p>Tiêu đề câu hỏi</p>
+                    <p>Tiêu đề câu hỏi<span class="text-danger">*</span></p>
                 </div>
                 <div class="col-md-8">
                     <input type="text" name="question_title[{{ $child->id }}]" class="form-control mb-2" placeholder="Enter question title" value="{{ old('question_title.' . $child->id, $child->question_title) }}">
@@ -54,7 +54,7 @@
             </div>
             <div class="row mb-3">
                 <div class="col-md-2">
-                    <p>Đáp án</p>
+                    <p>Đáp án<span class="text-danger">*</span></p>
                 </div>
                 <div class="col-md-8">
                     @foreach($child->answers as $index => $answer)
@@ -73,7 +73,7 @@
             </div>
             <div class="row mb-3">
                 <div class="col-md-2">
-                    <p>Giải thích</p>
+                    <p>Giải thích<span class="text-danger">*</span></p>
                 </div>
                 <div class="col-md-8">
                     <textarea name="explanation[{{ $child->id }}]" class="form-control" style="height: 150px;">{{ old('explanation.' . $child->id, $child->explanation) }}</textarea>

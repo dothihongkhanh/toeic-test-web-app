@@ -44,21 +44,29 @@ class PartThreeController extends Controller
     {
         if ($request->validated()) {
             $file = $request->file('file_upload');
+            $rows = Excel::toArray([], $file);
+            $rowCount = count($rows[0]);
             $audioFiles = $request->file('audio_upload');
             $imageFiles = $request->file('image_upload');
-            $import = new PartThreeImport($audioFiles, $imageFiles);
-            $result = Excel::import($import, $file);
 
-            if ($result && $import->importSuccess()) {
-                toastr()->success('Part 3 đã được lưu thành công!');
-                return redirect()->route('list-part3');
+
+            if ($rowCount == 40) {
+                $import = new PartThreeImport($audioFiles, $imageFiles);
+                $result = Excel::import($import, $file);
+
+                if ($result && $import->importSuccess()) {
+                    toastr()->success('Part 3 đã được lưu thành công!');
+                    return redirect()->route('list-part3');
+                } else {
+                    toastr()->error('Đã xảy ra lỗi trong quá trình nhập. Vui lòng chọn đúng tập tin.');
+                    return redirect()->back();
+                }
             } else {
-                toastr()->error('Đã xảy ra lỗi trong quá trình nhập. Vui lòng chọn đúng tập tin.');
+                toastr()->error('Tập tin phải chứa chính xác 39 câu hỏi. Vui lòng chọn đúng tập tin.');
                 return redirect()->back();
             }
         } else {
             toastr()->error('Đã xảy ra lỗi, vui lòng thử lại sau.');
-
             return redirect()->back();
         }
     }

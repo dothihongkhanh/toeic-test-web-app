@@ -11,6 +11,7 @@ use App\Models\Image;
 use App\Models\Question;
 use App\Models\QuestionChild;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Validation\ValidationException;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 
@@ -29,12 +30,55 @@ class PartThreeImport implements ToModel, WithHeadingRow
 
     public function model(array $row)
     {
-        if (empty($row['question_id']) || $row['question_id'] == 'question_id') {
+        if (empty($row['code_part3']) || $row['code_part3'] == 'code_part3') {
+            $this->importSuccess = false;
             return null;
         }
 
+        // Check audio files
+        $audioValid = false;
+        foreach ($this->audioFiles as $audioFile) {
+            $audioName = $audioFile->getClientOriginalName();
+            if (preg_match('/(\d+)_audio_/', $audioName, $matches)) {
+                $idQuestionFromAudioName = $matches[1];
+                if ($row['code_part3'] == $idQuestionFromAudioName) {
+                    $audioValid = true; // Audio file format is valid
+                    break;
+                }
+            }
+        }
+
+        // Check image files
+        $imageValid = false;
+        if (isset($row['image_name']) && !empty($row['image_name'])) {
+            foreach ($this->imageFiles as $imageFile) {
+                $imageName = $imageFile->getClientOriginalName();
+                if (preg_match('/(\d+)_image_/', $imageName, $matches)) {
+                    $idQuestionFromImageName = $matches[1];
+                    if ($row['code_part3'] == $idQuestionFromImageName) {
+                        $imageValid = true;
+                        break;
+                    }
+                }
+            }
+        } else {
+            $imageValid = true;
+        }
+
+        // If any file format is invalid, stop importing and set importSuccess to false
+        if (!$audioValid || !$imageValid) {
+            if (!$audioValid) {
+                toastr()->error('Tên audio không đúng định dạng');
+            }
+            if (!$imageValid) {
+                toastr()->error('Tên ảnh không đúng định dạng');
+            }
+            $this->importSuccess = false;
+            throw ValidationException::withMessages(['error' => 'Invalid file format']); // Throw exception to stop importing
+        }
+
         $parentQuestion = Question::where('id_part', PartType::PartThree)
-            ->where('code', $row['question_id'])
+            ->where('code', $row['code_part3'])
             ->first();
 
         if (!$parentQuestion) {
@@ -42,10 +86,10 @@ class PartThreeImport implements ToModel, WithHeadingRow
                 $audioName = $audioFile->getClientOriginalName();
                 if (preg_match('/(\d+)_audio_/', $audioName, $matches)) {
                     $idQuestionFromAudioName = $matches[1];
-                    if ($row['question_id'] == $idQuestionFromAudioName) {
+                    if ($row['code_part3'] == $idQuestionFromAudioName) {
                         $audioPath = $audioFile->store('listening/part3/audios', 'public');
                         $parentQuestion = Question::create([
-                            'code' => $row['question_id'],
+                            'code' => $row['code_part3'],
                             'id_part' => PartType::PartThree,
                             'url_audio' => Storage::url($audioPath),
                             'transcript' => $row['transcript'],
@@ -61,12 +105,20 @@ class PartThreeImport implements ToModel, WithHeadingRow
                 $imageName = $imageFile->getClientOriginalName();
                 if (preg_match('/(\d+)_image_/', $imageName, $matches)) {
                     $idQuestionFromImageName = $matches[1];
-                    if ($row['question_id'] == $idQuestionFromImageName) {
+                    if ($row['code_part3'] == $idQuestionFromImageName) {
                         $imagePath = $imageFile->store('listening/part3/images', 'public');
-                        Image::firstOrCreate([
-                            'url_image' => Storage::url($imagePath),
-                            'id_question' => $parentQuestion->id,
-                        ]);
+                        $existingImage = Image::where('id_question', $parentQuestion->id)->first();
+
+                        if ($existingImage) {
+                            $existingImage->update([
+                                'url_image' => Storage::url($imagePath),
+                            ]);
+                        } else {
+                            Image::create([
+                                'url_image' => Storage::url($imagePath),
+                                'id_question' => $parentQuestion->id,
+                            ]);
+                        }
                         break;
                     }
                 } else {

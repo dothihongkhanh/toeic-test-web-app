@@ -71,7 +71,7 @@
                                             @endif
                                         </div>
                                         <div class="text-center">
-                                            <a class="btn btn-link" href="register.html">Đăng ký ngay!</a>
+                                            <a class="btn btn-link" href="{{ route('register') }}">Đăng ký ngay!</a>
                                         </div>
                                     </div>
                                 </div>

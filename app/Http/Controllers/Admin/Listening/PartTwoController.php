@@ -43,22 +43,27 @@ class PartTwoController extends Controller
     {
         if ($request->validated()) {
             $file = $request->file('file_upload');
+            $rows = Excel::toArray([], $file);
+            $rowCount = count($rows[0]);
             $audioFiles = $request->file('audio_upload');
 
-            $import = new PartTwoImport($audioFiles);
+            if ($rowCount == 26) {
+                $import = new PartTwoImport($audioFiles);
+                $result = Excel::import($import, $file);
 
-            $result = Excel::import($import, $file);
-
-            if ($result && $import->importSuccess()) {
-                toastr()->success('Part 2 đã được lưu thành công!');
-                return redirect()->route('list-part2');
+                if ($result && $import->importSuccess()) {
+                    toastr()->success('Part 2 đã được lưu thành công!');
+                    return redirect()->route('list-part2');
+                } else {
+                    toastr()->error('Đã xảy ra lỗi trong quá trình nhập. Vui lòng chọn đúng tập tin.');
+                    return redirect()->back();
+                }
             } else {
-                toastr()->error('Đã xảy ra lỗi trong quá trình nhập. Vui lòng chọn đúng tập tin.');
+                toastr()->error('Tập tin phải chứa chính xác 25 câu hỏi. Vui lòng chọn đúng tập tin.');
                 return redirect()->back();
             }
         } else {
             toastr()->error('Đã xảy ra lỗi, vui lòng thử lại sau.');
-
             return redirect()->back();
         }
     }

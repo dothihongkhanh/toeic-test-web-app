@@ -25,7 +25,7 @@
                     <tr>
                         <td>{{ $exam->id }}</td>
                         <td>{{ $exam->name_exam }}</td>
-                        <td>{{ $exam->price }}</td>
+                        <td>{{ number_format($exam->price, 0, ',', '.') }} VND</td>
                         <td>
                             <a href="/admin/listening/detail-part1/{{ $exam->id }}" class="btn btn-warning">Chi tiết</a>
                             @if (is_null($exam->deleted_at))

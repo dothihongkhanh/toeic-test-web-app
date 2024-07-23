@@ -22,17 +22,18 @@ class PartFiveImport implements ToModel, WithHeadingRow
 
     public function model(array $row)
     {
-        if (empty($row['question_id']) || $row['question_id'] == 'question_id') {
+        if (empty($row['code_part5']) || $row['code_part5'] == 'code_part5') {
+            $this->importSuccess = false;
             return null;
         }
 
         $parentQuestion = Question::where('id_part', PartType::PartFive)
-            ->where('code', $row['question_id'])
+            ->where('code', $row['code_part5'])
             ->first();
 
         if (!$parentQuestion) {
             $parentQuestion = Question::create([
-                'code' => $row['question_id'],
+                'code' => $row['code_part5'],
                 'id_part' => PartType::PartFive,
                 'url_audio' => null,
                 'transcript' => null,
@@ -40,7 +41,7 @@ class PartFiveImport implements ToModel, WithHeadingRow
         }
 
         if ($parentQuestion) {
-            $questionChild = QuestionChild::create([
+            $questionChild = QuestionChild::firstOrCreate([
                 'id_question' => $parentQuestion->id,
                 'question_number' => $row['question_number'],
                 'question_title' => $row['title_question'],

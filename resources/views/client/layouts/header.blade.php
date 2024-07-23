@@ -12,7 +12,7 @@
                         <li class="">
                             <a href="/" class="nav-link text-left">Trang chủ</a>
                         </li>
-                        <li class="active">
+                        <li class="">
                             <a href="{{ route('client.listening.list') }}" class="nav-link text-left">Listening</a>
                         </li>
                         <li class="">

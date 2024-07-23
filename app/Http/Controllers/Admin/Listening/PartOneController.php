@@ -11,6 +11,7 @@ use App\Models\Exam;
 use App\Models\Image;
 use App\Models\Part;
 use App\Models\Question;
+use App\Services\CountRowFileService;
 use App\Services\ExamService;
 use App\Traits\NotificationUpdateQuestionTrait;
 use Illuminate\Support\Facades\Storage;
@@ -45,18 +46,28 @@ class PartOneController extends Controller
     {
         if ($request->validated()) {
             $file = $request->file('file_upload');
+            $rows = Excel::toArray([], $file);
+            $rowCount = count($rows[0]);
             $audioFiles = $request->file('audio_upload');
             $imageFiles = $request->file('image_upload');
 
-            $import = new PartOneImport($audioFiles, $imageFiles);
+            // $import = new PartOneImport($audioFiles, $imageFiles);
 
-            $result = Excel::import($import, $file);
+            // $result = Excel::import($import, $file);
 
-            if ($result && $import->importSuccess()) {
-                toastr()->success('Part 1 đã được lưu thành công!');
-                return redirect()->route('list-part1');
+            if ($rowCount == 7) {
+                $import = new PartOneImport($audioFiles, $imageFiles);
+                $result = Excel::import($import, $file);
+
+                if ($result && $import->importSuccess()) {
+                    toastr()->success('Part 1 đã được lưu thành công!');
+                    return redirect()->route('list-part1');
+                } else {
+                    toastr()->error('Đã xảy ra lỗi trong quá trình nhập. Vui lòng chọn đúng tập tin.');
+                    return redirect()->back();
+                }
             } else {
-                toastr()->error('An error has occurred during import. Please try again later.');
+                toastr()->error('Tập tin phải chứa chính xác 6 câu hỏi. Vui lòng chọn đúng tập tin.');
                 return redirect()->back();
             }
         } else {
@@ -155,7 +166,7 @@ class PartOneController extends Controller
                 }
             }
         }
-        
+
         $this->notifyUsersAboutUpdatedQuestion($question, $child);
         toastr()->success('Cập nhật thành công!');
 

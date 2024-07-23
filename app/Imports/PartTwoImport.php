@@ -9,6 +9,7 @@ use App\Models\ExamQuestion;
 use App\Models\Question;
 use App\Models\QuestionChild;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Validation\ValidationException;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 
@@ -25,12 +26,33 @@ class PartTwoImport implements ToModel, WithHeadingRow
 
     public function model(array $row)
     {
-        if (empty($row['question_id']) || $row['question_id'] == 'question_id') {
+        if (empty($row['code_part2']) || $row['code_part2'] == 'code_part2') {
+            $this->importSuccess = false;
             return null;
         }
 
+        // Check audio files
+        $audioValid = false;
+        foreach ($this->audioFiles as $audioFile) {
+            $audioName = $audioFile->getClientOriginalName();
+            if (preg_match('/(\d+)_audio_/', $audioName, $matches)) {
+                $idQuestionFromAudioName = $matches[1];
+                if ($row['code_part2'] == $idQuestionFromAudioName) {
+                    $audioValid = true; // Audio file format is valid
+                    break;
+                }
+            }
+        }
+
+        if (!$audioValid) {
+            toastr()->error('Tên audio không đúng định dạng');
+            $this->importSuccess = false;
+            throw ValidationException::withMessages(['error' => 'Invalid file format']);
+        }
+
+        // Create or update question
         $parentQuestion = Question::where('id_part', PartType::PartTwo)
-            ->where('code', $row['question_id'])
+            ->where('code', $row['code_part2'])
             ->first();
 
         if (!$parentQuestion) {
@@ -38,10 +60,10 @@ class PartTwoImport implements ToModel, WithHeadingRow
                 $audioName = $audioFile->getClientOriginalName();
                 if (preg_match('/(\d+)_audio_/', $audioName, $matches)) {
                     $idQuestionFromAudioName = $matches[1];
-                    if ($row['question_id'] == $idQuestionFromAudioName) {
+                    if ($row['code_part2'] == $idQuestionFromAudioName) {
                         $audioPath = $audioFile->store('listening/part2/audios', 'public');
                         $parentQuestion = Question::create([
-                            'code' => $row['question_id'],
+                            'code' => $row['code_part2'],
                             'id_part' => PartType::PartTwo,
                             'url_audio' => Storage::url($audioPath),
                             'transcript' => $row['transcript'],
@@ -53,7 +75,7 @@ class PartTwoImport implements ToModel, WithHeadingRow
         }
 
         if ($parentQuestion) {
-            $questionChild = QuestionChild::create([
+            $questionChild = QuestionChild::firstOrCreate([
                 'id_question' => $parentQuestion->id,
                 'question_number' => $row['question_number'],
                 'question_title' => null,

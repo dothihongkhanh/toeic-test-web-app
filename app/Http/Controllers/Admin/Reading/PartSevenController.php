@@ -19,14 +19,14 @@ use Maatwebsite\Excel\Facades\Excel;
 class PartSevenController extends Controller
 {
     use NotificationUpdateQuestionTrait;
-    
+
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
         $examsInPart7 = resolve(ExamService::class)->getExamsByPart(PartType::PartSeven);
-        
+
         return view('admin.reading.part-seven.index', compact('examsInPart7'));
     }
 
@@ -45,20 +45,27 @@ class PartSevenController extends Controller
     {
         if ($request->validated()) {
             $file = $request->file('file_upload');
+            $rows = Excel::toArray([], $file);
+            $rowCount = count($rows[0]);
             $imageFiles = $request->file('image_upload');
-            $import = new PartSevenImport($imageFiles);
-            $result = Excel::import($import, $file);
 
-            if ($result && $import->importSuccess()) {
-                toastr()->success('Part 7 đã được lưu thành công!');
-                return redirect()->route('list-part7');
+            if ($rowCount == 55) {
+                $import = new PartSevenImport($imageFiles);
+                $result = Excel::import($import, $file);
+
+                if ($result && $import->importSuccess()) {
+                    toastr()->success('Part 7 đã được lưu thành công!');
+                    return redirect()->route('list-part7');
+                } else {
+                    toastr()->error('Đã xảy ra lỗi trong quá trình nhập. Vui lòng chọn đúng tập tin.');
+                    return redirect()->back();
+                }
             } else {
-                toastr()->error('Đã xảy ra lỗi trong quá trình nhập. Vui lòng chọn đúng tập tin.');
+                toastr()->error('Tập tin phải chứa chính xác 54 câu hỏi. Vui lòng chọn đúng tập tin.');
                 return redirect()->back();
             }
         } else {
             toastr()->error('Đã xảy ra lỗi, vui lòng thử lại sau.');
-
             return redirect()->back();
         }
     }

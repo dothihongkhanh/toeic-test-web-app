@@ -27,7 +27,7 @@
                 @enderror
             </div>
             <div class="form-group">
-                <label>Nội dung câu hỏi (File excel)<span class="text-danger">*</span></label>
+                <label>Nội dung câu hỏi (File excel - 30 câu hỏi)<span class="text-danger">*</span></label>
                 <input type="file" accept=".xls,.xlsx" name="file_upload" class="form-control">
                 @error('file_upload')
                 <span class="text-danger"> {{ $message }}</span>

@@ -27,21 +27,21 @@
                 @enderror
             </div>
             <div class="form-group">
-                <label>Nội dung câu hỏi (File excel)<span class="text-danger">*</span></label>
+                <label>Nội dung câu hỏi (File excel - 6 câu hỏi)<span class="text-danger">*</span></label>
                 <input type="file" accept=".xls,.xlsx" name="file_upload" class="form-control">
                 @error('file_upload')
                 <span class="text-danger"> {{ $message }}</span>
                 @enderror
             </div>
             <div class="form-group">
-                <label>File âm thanh<span class="text-danger">*</span></label>
+                <label>File âm thanh (6 files)<span class="text-danger">*</span></label>
                 <input type="file" id="audioUpload" accept="audio/*" name="audio_upload[]" class="form-control" multiple>
                 @error('audio_upload')
                 <span class="text-danger"> {{ $message }}</span>
                 @enderror
             </div>
             <div class="form-group">
-                <label>File hình ảnh<span class="text-danger">*</span></label></label>
+                <label>File hình ảnh (6 files)<span class="text-danger">*</span></label></label>
                 <input type="file" id="imageUpload" accept="image/*" name="image_upload[]" class="form-control" multiple>
 
                 @error('image_upload')

@@ -11,14 +11,14 @@
             @foreach($question->questionChilds as $child)
             <div class="row mb-3">
                 <div class="col-md-2">
-                    <p>Số thứ tự</p>
+                    <p>Số thứ tự<span class="text-danger">*</span></p>
                 </div>
                 <div class="col-md-8">
                     <p>{{ $child->question_number }}</p>
                 </div>
             </div>
             <div class="row mb-3">
-                <div class="col-md-2"><label for="audio">Âm thanh</label></div>
+                <div class="col-md-2"><label for="audio">Âm thanh<span class="text-danger">*</span></label></div>
                 <div class="col-md-8">
                     <div class="form-group">
                         <input type="file" class="form-control" accept="audio/*" id="audio" name="audio" onchange="displayOldAudio()">
@@ -31,7 +31,7 @@
             </div>
             <div class="row mb-3">
                 <div class="col-md-2">
-                    <p>Dịch nghĩa</p>
+                    <p>Dịch nghĩa<span class="text-danger">*</span></p>
                 </div>
                 <div class="col-md-8">
                     <textarea name="transcript[{{ $question->id }}]" class="form-control" style="height: 150px;">{{ old('transcript.' . $question->id, $question->transcript) }}</textarea>
@@ -42,7 +42,7 @@
             </div>
             <div class="row mb-3">
                 <div class="col-md-2">
-                    <p>Đáp án</p>
+                    <p>Đáp án<span class="text-danger">*</span></p>
                 </div>
                 <div class="col-md-8">
                     @foreach($child->answers as $index => $answer)
@@ -63,7 +63,7 @@
             </div>
             <div class="row mb-3">
                 <div class="col-md-2">
-                    <p>Giải thích</p>
+                    <p>Giải thích<span class="text-danger">*</span></p>
                 </div>
                 <div class="col-md-8">
                     <textarea name="explanation[{{ $child->id }}]" class="form-control" style="height: 150px;">{{ old('explanation.' . $child->id, $child->explanation) }}</textarea>
