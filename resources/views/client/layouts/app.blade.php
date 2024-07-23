@@ -29,9 +29,7 @@
 </head>
 
 <body data-spy="scroll" data-target=".site-navbar-target" data-offset="300">
-
     <div class="site-wrap">
-
         <div class="site-mobile-menu site-navbar-target">
             <div class="site-mobile-menu-header">
                 <div class="site-mobile-menu-close mt-3">
@@ -40,14 +38,11 @@
             </div>
             <div class="site-mobile-menu-body"></div>
         </div>
-
         @include('client.layouts.header')
         @yield('content')
         @include('client.layouts.footer')
-
     </div>
     @include('client.layouts.javascript')
-
 </body>
 
 <script>

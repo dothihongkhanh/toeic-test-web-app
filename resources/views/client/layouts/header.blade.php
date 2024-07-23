@@ -46,7 +46,6 @@
                             </a>
 
                             <ul class="dropdown" aria-labelledby="navbarDropdown">
-                                <!-- <li><a href="{{ route('client.profile') }}">Thông tin cá nhân</a></li> -->
                                 <li><a href="{{ route('client.statistical') }}">Thống kê kết quả luyện tập</a></li>
                                 <li><a href="{{ route('client.showTimeNotify') }}">Đặt giờ nhắc nhở luyện tập</a></li>
 
